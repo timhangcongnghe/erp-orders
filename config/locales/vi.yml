@@ -1,0 +1,98 @@
+vi:
+  layouts:
+    erp:
+      backend:
+        sidebar:
+          sale: "Bán hàng"
+          orders: "Tất cả đơn hàng"
+  erp:
+    orders: 
+      backend:
+        orders:
+          create:
+            success: "Thêm thông tin đơn hàng thành công."
+          update:
+            success: "Cập nhật thông tin đơn hàng thành công."
+          destroy:
+            success: "Xóa thông tin đơn hàng thành công."
+          delete_all:
+            success: "Thông tin đơn hàng vừa chọn đã được xóa."
+          archive_all:
+            success: "Thông tin đơn hàng vừa chọn đã được ẩn."
+          unarchive_all:
+            success: "Thông tin đơn hàng vừa chọn đã được hiển thị."
+          index:
+            create: "Tạo đơn hàng"
+            order_number: "Số hóa đơn"
+            order_code: "Mã đơn hàng"
+            order_date: "Ngày đặt hàng"
+            customer: "Khách hàng"
+            salesperson: "Nhân viên bán hàng"
+            total: "Tổng cộng"
+            status: "Trạng thái"
+            creator: "Người tạo"
+            created_at: "Ngày tạo"
+            actions: "Thao tác"
+            archive: "Hủy đơn hàng"
+            unarchive: "Phục hồi đơn hủy"
+            delete: "Xóa đơn hàng"
+            orders: "Đơn đặt hàng"
+            delete_confirm: "Các đơn hàng đã chọn sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
+            product: "Hàng hóa (mã/tên)"
+            customer: "Khách hàng (mã/tên/sđt)"
+            salesperson: "Người bán hàng"
+            warehouse: "Chi nhánh"
+          list:
+            create: "Tạo đơn hàng"
+            order_number: "Mã đơn hàng"
+            order_date: "Ngày đặt hàng"
+            customer: "Khách hàng"
+            salesperson: "Nhân viên bán hàng"
+            total: "Tổng cộng"
+            status: "Trạng thái"
+            creator: "Người tạo"
+            created_at: "Ngày tạo"
+            actions: "Thao tác"
+            edit: "Cập nhật thông tin"
+            archive: "Hủy đơn hàng"
+            unarchive: "Phục hồi đơn hàng"
+            delete: "Xóa đơn hàng"
+            delete_confirm: "Cảnh báo: Đơn hàng này sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
+          new:
+            orders: "Tất cả đơn hàng"
+            create: "Thêm đơn hàng"
+            order_details: "Chi tiết đơn hàng"
+          edit:
+            orders: "Tất cả đơn hàng"
+            create: "Thêm đơn hàng"
+            order_details: "Chi tiết đơn hàng"
+            edit: "Cập nhật đơn hàng"
+          form:
+            customer: "Khách hàng"
+            order_date: "Ngày đặt hàng"
+            expiration_date: "Ngày hết hạn"
+            select_customer: "Chọn khách hàng"
+            choose_order_date: "Chọn ngày đặt hàng"
+            choose_expiration_date: "Chọn ngày hết hạn"
+            choose_salesperson: "Chọn nhân viên kinh doanh"
+            choose_warehouse: "Chọn kho bãi"
+            other_information: "Thông tin thêm"
+            order_lines: "Order Lines"
+            order_history: "Lịch sử đơn hàng"
+            shipping_information: "Thông tin vận chuyển"
+            warehouse: "Kho hàng"
+            sales_information: "Thông tin bán hàng"
+            salesperson: "Nhân viên kinh doanh"
+            add: "Thêm"
+            submit: "Lưu"
+            cancel: "Hủy"
+            product: "Sản phẩm"
+            help_product: "Sản phẩm có thể thêm vào đơn hàng"
+            choose_product: "Chọn sản phẩm cần thêm vào danh sách đơn hàng"
+            product_code: "Mã sản phẩm"
+            product_name: "Tên sản phẩm"
+            description: "Mô tả"
+            quantity: "Số lượng"
+            price: "Giá bán"
+            total: "Tổng cộng"
+            action: "Hành động"

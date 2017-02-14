@@ -1,0 +1,39 @@
+<% content_for :title do %>
+    <%= t('.edit') %>
+<% end %>
+
+<% content_for :page_title do %>    
+    <a href="<%= erp_orders.backend_orders_path %>">
+    <i class="fa fa-users"></i> <%= t('.orders') %>
+    </a> / ĐH00001
+<% end %>
+
+<% content_for :page_toolbar do %>
+        <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_orders.new_backend_order_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <div class="btn-group">
+        <div class="clearfix">
+        </div>
+    </div>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+        <% if @order.errors.any? %>
+            <%= erp_form_control("form_error_message") %>
+        <% end %>
+        <h3>
+            <span aria-hidden="true" class="icon-user"></span> <%= t('.order_details') %>
+        </h3>
+        
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <%= render 'form', order: @order %>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>

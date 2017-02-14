@@ -1,0 +1,125 @@
+<table class="table table-advance table-hover table-striped table-checkable order-column" id="">
+    <thead>
+        <tr>
+            <th width='1%'>
+                <%= erp_datalist_check_all %>
+            </th>
+            <% if get_columns(params).include?("order_number") %>
+                <th class="sortable" sort-by='erp_orders_orders.id'>
+                    <%= t('.order_number') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("order_date") %>
+                <th>
+                    <%= t('.order_date') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("customer") %>
+                <th>
+                    <%= t('.customer') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("salesperson") %>
+                <th>
+                    <%= t('.salesperson') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("total") %>
+                <th>
+                    <%= t('.total') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("status") %>
+                <th>
+                    <%= t('.status') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("creator") %>
+                <th>
+                    <%= t('.creator') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("created_at") %>
+                <th class="sortable" sort-by='erp_orders_orders.created_at'>
+                    <%= t('.created_at') %>
+                </th>
+            <% end %>
+            <th width="7%"><%= t('.actions') %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if @orders.each do |order| %>
+            <tr class="odd gradeX">
+                <td>
+                    <%= erp_datalist_check_row(id: order.id) %>
+                </td>
+                <% if get_columns(params).include?("order_number") %>
+                <td><%= order.id %></td>
+                <% end %>
+                <% if get_columns(params).include?("order_date") %>
+                <td><%= order.order_date.strftime("%d/%m/%Y") %></td>
+                <% end %>
+                <% if get_columns(params).include?("customer") %>
+                <td><%= order.customer_name %></td>
+                <% end %>
+                <% if get_columns(params).include?("salesperson") %>
+                <td><%= order.salesperson_name %></td>
+                <% end %>
+                <% if get_columns(params).include?("total") %>
+                <td><%= order.total %></td>
+                <% end %>
+                <% if get_columns(params).include?("status") %>
+                <td></td>
+                <% end %>
+                <% if get_columns(params).include?("creator") %>
+                <td>
+                    <%= erp_component('avatar', {
+                        user: order.creator
+                    }) %>
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("created_at") %>
+                <td><%= order.created_at.strftime("%d/%m/%Y") %></td>
+                <% end %>
+                <td>
+                    <%= erp_datalist_row_actions(
+                        [
+                            {
+                                text: '<i class="fa fa-edit"></i> '+t('.edit'),
+                                href: erp_orders.edit_backend_order_path(order)
+                            },
+                            {
+                                text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
+                                url: '',
+                                data_method: 'PUT',
+                                hide: '',
+                                class: 'ajax-link'
+                            },
+                            {
+                                text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
+                                url: '',
+                                data_method: 'PUT',
+                                hide: '',
+                                class: 'ajax-link'
+                            },
+                            { divider: true },
+                            {
+                              text: '<i class="fa fa-trash"></i> '+t('.delete'),
+                              url: erp_orders.backend_order_path(order),
+                              data_method: 'DELETE',
+                              data_confirm: t('.delete_confirm'),
+                              class: 'ajax-link'
+                            }
+                        ]
+                    ) %>
+                </td>
+            </tr>
+        <% end.empty? %>
+            <tr>
+                <td colspan="6"><%= t('.no_matching_records_found') %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+    
+<%= erp_datalist_pagination(@orders) %>

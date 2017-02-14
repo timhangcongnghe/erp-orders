@@ -1,0 +1,166 @@
+<%= form_for([erp_orders, :backend, order], html: {multipart: true}) do |f| %>
+    <div class="form-body">        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        <% if Erp::Core.available?("contacts") %>
+                            <%= erp_form_control("dataselect", {
+                                name: 'order[customer_id]',
+                                value: order.customer_id,
+                                text: order.customer_name,
+                                label: t('.customer'),
+                                placeholder: t('.select_customer'),
+                                url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
+                                create: {
+                                    url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
+                                    title: t('.create'),
+                                    container_selector: '.new_contact',
+                                    input_selector: 'input[name="contact[name]"]',
+                                    modal_size: "full"
+                                },
+                                edit: {
+                                    url: erp_contacts.edit_backend_contact_path(id: ':value'),
+                                    title: t('.edit'),
+                                    container_selector: '.edit_contact',
+                                }
+                            }) %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        <%= erp_form_control('date', {
+                            label: t('.order_date'),
+                            name: 'order[order_date]',
+                            value: order.order_date,
+                            placeholder: t('.choose_order_date')
+                        }) %>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tabbable-custom ">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_5_1" data-toggle="tab"> <%= t('.order_lines') %> </a>
+                        </li>
+                        <li>
+                            <a href="#tab_5_2" data-toggle="tab"> <%= t('.other_information') %> </a>
+                        </li>
+                        <li>
+                            <a href="#tab_5_3" data-toggle="tab"> <%= t('.order_history') %> </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content order-details">
+                        <div class="tab-pane addableform-table active" id="tab_5_1">
+                            <%= erp_form_control("addableform", {
+                                type: 'table',
+                                add_button: t('.add'),
+                                partial: 'erp/orders/backend/order_details/order_line_form',
+                                partial_url: erp_orders.order_line_form_backend_order_details_path,
+                                items: @order.order_details,
+                                item: :order_detail,
+                                add_control_selector: "input[name='product_id']",
+                                add_control: erp_form_control("dataselect", {
+                                    name: 'product_id',
+                                    placeholder: t('.choose_product'),
+                                    label: t('.product'),
+                                    help: t('.help_product'),
+                                    url: erp_products.dataselect_backend_products_path(format: 'json'),
+                                    create: {
+                                        url: erp_products.new_backend_product_path,
+                                        title: t('.create_product'),
+                                        container_selector: '.new_product',
+                                        input_selector: 'input[name="product[name]"]'
+                                    },
+                                    edit: {
+                                        url: erp_products.edit_backend_product_path(id: ':value'),
+                                        title: t('.edit_product'),
+                                        container_selector: '.edit_product',
+                                    }
+                                }),
+                                thead: "<th>#{t('.product_code')}</th>
+                                        <th>#{t('.product_name')}</th>                                        
+                                        <th class='text-right'>#{t('.quantity')}</th>
+                                        <th class='text-right'>#{t('.price')}</th>
+                                        <th>#{t('.tax')}</th>
+                                        <th class='text-right'>#{t('.total')}</th>                                        
+                                        <th class='text-right'>#{t('.action')}</th>"
+                            }) %>
+                            
+                            <table class="table">
+                                <tr>
+                                    <td width="90%" class="text-right text-semibold">Tổng cộng:</td>
+                                    <td class="text-right">
+                                        <h4>
+                                            <span class="order_total text-bold">ssss</span>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="tab_5_2">
+                            <div class="row">                                
+                                <div class="col-md-6">
+                                    <h4><%= t('.sales_information') %></h4>
+                                    <%= erp_form_control("dataselect", {
+                                        name: 'order[salesperson_id]',
+                                        value: order.salesperson_id,
+                                        text: order.salesperson_name,
+                                        placeholder: t('.choose_salesperson'),
+                                        label: t('.salesperson'),
+                                        url: erp.dataselect_backend_users_path(format: 'json'),
+                                        create: {
+                                            url: erp.new_backend_user_path,
+                                            title: t('.create'),
+                                            container_selector: '.new_user',
+                                            input_selector: 'input[name="user[name]"]'
+                                        }
+                                    }) %>
+                                    <%= erp_form_control('date', {
+                                        label: t('.expiration_date'),
+                                        name: 'order[expiration_date]',
+                                        value: order.expiration_date,
+                                        placeholder: t('.choose_expiration_date')
+                                    }) %>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4><%= t('.shipping_information') %></h4>
+                                    <%= erp_form_control("dataselect", {
+                                        name: 'order[warehouse_id]',
+                                        value: order.warehouse_id,
+                                        text: order.warehouse_name,
+                                        placeholder: t('.choose_warehouse'),
+                                        label: t('.warehouse'),
+                                        url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+                                        create: {
+                                            url: erp_warehouses.new_backend_warehouse_url,
+                                            title: t('.create'),
+                                            container_selector: '.new_warehouse',
+                                            input_selector: 'input[name="warehouse[name]"]'
+                                        }
+                                    }) %>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_5_3">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= erp_component('button/save', {
+        text: t('.submit')
+    }) %>
+    <%= erp_component('button/cancel', {
+        text: t('.cancel'),
+        href: erp_orders.backend_orders_path
+    }) %>
+<% end %>

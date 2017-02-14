@@ -1,0 +1,91 @@
+<% content_for :title do %>
+    <%= t('.orders') %>
+<% end %>
+
+<% content_for :page_title do %>
+    <i class="fa fa-file-text"></i> <%= t('.orders') %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_orders.new_backend_order_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<%= erp_datalist(
+    url: erp_orders.list_backend_orders_path,
+    keywords: [
+        {
+            text: t('.order_code'), name: 'erp_orders_orders.code'
+        },
+        {
+            text: t('.product'), name: 'erp_products_products.name'
+        },
+        {
+            text: t('.customer'), name: 'erp_contacts_contacts.name'
+        },
+        {
+            text: t('.salesperson'), name: 'erp_users.name'
+        },
+        {
+            text: t('.warehouse'), name: 'erp_warehouses_warehouses.short_name'
+        },
+        {
+            text: t('creator'),
+            name: 'erp_users.name',
+            select: {
+                name: 'erp_users.id',
+                data_url: erp.dataselect_backend_users_path
+            }
+        }
+    ],
+    actions: [
+        {
+            text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
+            url: '',
+            data_method: 'PUT'
+        },
+        {
+            text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
+            url: '',
+            data_method: 'PUT'
+        },
+        {
+            divider: true
+        },
+        {
+            text: '<i class="fa fa-trash"></i> '+t('.delete'),
+            url: erp_orders.delete_all_backend_orders_path,
+            data_method: 'DELETE',
+            data_confirm: t('.delete_confirm')
+        }
+    ],
+    columns: [
+        {
+            text: t('.order_number'), name: 'order_number', value: true, checked: true
+        },
+        {
+            text: t('.order_date'), name: 'order_date', value: true, checked: true
+        },
+        {
+            text: t('.customer'), name: 'customer', value: true, checked: true
+        },
+        {
+            text: t('.salesperson'), name: 'salesperson', value: true, checked: true
+        },
+        {
+            text: t('.total'), name: 'total', value: true, checked: true
+        },
+        {
+            text: t('.status'), name: 'status', value: true, checked: false
+        },
+        {
+            text: t('.creator'), name: 'creator', value: true, checked: false
+        },
+        {
+            text: t('.created_at'), name: 'created_at', value: true, checked: false
+        }
+    ]
+) %>
