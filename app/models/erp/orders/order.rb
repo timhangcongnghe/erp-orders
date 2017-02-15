@@ -13,6 +13,7 @@ module Erp::Orders
     
     if Erp::Core.available?("payments")
 			has_many :payment_records, class_name: "Erp::Payments::PaymentRecord"
+			has_many :debts, class_name: "Erp::Payments::Debt"
 		end
     
     after_save :update_cache_payment_status
@@ -125,7 +126,11 @@ module Erp::Orders
     if Erp::Core.available?("payments")
 			# get paid amount for order
 			def paid_amount
-				result = self.receice_payment_records.sum(:amount) - self.pay_payment_records.sum(:amount)
+				if self.sales?
+					result = self.receice_payment_records.sum(:amount) - self.pay_payment_records.sum(:amount)
+				elsif self.purchase?
+					result = - self.receice_payment_records.sum(:amount) + self.pay_payment_records.sum(:amount)
+				end
 			end
 			
 			# get pay payment records for order
@@ -161,7 +166,11 @@ module Erp::Orders
 			# get payment deadline
 			def get_payment_deadline
 				# @todo
-				return self.expiration_date
+				if debts.present?
+					self.debts.last.deadline
+				else
+					self.expiration_date
+				end
 			end
 		end
   end
