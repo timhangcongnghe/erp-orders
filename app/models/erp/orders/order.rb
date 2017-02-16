@@ -137,6 +137,7 @@ module Erp::Orders
 				elsif self.purchase?
 					result = - self.receice_payment_records.sum(:amount) + self.pay_payment_records.sum(:amount)
 				end
+				return 0.0
 			end
 			
 			# get pay payment records for order
