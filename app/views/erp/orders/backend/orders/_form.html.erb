@@ -130,7 +130,7 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="tab_5_2">
-                            <div class="row">                                
+                            <div class="row">
                                 <div class="col-md-6">
                                     <h4><%= t('.sales_information') %></h4>
                                     <%= erp_form_control("dataselect", {
@@ -169,12 +169,47 @@
                         </div>
                         <% if Erp::Core.available?("payments") %>
                             <div class="tab-pane" id="tab_5_3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <h4><%= t('.paid_amount') %>: <strong><%= order.paid_amount %></strong></h4>
+                                            <h4><%= t('.remain_amount') %>: <strong><%= order.remain_amount %></strong></h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 right">
+                                        <div class="form-group">
+                                            <%= erp_component('button/create', {
+                                                text: t('.receice'),
+                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE)
+                                            }) %>
+                                            <%= erp_component('button/create', {
+                                                text: t('.pay'),
+                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY)
+                                            }) %>
+                                        </div>
+                                    </div>
+                                </div>
                                 <%= erp_datalist(
                                     url: erp_payments.order_payment_record_list_backend_payment_records_path(order_id: order.id),
                                     no_border: true
                                 )%>
                             </div>
                             <div class="tab-pane" id="tab_5_4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <h4><%= t('.expiration_date') %> <strong><%= format_date(order.get_payment_deadline) %></strong></h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 right">
+                                        <div class="form-group">
+                                            <%= erp_component('button/create', {
+                                                text: t('.extend_debt_deadline'),
+                                                href: erp_payments.new_backend_debt_path(order_id: order.id)
+                                            }) %>
+                                        </div>
+                                    </div>
+                                </div>
                                 <%= erp_datalist(
                                     url: erp_payments.order_debt_list_backend_debts_path(order_id: order.id),
                                     no_border: true
