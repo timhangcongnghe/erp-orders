@@ -5,11 +5,11 @@
 <% content_for :page_title do %>    
     <a href="<%= erp_orders.backend_orders_path %>">
     <i class="fa fa-users"></i> <%= t('.orders') %>
-    </a> / ĐH00001
+    </a> / <%= @order.code %>
 <% end %>
 
 <% content_for :page_toolbar do %>
-        <%= erp_component('button/create', {
+    <%= erp_component('button/create', {
         text: t('.create'),
         href: erp_orders.new_backend_order_path,
         class: 'btn-noborder'
