@@ -159,7 +159,7 @@ module Erp::Orders
 				if remain_amount == 0
 					status = Erp::Orders::Order::STATUS_PAID
 				else remain_amount > 0
-					if Time.now > get_payment_deadline
+					if Time.now > get_payment_deadline.end_of_day
 						status = Erp::Orders::Order::STATUS_NOT_PAID
 					else
 						status = Erp::Orders::Order::STATUS_DEBT
@@ -172,10 +172,10 @@ module Erp::Orders
 			# get payment deadline
 			def get_payment_deadline
 				# @todo
-				if debts.present?
+				if !debts.empty?
 					self.debts.last.deadline
 				else
-					self.expiration_date
+					Time.now
 				end
 			end
 		end
