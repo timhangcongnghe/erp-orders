@@ -25,6 +25,26 @@
                                     container_selector: '.edit_contact',
                                 }
                             }) %>
+                            <%= erp_form_control("dataselect", {
+                                name: 'order[supplier_id]',
+                                value: order.supplier_id,
+                                text: order.supplier_name,
+                                label: t('.supplier'),
+                                placeholder: t('.select_supplier'),
+                                url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
+                                create: {
+                                    url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
+                                    title: t('.create'),
+                                    container_selector: '.new_contact',
+                                    input_selector: 'input[name="contact[name]"]',
+                                    modal_size: "full"
+                                },
+                                edit: {
+                                    url: erp_contacts.edit_backend_contact_path(id: ':value'),
+                                    title: t('.edit'),
+                                    container_selector: '.edit_contact',
+                                }
+                            }) %>
                         <% end %>
                     </div>
                 </div>
@@ -37,7 +57,7 @@
                             name: 'order[order_date]',
                             value: order.order_date,
                             placeholder: t('.choose_order_date')
-                        }) %>                        
+                        }) %>
                     </div>
                 </div>
             </div>
@@ -52,9 +72,14 @@
                         <li>
                             <a href="#tab_5_2" data-toggle="tab"> <%= t('.other_information') %> </a>
                         </li>
-                        <li>
-                            <a href="#tab_5_3" data-toggle="tab"> <%= t('.order_history') %> </a>
-                        </li>
+                        <% if Erp::Core.available?("payments") %>
+                            <li>
+                                <a href="#tab_5_3" data-toggle="tab"> <%= t('.order_history') %> </a>
+                            </li>
+                            <li>
+                                <a href="#tab_5_4" data-toggle="tab"> <%= t('.order_debt') %> </a>
+                            </li>
+                        <% end %>
                     </ul>
                     <div class="tab-content order-details">
                         <div class="tab-pane addableform-table active" id="tab_5_1">
@@ -98,7 +123,7 @@
                                     <td width="90%" class="text-right text-semibold">Tổng cộng:</td>
                                     <td class="text-right">
                                         <h4>
-                                            <span class="order_total text-bold">ssss</span>
+                                            <span class="order_total text-bold"></span>
                                         </h4>
                                     </td>
                                 </tr>
@@ -122,12 +147,6 @@
                                             input_selector: 'input[name="user[name]"]'
                                         }
                                     }) %>
-                                    <%= erp_form_control('date', {
-                                        label: t('.expiration_date'),
-                                        name: 'order[expiration_date]',
-                                        value: order.expiration_date,
-                                        placeholder: t('.choose_expiration_date')
-                                    }) %>
                                 </div>
                                 <div class="col-md-6">
                                     <h4><%= t('.shipping_information') %></h4>
@@ -148,9 +167,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tab_5_3">
-                            
-                        </div>
+                        <% if Erp::Core.available?("payments") %>
+                            <div class="tab-pane" id="tab_5_3">
+                                <%= erp_datalist(
+                                    url: erp_payments.order_payment_record_list_backend_payment_records_path(order_id: order.id),
+                                    no_border: true
+                                )%>
+                            </div>
+                            <div class="tab-pane" id="tab_5_4">
+                                <%= erp_datalist(
+                                    url: erp_payments.order_debt_list_backend_debts_path(order_id: order.id),
+                                    no_border: true
+                                )%>
+                            </div>
+                        <% end %>
                     </div>
                 </div>
             </div>
