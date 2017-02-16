@@ -4,6 +4,7 @@ module Erp::Orders
     belongs_to :salesperson, class_name: "Erp::User", foreign_key: :salesperson_id, optional: true
     if Erp::Core.available?("contacts")
 			belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id, optional: true
+			belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id, optional: true
 		end
     if Erp::Core.available?("warehouses")
 			belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse", foreign_key: :warehouse_id, optional: true
@@ -82,19 +83,24 @@ module Erp::Orders
     if Erp::Core.available?("contacts")
 			# display customer
 			def customer_name
-				customer.present? ? customer.name : ""
+				customer.present? ? customer.name : ''
+			end
+			
+			# display supplier
+			def supplier_name
+				supplier.present? ? supplier.name : ''
 			end
 		end
     
     # display salesperson
     def salesperson_name
-			salesperson.present? ? salesperson.name : ""
+			salesperson.present? ? salesperson.name : ''
 		end
     
     if Erp::Core.available?("warehouses")
 			# display warehouse
 			def warehouse_name
-				warehouse.present? ? warehouse.warehouse_name : ""
+				warehouse.present? ? warehouse.warehouse_name : ''
 			end
 		end
     
