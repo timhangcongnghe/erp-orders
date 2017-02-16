@@ -127,7 +127,7 @@ module Erp
     
           # Only allow a trusted parameter "white list" through.
           def order_params
-            params.fetch(:order, {}).permit(:order_date, :expiration_date, :customer_id, :warehouse_id, :salesperson_id,
+            params.fetch(:order, {}).permit(:order_date, :customer_id, :warehouse_id, :salesperson_id,
                                             :order_details_attributes => [ :id, :product_id, :order_id, :quantity, :price, :description, :_destroy ])
           end
       end
