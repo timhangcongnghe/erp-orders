@@ -54,7 +54,7 @@
                     <%= erp_datalist_check_row(id: order.id) %>
                 </td>
                 <% if get_columns(params).include?("order_number") %>
-                <td><%= order.id %></td>
+                <td><%= link_to order.code, erp_orders.edit_backend_order_path(order) %></td>
                 <% end %>
                 <% if get_columns(params).include?("order_date") %>
                 <td><%= order.order_date.strftime("%d/%m/%Y") %></td>
@@ -84,6 +84,10 @@
                 <td>
                     <%= erp_datalist_row_actions(
                         [
+                            {
+                                text: '<i class="icon-docs"></i> '+t('.view'),
+                                url: erp_orders.backend_order_path(order)
+                            },
                             {
                                 text: '<i class="fa fa-edit"></i> '+t('.edit'),
                                 url: erp_orders.edit_backend_order_path(order)
