@@ -109,7 +109,7 @@ warehouse = Erp::Warehouses::Warehouse.create(
 puts warehouse.errors.to_json if !warehouse.errors.empty?
 
 
-# SALES ORDERS
+# ORDERS ORDERS
 puts "Create sample orders order"
 Erp::Orders::Order.where(code: "O0001").destroy_all
 orders_order1 = Erp::Orders::Order.create(
@@ -117,7 +117,6 @@ orders_order1 = Erp::Orders::Order.create(
   customer_id: customer1.id,
   code: "O0001",
   order_date: Time.now - 1.day,
-  expiration_date: Time.now + 1.week,
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
@@ -143,21 +142,20 @@ order_detail2 = orders_order1.order_details.create(
 )
 puts order_detail2.errors.to_json if !order_detail2.errors.empty?
 
-puts "Create sample sales order"
+puts "Create sample orders order"
 Erp::Orders::Order.where(code: "O0002").destroy_all
 orders_order2 = Erp::Orders::Order.create(
   supplier_id: owner.id,
   customer_id: customer2.id,
   code: "O0002",
   order_date: Time.now,
-  expiration_date: Time.now + 2.week,
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
 )
 puts orders_order2.errors.to_json if !orders_order2.errors.empty?
 
-puts "Create sample sales order detail"
+puts "Create sample orders order detail"
 order_detail3 = orders_order2.order_details.create(
   order_id: orders_order2.id,
   product_id: product3.id,
@@ -184,7 +182,6 @@ purchase_order1 = Erp::Orders::Order.create(
   customer_id: owner.id,
   code: "PO0001",
   order_date: Time.now,
-  expiration_date: Time.now + 2.week,
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
@@ -217,7 +214,6 @@ purchase_order2 = Erp::Orders::Order.create(
   customer_id: owner.id,
   code: "PO0006",
   order_date: Time.now,
-  expiration_date: Time.now + 2.week,
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
