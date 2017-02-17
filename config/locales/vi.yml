@@ -105,3 +105,5 @@ vi:
             action: "Hành động"
             paid_amount: "Đã thanh toán"
             remain_amount: "Còn nợ"
+            receive: "Thu tiền"
+            pay: "Trả tiền"
