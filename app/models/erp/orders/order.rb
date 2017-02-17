@@ -179,6 +179,14 @@ module Erp::Orders
 					Time.now
 				end
 			end
+			
+			def remain_order_quantity
+				total = 0
+				order_details.each do |od|
+					total += od.remain_quantity
+				end
+				return total
+			end
 		end
   end
 end
