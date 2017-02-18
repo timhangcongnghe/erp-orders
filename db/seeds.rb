@@ -117,6 +117,7 @@ orders_order1 = Erp::Orders::Order.create(
   customer_id: customer1.id,
   code: "O0001",
   order_date: Time.now - 1.day,
+  status: "draft",
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
@@ -149,6 +150,7 @@ orders_order2 = Erp::Orders::Order.create(
   customer_id: customer2.id,
   code: "O0002",
   order_date: Time.now,
+  status: "draft",
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
@@ -182,6 +184,7 @@ purchase_order1 = Erp::Orders::Order.create(
   customer_id: owner.id,
   code: "PO0001",
   order_date: Time.now,
+  status: "draft",
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
@@ -214,6 +217,7 @@ purchase_order2 = Erp::Orders::Order.create(
   customer_id: owner.id,
   code: "PO0006",
   order_date: Time.now,
+  status: "draft",
   creator_id: user.id,
   salesperson_id: user.id,
   warehouse_id: warehouse.id
