@@ -5,11 +5,21 @@ Erp::Orders::Engine.routes.draw do
         collection do
           post 'list'
 					get 'dataselect'
+					delete 'delete_all'
 					put 'archive'
 					put 'unarchive'
-					delete 'delete_all'
+					put 'set_draft'
+					put 'set_items_confirm'
+					put 'set_price_confirm'
+					put 'set_confirm'
+					put 'set_cancel'
 					put 'archive_all'
 					put 'unarchive_all'
+					put 'set_draft_all'
+					put 'set_items_confirm_all'
+					put 'set_price_confirm_all'
+					put 'set_confirm_all'
+					put 'set_cancel_all'
         end
       end
       resources :order_details do
