@@ -24,7 +24,10 @@
             text: t('.product'), name: 'erp_products_products.name'
         },
         {
-            text: t('.customer'), name: 'erp_contacts_contacts.name'
+            text: t('.key_customer'), name: 'erp_contacts_contacts.customer_name'
+        },
+        {
+            text: t('.key_supplier'), name: 'erp_contacts_contacts.supplier_name'
         },
         {
             text: t('.salesperson'), name: 'erp_users.name'
@@ -43,14 +46,49 @@
     ],
     actions: [
         {
+            text: '<i class="fa fa-clipboard"></i> '+t('.set_draft'),
+            url: erp_orders.set_draft_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_draft_confirm')
+        },
+        {
+            text: '<i class="fa fa-check"></i> '+t('.set_items_confirm'),
+            url: erp_orders.set_items_confirm_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_items_confirm_confirm')
+        },
+        {
+            text: '<i class="fa fa-check"></i> '+t('.set_price_confirm'),
+            url: erp_orders.set_price_confirm_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_price_confirm_confirm')
+        },
+        {
+            text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
+            url: erp_orders.set_confirm_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_confirm_confirm')
+        },
+        {
+            text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
+            url: erp_orders.set_cancel_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_cancel_confirm')
+        },
+        {
+            divider: true
+        },
+        {
             text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
-            url: '',
-            data_method: 'PUT'
+            url: erp_orders.archive_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.archive_confirm')
         },
         {
             text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
-            url: '',
-            data_method: 'PUT'
+            url: erp_orders.unarchive_all_backend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.unarchive_confirm')
         },
         {
             divider: true
@@ -62,6 +100,41 @@
             data_confirm: t('.delete_confirm')
         }
     ],
+    filters: [
+        {
+            text: t('.draft'), name: 'status', value: Erp::Orders::Order::STATUS_DRAFT, checked: false
+        },
+        {
+            text: t('.items_confirmed'), name: 'status', value: Erp::Orders::Order::STATUS_ITEMS_CONFIRMED, checked: false
+        },
+        {
+            text: t('.price_confirmed'), name: 'status', value: Erp::Orders::Order::STATUS_PRICE_CONFIRMED, checked: false
+        },
+        {
+            text: t('.confirmed'), name: 'status', value: Erp::Orders::Order::STATUS_CONFIRMED, checked: false
+        },
+        {
+            text: t('.order_cancel'), name: 'status', value: Erp::Orders::Order::STATUS_CANCELLED, checked: false
+        },
+        {
+            divider: true
+        },
+        {
+            text: t('.paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_PAID, checked: false
+        },
+        {
+            text: t('.not_paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_NOT_PAID, checked: false
+        },
+        {
+            text: t('.debt'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_DEBT, checked: false
+        },
+        {
+            divider: true
+        },
+        {
+            text: t('.order_archived'), name: 'show_archived', value: true, checked: false
+        }
+    ],
     columns: [
         {
             text: t('.order_number'), name: 'order_number', value: true, checked: true
@@ -71,6 +144,9 @@
         },
         {
             text: t('.customer'), name: 'customer', value: true, checked: true
+        },
+        {
+            text: t('.supplier'), name: 'supplier', value: true, checked: true
         },
         {
             text: t('.salesperson'), name: 'salesperson', value: true, checked: true
