@@ -19,6 +19,11 @@
                     <%= t('.customer') %>
                 </th>
             <% end %>
+            <% if get_columns(params).include?("supplier") %>
+                <th>
+                    <%= t('.supplier') %>
+                </th>
+            <% end %>
             <% if get_columns(params).include?("salesperson") %>
                 <th>
                     <%= t('.salesperson') %>
@@ -62,6 +67,9 @@
                 <% if get_columns(params).include?("customer") %>
                 <td><%= order.customer_name %></td>
                 <% end %>
+                <% if get_columns(params).include?("supplier") %>
+                <td><%= order.supplier_name %></td>
+                <% end %>
                 <% if get_columns(params).include?("salesperson") %>
                 <td><%= order.salesperson_name %></td>
                 <% end %>
@@ -69,7 +77,39 @@
                 <td><%= order.total %></td>
                 <% end %>
                 <% if get_columns(params).include?("status") %>
-                <td></td>
+                <td>
+                    <% if order.status == Erp::Orders::Order::STATUS_DRAFT %>
+                        <span class="label label-sm label-default"><%= t('.'+order.status) %></span>
+                    <% end %>
+                    <% if order.status == Erp::Orders::Order::STATUS_ITEMS_CONFIRMED %>
+                        <span class="label label-sm label-warning"><%= t('.'+order.status) %></span>
+                    <% end %>
+                    <% if order.status == Erp::Orders::Order::STATUS_PRICE_CONFIRMED %>
+                        <span class="label label-sm label-warning"><%= t('.'+order.status) %></span>
+                    <% end %>
+                    <% if order.status == Erp::Orders::Order::STATUS_CONFIRMED %>
+                        <span class="label label-sm label-success"><%= t('.'+order.status) %></span>
+                    <% end %>
+                    <% if order.status == Erp::Orders::Order::STATUS_CANCELLED %>
+                        <span class="label label-sm label-danger"><%= t('.'+order.status) %></span>
+                    <% end %>
+                    
+                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_PAID %>
+                        <span class="label label-sm label-success"><%= t('.'+order.cache_payment_status) %></span>
+                    <% end %>
+                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_NOT_PAID %>
+                        <span class="label label-sm label-danger"><%= t('.'+order.cache_payment_status) %></span>
+                    <% end %>
+                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_DEBT %>
+                        <span class="label label-sm label-warning"><%= t('.'+order.cache_payment_status) %></span>
+                    <% end %>
+                    
+                    <% if order.archived == true %>
+                    <span class="label label-sm label-danger"><%= t('.archived') %></span>
+                    <% else %>
+                    <span class="label label-sm label-success"><%= t('.active') %></span>
+                    <% end %>
+                </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>
                 <td>
@@ -92,19 +132,58 @@
                                 text: '<i class="fa fa-edit"></i> '+t('.edit'),
                                 url: erp_orders.edit_backend_order_path(order)
                             },
+                            { divider: true },
+                            {
+                                text: '<i class="fa fa-clipboard"></i> '+t('.set_draft'),
+                                url: erp_orders.set_draft_backend_orders_path(id: order),
+                                data_method: 'PUT',
+                                class: 'ajax-link',
+                                data_confirm: t('.set_draft_confirm')
+                            },
+                            {
+                                text: '<i class="fa fa-check"></i> '+t('.set_items_confirm'),
+                                url: erp_orders.set_items_confirm_backend_orders_path(id: order),
+                                data_method: 'PUT',
+                                class: 'ajax-link',
+                                data_confirm: t('.set_items_confirm_confirm')
+                            },
+                            {
+                                text: '<i class="fa fa-check"></i> '+t('.set_price_confirm'),
+                                url: erp_orders.set_price_confirm_backend_orders_path(id: order),
+                                data_method: 'PUT',
+                                class: 'ajax-link',
+                                data_confirm: t('.set_price_confirm_confirm')
+                            },
+                            {
+                                text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
+                                url: erp_orders.set_confirm_backend_orders_path(id: order),
+                                data_method: 'PUT',
+                                class: 'ajax-link',
+                                data_confirm: t('.set_confirm_confirm')
+                            },
+                            {
+                                text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
+                                url: erp_orders.set_cancel_backend_orders_path(id: order),
+                                data_method: 'PUT',
+                                class: 'ajax-link',
+                                data_confirm: t('.set_cancel_confirm')
+                            },
+                            { divider: true },
                             {
                                 text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
-                                url: '',
+                                url: erp_orders.archive_backend_orders_path(id: order),
                                 data_method: 'PUT',
-                                hide: '',
-                                class: 'ajax-link'
+                                hide: order.archived,
+                                class: 'ajax-link',
+                                data_confirm: t('.archive_confirm')
                             },
                             {
                                 text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
-                                url: '',
+                                url: erp_orders.unarchive_backend_orders_path(id: order),
                                 data_method: 'PUT',
-                                hide: '',
-                                class: 'ajax-link'
+                                hide: !order.archived,
+                                class: 'ajax-link',
+                                data_confirm: t('.unarchive_confirm')
                             },
                             { divider: true },
                             {
