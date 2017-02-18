@@ -23,11 +23,36 @@ module Erp::Orders
     STATUS_PAID = 'paid'
     STATUS_NOT_PAID = 'not_paid'
     STATUS_DEBT = 'debt'
+    STATUS_DRAFT = 'draft'
+    STATUS_ITEMS_CONFIRMED = 'items_confirmed'
+    STATUS_PRICE_CONFIRMED = 'price_confirmed'
+    STATUS_CONFIRMED = 'confirmed'
+    STATUS_CANCELLED = 'cancelled'
     
     # Filters
     def self.filter(query, params)
       params = params.to_unsafe_hash
+      
       and_conds = []
+      # show archived items condition - default: false
+      show_archived = false
+      
+      #filters
+      if params["filters"].present?
+        params["filters"].each do |ft|
+          or_conds = []
+          ft[1].each do |cond|
+            # in case filter is show archived
+            if cond[1]["name"] == 'show_archived'
+              # show archived items
+              show_archived = true
+            else
+              or_conds << "#{cond[1]["name"]} = '#{cond[1]["value"]}'"
+            end
+          end
+          and_conds << '('+or_conds.join(' OR ')+')' if !or_conds.empty?
+        end
+      end
       
       #keywords
       if params["keywords"].present?
@@ -43,6 +68,9 @@ module Erp::Orders
       # join with users table for search creator
       query = query.joins(:creator)
       
+      # showing archived items if show_archived is not true
+      query = query.where(archived: false) if show_archived == false
+      
       # join with users table for search salesperson
       query = query.joins(:salesperson)
       
@@ -55,7 +83,8 @@ module Erp::Orders
 				# join with warehouses table for search warehouse
 				query = query.joins(:warehouse)
 			end
-
+			
+			# add conditions to query
       query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
       
       return query
@@ -119,15 +148,71 @@ module Erp::Orders
 			return self.customer_id == Erp::Contacts::Contact.get_main_contact.id
 		end
     
-    # check if order is purchase order
+    # Get all sales orders
     def self.sales_orders
 			return self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
     
-    # check if order is purchase order
+    # Get all purchase orders
     def self.purchase_orders
 			return self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
+    
+    def archive
+			update_columns(archived: true)
+		end
+		
+		def unarchive
+			update_columns(archived: false)
+		end
+    
+    def self.archive_all
+			update_all(archived: true)
+		end
+    
+    def self.unarchive_all
+			update_all(archived: false)
+		end
+    
+    def set_draft
+      update_columns(status: Erp::Orders::Order::STATUS_DRAFT)
+    end
+    
+    def set_items_confirm
+      update_columns(status: Erp::Orders::Order::STATUS_ITEMS_CONFIRMED)
+    end
+    
+    def set_price_confirm
+      update_columns(status: Erp::Orders::Order::STATUS_PRICE_CONFIRMED)
+    end
+    
+    def set_confirm
+      update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
+    end
+    
+    def set_cancel
+      update_columns(status: Erp::Orders::Order::STATUS_CANCELLED)
+    end
+    
+    def self.set_draft_all
+      update_all(status: Erp::Orders::Order::STATUS_DRAFT)
+    end
+    
+    def self.set_items_confirm_all
+      update_all(status: Erp::Orders::Order::STATUS_ITEMS_CONFIRMED)
+    end
+    
+    def self.set_price_confirm_all
+      update_all(status: Erp::Orders::Order::STATUS_PRICE_CONFIRMED)
+    end
+    
+    def self.set_confirm_all
+      update_all(status: Erp::Orders::Order::STATUS_CONFIRMED)
+    end
+    
+    def self.set_cancel_all
+      update_all(status: Erp::Orders::Order::STATUS_CANCELLED)
+    end
     
     if Erp::Core.available?("payments")
 			# get paid amount for order
