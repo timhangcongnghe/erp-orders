@@ -102,6 +102,15 @@
     ],
     filters: [
         {
+            text: t('.sales'), name: 'erp_orders_orders.supplier_id', value: Erp::Contacts::Contact.get_main_contact.id, checked: false
+        },
+        {
+            text: t('.purchase'), name: 'erp_orders_orders.customer_id', value: Erp::Contacts::Contact.get_main_contact.id, checked: false
+        },
+        {
+            divider: true
+        },
+        {
             text: t('.draft'), name: 'status', value: Erp::Orders::Order::STATUS_DRAFT, checked: false
         },
         {
