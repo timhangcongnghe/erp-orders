@@ -203,18 +203,21 @@ module Erp::Orders
 					result = self.receice_payment_records.sum(:amount) - self.pay_payment_records.sum(:amount)
 				elsif self.purchase?
 					result = - self.receice_payment_records.sum(:amount) + self.pay_payment_records.sum(:amount)
+				else
+					return 0.0
 				end
-				return 0.0
 			end
 			
 			# get pay payment records for order
 			def pay_payment_records
 				self.payment_records.where(payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY)
+														.where(status: Erp::Payments::PaymentRecord::STATUS_DONE)
 			end
 			
 			# get receice payment records for order
 			def receice_payment_records
 				self.payment_records.where(payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE)
+														.where(status: Erp::Payments::PaymentRecord::STATUS_DONE)
 			end
 			
 			# get remain amount
