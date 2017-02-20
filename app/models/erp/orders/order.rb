@@ -24,8 +24,6 @@ module Erp::Orders
     STATUS_NOT_PAID = 'not_paid'
     STATUS_DEBT = 'debt'
     STATUS_DRAFT = 'draft'
-    STATUS_ITEMS_CONFIRMED = 'items_confirmed'
-    STATUS_PRICE_CONFIRMED = 'price_confirmed'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_CANCELLED = 'cancelled'
     
@@ -178,14 +176,6 @@ module Erp::Orders
       update_columns(status: Erp::Orders::Order::STATUS_DRAFT)
     end
     
-    def set_items_confirm
-      update_columns(status: Erp::Orders::Order::STATUS_ITEMS_CONFIRMED)
-    end
-    
-    def set_price_confirm
-      update_columns(status: Erp::Orders::Order::STATUS_PRICE_CONFIRMED)
-    end
-    
     def set_confirm
       update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
@@ -196,14 +186,6 @@ module Erp::Orders
     
     def self.set_draft_all
       update_all(status: Erp::Orders::Order::STATUS_DRAFT)
-    end
-    
-    def self.set_items_confirm_all
-      update_all(status: Erp::Orders::Order::STATUS_ITEMS_CONFIRMED)
-    end
-    
-    def self.set_price_confirm_all
-      update_all(status: Erp::Orders::Order::STATUS_PRICE_CONFIRMED)
     end
     
     def self.set_confirm_all

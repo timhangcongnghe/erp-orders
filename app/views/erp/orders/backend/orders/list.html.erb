@@ -81,12 +81,6 @@
                     <% if order.status == Erp::Orders::Order::STATUS_DRAFT %>
                         <span class="label label-sm label-default"><%= t('.'+order.status) %></span>
                     <% end %>
-                    <% if order.status == Erp::Orders::Order::STATUS_ITEMS_CONFIRMED %>
-                        <span class="label label-sm label-warning"><%= t('.'+order.status) %></span>
-                    <% end %>
-                    <% if order.status == Erp::Orders::Order::STATUS_PRICE_CONFIRMED %>
-                        <span class="label label-sm label-warning"><%= t('.'+order.status) %></span>
-                    <% end %>
                     <% if order.status == Erp::Orders::Order::STATUS_CONFIRMED %>
                         <span class="label label-sm label-success"><%= t('.'+order.status) %></span>
                     <% end %>
@@ -139,20 +133,6 @@
                                 data_method: 'PUT',
                                 class: 'ajax-link',
                                 data_confirm: t('.set_draft_confirm')
-                            },
-                            {
-                                text: '<i class="fa fa-check"></i> '+t('.set_items_confirm'),
-                                url: erp_orders.set_items_confirm_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                class: 'ajax-link',
-                                data_confirm: t('.set_items_confirm_confirm')
-                            },
-                            {
-                                text: '<i class="fa fa-check"></i> '+t('.set_price_confirm'),
-                                url: erp_orders.set_price_confirm_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                class: 'ajax-link',
-                                data_confirm: t('.set_price_confirm_confirm')
                             },
                             {
                                 text: '<i class="fa fa-check"></i> '+t('.set_confirm'),

@@ -4,8 +4,8 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :edit, :update, :destroy, :archive, :unarchive, :set_draft, :set_items_confirm, :set_price_confirm, :set_confirm, :set_cancel]
-        before_action :set_orders, only: [:archive_all, :unarchive_all, :delete_all, :set_draft_all, :set_items_confirm_all, :set_price_confirm_all, :set_confirm_all, :set_cancel_all]
+        before_action :set_order, only: [:show, :edit, :update, :destroy, :archive, :unarchive, :set_draft, :set_confirm, :set_cancel]
+        before_action :set_orders, only: [:archive_all, :unarchive_all, :delete_all, :set_draft_all, :set_confirm_all, :set_cancel_all]
     
         # GET /orders
         def index
@@ -157,34 +157,6 @@ module Erp
           end
         end
         
-        # Items confirm /orders/set_items_confirm?id=1
-        def set_items_confirm
-          @order.set_items_confirm
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Price confirm /orders/set_price_confirm?id=1
-        def set_price_confirm
-          @order.set_price_confirm
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
         # Confirm /orders/set_confirm?id=1
         def set_confirm
           @order.set_confirm
@@ -244,34 +216,6 @@ module Erp
         # Draft /orders/set_draft_all?ids=1,2,3
         def set_draft_all
           @orders.set_draft_all
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Items confirm /orders/set_items_confirm_all?ids=1,2,3
-        def set_items_confirm_all
-          @orders.set_items_confirm_all
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Price confirm /orders/set_price_confirm_all?ids=1,2,3
-        def set_price_confirm_all
-          @orders.set_price_confirm_all
           
           respond_to do |format|
           format.json {
