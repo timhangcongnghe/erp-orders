@@ -114,10 +114,13 @@
             text: t('.paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_PAID, checked: false
         },
         {
-            text: t('.not_paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_NOT_PAID, checked: false
+            text: t('.not_paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_OVERDUE, checked: false
         },
         {
             text: t('.debt'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_DEBT, checked: false
+        },
+        {
+            text: t('.return_back'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_RETURN_BACK, checked: false
         },
         {
             divider: true
@@ -144,6 +147,12 @@
         },
         {
             text: t('.total'), name: 'total', value: true, checked: true
+        },
+        {
+            text: t('.remain'), name: 'remain', value: true, checked: true
+        },
+        {
+            text: t('.debt_deadline'), name: 'deadline', value: true, checked: true
         },
         {
             text: t('.status'), name: 'status', value: true, checked: false
