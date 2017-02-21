@@ -34,6 +34,16 @@
                     <%= t('.total') %>
                 </th>
             <% end %>
+            <% if get_columns(params).include?("remain") %>
+                <th>
+                    <%= t('.remain') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("deadline") %>
+                <th>
+                    <%= t('.debt_deadline') %>
+                </th>
+            <% end %>
             <% if get_columns(params).include?("status") %>
                 <th>
                     <%= t('.status') %>
@@ -76,6 +86,12 @@
                 <% if get_columns(params).include?("total") %>
                 <td><%= order.total %></td>
                 <% end %>
+                <% if get_columns(params).include?("remain") %>
+                <td><%= order.remain_amount %></td>
+                <% end %>
+                <% if get_columns(params).include?("deadline") %>
+                <td><%= format_date(order.get_payment_deadline) %></td>
+                <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
                     <% if order.status == Erp::Orders::Order::STATUS_DRAFT %>
@@ -91,10 +107,13 @@
                     <% if order.cache_payment_status == Erp::Orders::Order::STATUS_PAID %>
                         <span class="label label-sm label-success"><%= t('.'+order.cache_payment_status) %></span>
                     <% end %>
-                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_NOT_PAID %>
+                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_OVERDUE %>
                         <span class="label label-sm label-danger"><%= t('.'+order.cache_payment_status) %></span>
                     <% end %>
                     <% if order.cache_payment_status == Erp::Orders::Order::STATUS_DEBT %>
+                        <span class="label label-sm label-warning"><%= t('.'+order.cache_payment_status) %></span>
+                    <% end %>
+                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_RETURN_BACK %>
                         <span class="label label-sm label-warning"><%= t('.'+order.cache_payment_status) %></span>
                     <% end %>
                     
@@ -125,6 +144,11 @@
                             {
                                 text: '<i class="fa fa-edit"></i> '+t('.edit'),
                                 url: erp_orders.edit_backend_order_path(order)
+                            },
+                            {
+                                text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),
+                                url: erp_payments.new_backend_debt_path(order_id: order.id),
+                                class: 'modal-link'
                             },
                             { divider: true },
                             {
