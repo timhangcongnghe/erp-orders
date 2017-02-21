@@ -21,8 +21,9 @@ module Erp::Orders
     
     # class const
     STATUS_PAID = 'paid'
-    STATUS_NOT_PAID = 'not_paid'
+    STATUS_OVERDUE = 'overdue'
     STATUS_DEBT = 'debt'
+    STATUS_RETURN_BACK = 'return_back'
     STATUS_DRAFT = 'draft'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_CANCELLED = 'cancelled'
@@ -173,15 +174,15 @@ module Erp::Orders
 		end
     
     def set_draft
-      update_columns(status: Erp::Orders::Order::STATUS_DRAFT)
+      update_attributes(status: Erp::Orders::Order::STATUS_DRAFT)
     end
     
     def set_confirm
-      update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
+      update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
     
     def set_cancel
-      update_columns(status: Erp::Orders::Order::STATUS_CANCELLED)
+      update_attributes(status: Erp::Orders::Order::STATUS_CANCELLED)
     end
     
     def self.set_draft_all
@@ -200,44 +201,73 @@ module Erp::Orders
 			# get paid amount for order
 			def paid_amount
 				if self.sales?
-					result = self.receice_payment_records.sum(:amount) - self.pay_payment_records.sum(:amount)
+					result = self.done_receiced_payment_records.sum(:amount) - self.done_paid_payment_records.sum(:amount)
 				elsif self.purchase?
-					result = - self.receice_payment_records.sum(:amount) + self.pay_payment_records.sum(:amount)
+					result = - self.done_receiced_payment_records.sum(:amount) + self.done_paid_payment_records.sum(:amount)
 				else
 					return 0.0
 				end
 			end
 			
 			# get pay payment records for order
-			def pay_payment_records
-				self.payment_records.where(payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY)
-														.where(status: Erp::Payments::PaymentRecord::STATUS_DONE)
+			def done_paid_payment_records
+				self.payment_records.all_done.all_paid
 			end
 			
 			# get receice payment records for order
-			def receice_payment_records
-				self.payment_records.where(payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE)
-														.where(status: Erp::Payments::PaymentRecord::STATUS_DONE)
+			def done_receiced_payment_records
+				self.payment_records.all_done.all_received
 			end
 			
 			# get remain amount
 			def remain_amount
-				return self.total - self.paid_amount
+				return self.ordered_amount - self.paid_amount
+			end
+			
+			# ordered amount
+			def ordered_amount
+				if status == Erp::Orders::Order::STATUS_CANCELLED
+					total = 0.0
+				else
+					total = self.total
+				end
+				return total
+			end
+			
+			# check if order is cancelled
+			def cancelled?
+				return self.status == Erp::Orders::Order::STATUS_CANCELLED
+			end
+			
+			# set payment status
+			def payment_status
+				status = ''
+				if self.status == Erp::Orders::Order::STATUS_CONFIRMED
+					if remain_amount == 0
+						status = Erp::Orders::Order::STATUS_PAID
+					elsif remain_amount > 0
+						if Time.now < get_payment_deadline.end_of_day
+							status = Erp::Orders::Order::STATUS_DEBT
+						else
+							status = Erp::Orders::Order::STATUS_OVERDUE
+						end
+					else
+						status = Erp::Orders::Order::STATUS_RETURN_BACK
+					end
+				elsif self.status == Erp::Orders::Order::STATUS_CANCELLED
+					if remain_amount == 0
+						status = ''
+					else
+						status = Erp::Orders::Order::STATUS_RETURN_BACK
+					end
+				end
+				
+				return status
 			end
 			
 			# update cache payment status
 			def update_cache_payment_status
-				if remain_amount == 0
-					status = Erp::Orders::Order::STATUS_PAID
-				else remain_amount > 0
-					if Time.now > get_payment_deadline.end_of_day
-						status = Erp::Orders::Order::STATUS_NOT_PAID
-					else
-						status = Erp::Orders::Order::STATUS_DEBT
-					end
-				end
-				
-				self.update_columns(cache_payment_status: status)
+				self.update_columns(cache_payment_status: payment_status)
 			end
 			
 			# get payment deadline
@@ -250,6 +280,7 @@ module Erp::Orders
 				end
 			end
 			
+			# remain order quantity
 			def remain_order_quantity
 				total = 0
 				order_details.each do |od|
