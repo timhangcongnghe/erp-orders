@@ -17,12 +17,6 @@ vi:
             success: "Xóa thông tin đơn hàng thành công."
           delete_all:
             success: "Thông tin đơn hàng vừa chọn đã được xóa."
-          archive:
-            success: "Ẩn đơn hàng thành công."
-          unarchive:
-            success: "Hiện đơn hàng thành công."
-          set_draft:
-            success: "Lưu tạm đơn hàng thành công."
           set_items_confirm:
             success: "Xác nhận mặt hàng thành công."
           set_price_confirm:
@@ -31,12 +25,6 @@ vi:
             success: "Xác nhận đơn hàng thành công."
           set_cancel:
             success: "Đơn hàng đã được hủy thành công."
-          archive_all:
-            success: "Thông tin đơn hàng vừa chọn đã được ẩn."
-          unarchive_all:
-            success: "Thông tin đơn hàng vừa chọn đã được hiển thị."
-          set_draft_all:
-            success: "Lưu tạm đơn hàng thành công."
           set_items_confirm_all:
             success: "Xác nhận mặt hàng thành công."
           set_price_confirm_all:
@@ -60,8 +48,6 @@ vi:
             creator: "Người tạo"
             created_at: "Ngày tạo"
             actions: "Thao tác"
-            archive: "Hủy đơn hàng"
-            unarchive: "Phục hồi đơn hủy"
             delete: "Xóa đơn hàng"
             orders: "Đơn đặt hàng"
             delete_confirm: "Các đơn hàng đã chọn sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
@@ -80,21 +66,14 @@ vi:
             not_paid: "Chưa thanh toán"
             debt: "Đang công nợ"
             return_back: "Cần trả lại tiền"
-            order_archived: "Đơn hàng đã ẩn"
-            archive: "Ẩn đơn hàng"
-            unarchive: "Hiện đơn hàng"
-            set_draft: "Lưu tạm thời"
             set_items_confirm: "Xác nhận mặt hàng"
             set_price_confirm: "Xác nhận giá"
             set_confirm: "Xác nhận đơn hàng"
             set_cancel: "Hủy đơn hàng"
-            set_draft_confirm: "Bạn đồng ý chuyển trạng thái đơn hàng thành 'lưu nháp'?"
             set_items_confirm_confirm: "Bạn đồng ý xác nhận mặt hàng?"
             set_price_confirm_confirm: "Bạn đồng ý xác nhận giá?"
             set_confirm_confirm: "Bạn đồng ý xác nhận đơn hàng?"
             set_cancel_confirm: "Bạn đồng ý hủy đơn hàng?"
-            archive_confirm: "Bạn có chắc muốn ẩn đơn hàng này?"
-            unarchive_confirm: "Bạn có chắc muốn hiện đơn hàng này?"
           list:
             create: "Tạo đơn hàng"
             order_number: "Mã đơn hàng"
@@ -111,10 +90,6 @@ vi:
             actions: "Thao tác"
             edit: "Cập nhật thông tin"
             view: "Xem đơn hàng"
-            archive: "Ẩn đơn hàng"
-            unarchive: "Hiện đơn hàng"
-            archive_confirm: "Bạn có chắc muốn ẩn đơn hàng này?"
-            unarchive_confirm: "Bạn có chắc muốn hiện đơn hàng này?"
             delete: "Xóa đơn hàng"
             delete_confirm: "Cảnh báo: Đơn hàng này sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
             draft: "Lưu tạm"
@@ -125,18 +100,20 @@ vi:
             overdue: "Quá hạn thanh toán"
             debt: "Công nợ"
             active: "Kích hoạt"
-            archived: "Đang ẩn"
             extend_debt_deadline: "Gia hạn công nợ"
-            set_draft: "Lưu tạm thời"
-            set_items_confirm: "Xác nhận mặt hàng"
-            set_price_confirm: "Xác nhận giá"
+            re_opened: "Mở lại đơn hàng"
             set_confirm: "Xác nhận đơn hàng"
             set_cancel: "Hủy đơn hàng"
-            set_draft_confirm: "Bạn đồng ý chuyển trạng thái đơn hàng thành 'lưu nháp'?"
             set_items_confirm_confirm: "Bạn đồng ý xác nhận mặt hàng?"
             set_price_confirm_confirm: "Bạn đồng ý xác nhận giá?"
             set_confirm_confirm: "Bạn đồng ý xác nhận đơn hàng?"
             set_cancel_confirm: "Bạn đồng ý hủy đơn hàng?"
+            re_opened_confirm: "Bạn đồng ý mở lại đơn hàng?"
+            pay_ncc: "Trả tiền NCC"
+            pay_kh: "Trả lại tiền KH"
+            receive_ncc: "Nhận tiền NCC"
+            receive_kh: "Thu tiền KH"
+            payment_record: "Phiếu thanh toán"
           new:
             orders: "Tất cả đơn hàng"
             create: "Thêm đơn hàng"
