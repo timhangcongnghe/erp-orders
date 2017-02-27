@@ -94,34 +94,8 @@
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
-                    <% if order.status == Erp::Orders::Order::STATUS_DRAFT %>
-                        <span class="label label-sm label-default"><%= t('.'+order.status) %></span>
-                    <% end %>
-                    <% if order.status == Erp::Orders::Order::STATUS_CONFIRMED %>
-                        <span class="label label-sm label-success"><%= t('.'+order.status) %></span>
-                    <% end %>
-                    <% if order.status == Erp::Orders::Order::STATUS_CANCELLED %>
-                        <span class="label label-sm label-danger"><%= t('.'+order.status) %></span>
-                    <% end %>
-                    
-                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_PAID %>
-                        <span class="label label-sm label-success"><%= t('.'+order.cache_payment_status) %></span>
-                    <% end %>
-                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_OVERDUE %>
-                        <span class="label label-sm label-danger"><%= t('.'+order.cache_payment_status) %></span>
-                    <% end %>
-                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_DEBT %>
-                        <span class="label label-sm label-warning"><%= t('.'+order.cache_payment_status) %></span>
-                    <% end %>
-                    <% if order.cache_payment_status == Erp::Orders::Order::STATUS_RETURN_BACK %>
-                        <span class="label label-sm label-warning"><%= t('.'+order.cache_payment_status) %></span>
-                    <% end %>
-                    
-                    <% if order.archived == true %>
-                    <span class="label label-sm label-danger"><%= t('.archived') %></span>
-                    <% else %>
-                    <span class="label label-sm label-success"><%= t('.active') %></span>
-                    <% end %>
+                    <%= status_label(order.status) %>
+                    <%= status_label(order.cache_payment_status) %>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>
@@ -135,70 +109,7 @@
                 <td><%= order.created_at.strftime("%d/%m/%Y") %></td>
                 <% end %>
                 <td>
-                    <%= erp_datalist_row_actions(
-                        [
-                            {
-                                text: '<i class="icon-docs"></i> '+t('.view'),
-                                url: erp_orders.backend_order_path(order)
-                            },
-                            {
-                                text: '<i class="fa fa-edit"></i> '+t('.edit'),
-                                url: erp_orders.edit_backend_order_path(order)
-                            },
-                            {
-                                text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),
-                                url: erp_payments.new_backend_debt_path(order_id: order.id),
-                                class: 'modal-link'
-                            },
-                            { divider: true },
-                            {
-                                text: '<i class="fa fa-clipboard"></i> '+t('.set_draft'),
-                                url: erp_orders.set_draft_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                class: 'ajax-link',
-                                data_confirm: t('.set_draft_confirm')
-                            },
-                            {
-                                text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
-                                url: erp_orders.set_confirm_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                class: 'ajax-link',
-                                data_confirm: t('.set_confirm_confirm')
-                            },
-                            {
-                                text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
-                                url: erp_orders.set_cancel_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                class: 'ajax-link',
-                                data_confirm: t('.set_cancel_confirm')
-                            },
-                            { divider: true },
-                            {
-                                text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
-                                url: erp_orders.archive_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                hide: order.archived,
-                                class: 'ajax-link',
-                                data_confirm: t('.archive_confirm')
-                            },
-                            {
-                                text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
-                                url: erp_orders.unarchive_backend_orders_path(id: order),
-                                data_method: 'PUT',
-                                hide: !order.archived,
-                                class: 'ajax-link',
-                                data_confirm: t('.unarchive_confirm')
-                            },
-                            { divider: true },
-                            {
-                              text: '<i class="fa fa-trash"></i> '+t('.delete'),
-                              url: erp_orders.backend_order_path(order),
-                              data_method: 'DELETE',
-                              data_confirm: t('.delete_confirm'),
-                              class: 'ajax-link'
-                            }
-                        ]
-                    ) %>
+                    <%= order_dropdown_actions(order) %>
                 </td>
             </tr>
         <% end.empty? %>
