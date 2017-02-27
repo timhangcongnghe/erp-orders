@@ -68,7 +68,7 @@ module Erp::Orders
       query = query.joins(:creator)
       
       # showing archived items if show_archived is not true
-      query = query.where(archived: false) if show_archived == false
+      #query = query.where(archived: false) if show_archived == false
       
       # join with users table for search salesperson
       query = query.joins(:salesperson)
@@ -157,36 +157,12 @@ module Erp::Orders
 			return self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
     
-    def archive
-			update_columns(archived: true)
-		end
-		
-		def unarchive
-			update_columns(archived: false)
-		end
-    
-    def self.archive_all
-			update_all(archived: true)
-		end
-    
-    def self.unarchive_all
-			update_all(archived: false)
-		end
-    
-    def set_draft
-      update_attributes(status: Erp::Orders::Order::STATUS_DRAFT)
-    end
-    
     def set_confirm
       update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
     
     def set_cancel
       update_attributes(status: Erp::Orders::Order::STATUS_CANCELLED)
-    end
-    
-    def self.set_draft_all
-      update_all(status: Erp::Orders::Order::STATUS_DRAFT)
     end
     
     def self.set_confirm_all
