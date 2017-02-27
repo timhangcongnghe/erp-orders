@@ -46,12 +46,6 @@
     ],
     actions: [
         {
-            text: '<i class="fa fa-clipboard"></i> '+t('.set_draft'),
-            url: erp_orders.set_draft_all_backend_orders_path,
-            data_method: 'PUT',
-            data_confirm: t('.set_draft_confirm')
-        },
-        {
             text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
             url: erp_orders.set_confirm_all_backend_orders_path,
             data_method: 'PUT',
@@ -62,21 +56,6 @@
             url: erp_orders.set_cancel_all_backend_orders_path,
             data_method: 'PUT',
             data_confirm: t('.set_cancel_confirm')
-        },
-        {
-            divider: true
-        },
-        {
-            text: '<i class="fa fa-eye-slash"></i> '+t('.archive'),
-            url: erp_orders.archive_all_backend_orders_path,
-            data_method: 'PUT',
-            data_confirm: t('.archive_confirm')
-        },
-        {
-            text: '<i class="fa fa-eye"></i> '+t('.unarchive'),
-            url: erp_orders.unarchive_all_backend_orders_path,
-            data_method: 'PUT',
-            data_confirm: t('.unarchive_confirm')
         },
         {
             divider: true
@@ -121,12 +100,6 @@
         },
         {
             text: t('.return_back'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_RETURN_BACK, checked: false
-        },
-        {
-            divider: true
-        },
-        {
-            text: t('.order_archived'), name: 'show_archived', value: true, checked: false
         }
     ],
     columns: [
@@ -155,7 +128,7 @@
             text: t('.debt_deadline'), name: 'deadline', value: true, checked: true
         },
         {
-            text: t('.status'), name: 'status', value: true, checked: false
+            text: t('.status'), name: 'status', value: true, checked: true
         },
         {
             text: t('.creator'), name: 'creator', value: true, checked: false
