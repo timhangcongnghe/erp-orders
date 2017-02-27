@@ -5,7 +5,6 @@ class CreateErpOrdersOrders < ActiveRecord::Migration[5.0]
       t.datetime :order_date
       t.string :status
       t.string :cache_payment_status
-      t.boolean :archived, default: false
       t.references :creator, index: true, references: :erp_users
       t.references :customer, index: true, references: :erp_contacts_contacts
       t.references :supplier, index: true, references: :erp_contacts_contacts
