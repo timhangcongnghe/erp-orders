@@ -4,8 +4,8 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :edit, :update, :destroy, :archive, :unarchive, :set_draft, :set_confirm, :set_cancel]
-        before_action :set_orders, only: [:archive_all, :unarchive_all, :delete_all, :set_draft_all, :set_confirm_all, :set_cancel_all]
+        before_action :set_order, only: [:show, :edit, :update, :destroy, :set_confirm, :set_cancel]
+        before_action :set_orders, only: [:delete_all, :set_confirm_all, :set_cancel_all]
     
         # GET /orders
         def index
@@ -13,7 +13,7 @@ module Erp
         
         # POST /orders/list
         def list
-          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 3)
+          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 5)
           
           render layout: nil
         end
@@ -115,48 +115,6 @@ module Erp
           end
         end
         
-        # Archive /orders/archive?id=1
-        def archive
-          @order.archive
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Unarchive /orders/unarchive?id=1
-        def unarchive
-          @order.unarchive
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Draft /orders/set_draft?id=1
-        def set_draft
-          @order.set_draft
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
         # Confirm /orders/set_confirm?id=1
         def set_confirm
           @order.set_confirm
@@ -174,48 +132,6 @@ module Erp
         # Cancel /orders/set_cancel?id=1
         def set_cancel
           @order.set_cancel
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Archive /orders/archive_all?ids=1,2,3
-        def archive_all
-          @orders.archive_all
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Unarchive /orders/unarchive_all?ids=1,2,3
-        def unarchive_all
-          @orders.unarchive_all
-          
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-        
-        # Draft /orders/set_draft_all?ids=1,2,3
-        def set_draft_all
-          @orders.set_draft_all
           
           respond_to do |format|
           format.json {
