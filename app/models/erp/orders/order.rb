@@ -27,6 +27,7 @@ module Erp::Orders
     STATUS_DRAFT = 'draft'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_CANCELLED = 'cancelled'
+    STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
     
     # Filters
     def self.filter(query, params)
@@ -263,6 +264,14 @@ module Erp::Orders
 					total += od.remain_quantity
 				end
 				return total
+			end
+		end
+    
+    if Erp::Core.available?("accounting")
+			# Accounting: Orders need to payments
+			def self.status_active_for_orders
+				# @TODO
+				self.where(status: Erp::Orders::Order::STATUS_ACTIVE)
 			end
 		end
   end
