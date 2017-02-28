@@ -63,7 +63,7 @@
         </tr>
     </thead>
     <tbody>
-        <% if @orders.each do |order| %>
+        <% @orders.each do |order| %>
             <tr class="odd gradeX">
                 <td>
                     <%= erp_datalist_check_row(id: order.id) %>
@@ -112,12 +112,11 @@
                     <%= order_dropdown_actions(order) %>
                 </td>
             </tr>
-        <% end.empty? %>
-            <tr>
-                <td colspan="6"><%= t('.no_matching_records_found') %></td>
-            </tr>
         <% end %>
     </tbody>
 </table>
+<% if @orders.empty? %>
+    <div class="datalist-empty-line"><%= t('.no_matching_records_found') %></div>
+<% end %>
     
 <%= erp_datalist_pagination(@orders) %>
