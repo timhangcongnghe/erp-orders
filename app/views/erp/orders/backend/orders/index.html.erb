@@ -46,6 +46,14 @@
     ],
     actions: [
         {
+            text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),
+            url: '',
+            data_method: 'PUT'
+        },
+        {
+            divider: true
+        },
+        {
             text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
             url: erp_orders.set_confirm_all_backend_orders_path,
             data_method: 'PUT',
