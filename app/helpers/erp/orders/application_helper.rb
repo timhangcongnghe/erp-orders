@@ -17,17 +17,14 @@ module Erp
         actions << {
           text: '<i class="icon-action-undo"></i> '+(order.purchase? ? t('.pay_ncc') : t('.pay_kh')),
           url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY),
-          class: 'modal-link'
         }
         actions << {
           text: '<i class="icon-action-redo"></i> '+(order.purchase? ? t('.receive_ncc') : t('.receive_kh')),
           url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE),
-          class: 'modal-link'
         }
         actions << {
           text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),
           url: erp_payments.new_backend_debt_path(order_id: order.id),
-          class: 'modal-link'
         }
         actions << { divider: true }
         actions << {
@@ -49,7 +46,6 @@ module Erp
           actions << {
             text: '<i class="fa fa-print"></i> '+t('.payment_record')+' ('+payment_record.code+')',
             url: erp_payments.backend_payment_record_path(payment_record),
-            class: 'modal-link'
           }
         end
         actions << { divider: true } if !order.payment_records.empty?
