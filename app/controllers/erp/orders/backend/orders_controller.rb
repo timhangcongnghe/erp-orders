@@ -40,6 +40,7 @@ module Erp
         def create
           @order = Order.new(order_params)
           @order.creator = current_user
+          @order.status = Erp::Orders::Order::STATUS_DRAFT
     
           if @order.save
             if request.xhr?
