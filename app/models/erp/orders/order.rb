@@ -18,6 +18,7 @@ module Erp::Orders
 		end
     
     after_save :update_cache_payment_status
+    after_save :update_cache_total
     
     # class const
     STATUS_PAID = 'paid'
@@ -33,22 +34,30 @@ module Erp::Orders
     def self.filter(query, params)
       params = params.to_unsafe_hash
       
+      # join with users table for search creator
+      query = query.joins(:creator)
+      
+      # join with users table for search salesperson
+      query = query.joins(:salesperson)
+      
+      if Erp::Core.available?("contacts")
+				# join with contacts table for search customer
+				query = query.joins(:customer)
+			end
+      
+      if Erp::Core.available?("warehouses")
+				# join with warehouses table for search warehouse
+				query = query.joins(:warehouse)
+			end
+      
       and_conds = []
-      # show archived items condition - default: false
-      show_archived = false
       
       #filters
       if params["filters"].present?
         params["filters"].each do |ft|
           or_conds = []
           ft[1].each do |cond|
-            # in case filter is show archived
-            if cond[1]["name"] == 'show_archived'
-              # show archived items
-              show_archived = true
-            else
-              or_conds << "#{cond[1]["name"]} = '#{cond[1]["value"]}'"
-            end
+            or_conds << "#{cond[1]["name"]} = '#{cond[1]["value"]}'"
           end
           and_conds << '('+or_conds.join(' OR ')+')' if !or_conds.empty?
         end
@@ -65,27 +74,14 @@ module Erp::Orders
         end
       end
       
-      # join with users table for search creator
-      query = query.joins(:creator)
-      
-      # showing archived items if show_archived is not true
-      #query = query.where(archived: false) if show_archived == false
-      
-      # join with users table for search salesperson
-      query = query.joins(:salesperson)
-      
-      if Erp::Core.available?("contacts")
-				# join with contacts table for search customer
-				query = query.joins(:customer)
-			end
-      
-      if Erp::Core.available?("warehouses")
-				# join with warehouses table for search warehouse
-				query = query.joins(:warehouse)
-			end
-			
-			# add conditions to query
+      # add conditions to query
       query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
+      
+      # search by a date
+      if params[:date].present?
+				date = params[:date].to_date
+				query = query.where("order_date >= ? AND order_date <= ?", date.beginning_of_day, date.end_of_day)
+			end
       
       return query
     end
@@ -138,6 +134,16 @@ module Erp::Orders
 			return order_details.sum('price * quantity')
 		end
     
+    # Update cache total
+    def update_cache_total
+			self.update_column(:cache_total, self.total)
+		end
+    
+    # Cache total
+    def self.cache_total
+			self.sum("erp_orders_orders.cache_total")
+		end
+    
     # check if order is sales order
     def sales?
 			return self.supplier_id == Erp::Contacts::Contact.get_main_contact.id
@@ -149,14 +155,39 @@ module Erp::Orders
 		end
     
     # Get all sales orders
-    def self.sales_orders
-			return self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+    def self.sales_orders(from_date=nil, to_date=nil)
+			query = self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+    
+			if from_date.present?
+        query = query.where("order_date >= ?", from_date.beginning_of_day)
+      end
+      
+      if to_date.present?
+        query = query.where("order_date <= ?", to_date.end_of_day)
+      end
+      
+      return query
 		end
     
     # Get all purchase orders
-    def self.purchase_orders
-			return self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+    def self.purchase_orders(from_date=nil, to_date=nil)
+			query = self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+			
+			if from_date.present?
+        query = query.where("order_date >= ?", from_date.beginning_of_day)
+      end
+      
+      if to_date.present?
+        query = query.where("order_date <= ?", to_date.end_of_day)
+      end
+      
+      return query
 		end
+    
+    # Get all active orders
+    def self.all_confirmed
+      self.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
+    end
     
     def set_confirm
       update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
@@ -249,7 +280,6 @@ module Erp::Orders
 			
 			# get payment deadline
 			def get_payment_deadline
-				# @todo
 				if !debts.empty?
 					self.debts.last.deadline
 				else
@@ -273,6 +303,11 @@ module Erp::Orders
 				# @TODO
 				self.where(status: Erp::Orders::Order::STATUS_ACTIVE)
 			end
+		end
+    
+    # count orders by date range
+    def self.get_by_time(from_date, to_date)
+			self.where("order_date >= ? AND order_date <= ?", from_date.beginning_of_day, to_date.end_of_day)
 		end
   end
 end
