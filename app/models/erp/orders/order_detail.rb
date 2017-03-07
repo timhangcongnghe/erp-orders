@@ -7,7 +7,16 @@ module Erp::Orders
 			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
 		end
     after_save :order_update_cache_payment_status
+    after_save :update_order_cache_total
     
+    # update order cache total
+    def update_order_cache_total
+			if order.present?
+				order.update_cache_total
+			end
+		end
+    
+    # update order cache payment status
     def order_update_cache_payment_status
 			if order.present?
 				order.update_cache_payment_status
