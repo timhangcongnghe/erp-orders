@@ -34,6 +34,12 @@ product1 = Erp::Products::Product.create(
   price: 120000,
   cost: 950000,
   unit_id: unit1.id,
+  short_description: "<p><strong>M&agrave;n h&igrave;nh:</strong> 14&rdquo;, 1366x768</p>
+<p><strong>CPU:</strong> Intel Celeron, 1.6GHz</p>
+<p><strong>RAM:</strong> 4GB / <strong>HDD:</strong> 500GB</p>
+<p><strong>VGA:</strong> Intel HD Graphics</p>
+<p><strong>HĐH:</strong> Windows 10 Home</p>
+<p><strong>Pin:</strong> 3 cell / <strong>DVD:</strong> Kh&ocirc;ng</p>"
 )
 Erp::Products::Product.where(code: 'P0002').destroy_all
 product2 = Erp::Products::Product.create(
@@ -43,7 +49,12 @@ product2 = Erp::Products::Product.create(
   creator_id: user.id,
   price: 280000,
   cost: 200000,
-  unit_id: unit2.id,
+  unit_id: unit2.id,short_description: "<p><strong>M&agrave;n h&igrave;nh:</strong> 14&rdquo;, 1366x768</p>
+<p><strong>CPU:</strong> Intel Celeron, 1.6GHz</p>
+<p><strong>RAM:</strong> 4GB / <strong>HDD:</strong> 500GB</p>
+<p><strong>VGA:</strong> Intel HD Graphics</p>
+<p><strong>HĐH:</strong> Windows 10 Home</p>
+<p><strong>Pin:</strong> 3 cell / <strong>DVD:</strong> Kh&ocirc;ng</p>"
 )
 Erp::Products::Product.where(code: 'P0003').destroy_all
 product3 = Erp::Products::Product.create(
@@ -54,6 +65,12 @@ product3 = Erp::Products::Product.create(
   price: 180000,
   cost: 130000,
   unit_id: unit1.id,
+  short_description: "<p><strong>M&agrave;n h&igrave;nh:</strong> 14&rdquo;, 1366x768</p>
+<p><strong>CPU:</strong> Intel Celeron, 1.6GHz</p>
+<p><strong>RAM:</strong> 4GB / <strong>HDD:</strong> 500GB</p>
+<p><strong>VGA:</strong> Intel HD Graphics</p>
+<p><strong>HĐH:</strong> Windows 10 Home</p>
+<p><strong>Pin:</strong> 3 cell / <strong>DVD:</strong> Kh&ocirc;ng</p>"
 )
 Erp::Products::Product.where(code: 'P0004').destroy_all
 product4 = Erp::Products::Product.create(
@@ -64,6 +81,12 @@ product4 = Erp::Products::Product.create(
   price: 90000,
   cost: 60000,
   unit_id: unit1.id,
+  short_description: "<p><strong>M&agrave;n h&igrave;nh:</strong> 14&rdquo;, 1366x768</p>
+<p><strong>CPU:</strong> Intel Celeron, 1.6GHz</p>
+<p><strong>RAM:</strong> 4GB / <strong>HDD:</strong> 500GB</p>
+<p><strong>VGA:</strong> Intel HD Graphics</p>
+<p><strong>HĐH:</strong> Windows 10 Home</p>
+<p><strong>Pin:</strong> 3 cell / <strong>DVD:</strong> Kh&ocirc;ng</p>"
 )
 
 
