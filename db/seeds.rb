@@ -24,12 +24,31 @@ unit1 = Erp::Products::Unit.create(name: "Cái", creator_id: user.id)
 Erp::Products::Unit.where(name: "Hộp").destroy_all
 unit2 = Erp::Products::Unit.create(name: "Hộp", creator_id: user.id)
 
+puts "Create sample brands"
+Erp::Products::Brand.where(name: 'HK Incotech 01').destroy_all
+brand1 = Erp::Products::Brand.create(
+  name: 'HK Incotech 01'
+)
+Erp::Products::Brand.where(name: 'HK Incotech 02').destroy_all
+brand2 = Erp::Products::Brand.create(
+  name: 'HK Incotech 02'
+)
+Erp::Products::Brand.where(name: 'HK Incotech 03').destroy_all
+brand3 = Erp::Products::Brand.create(
+  name: 'HK Incotech 03'
+)
+Erp::Products::Brand.where(name: 'HK Incotech 04').destroy_all
+brand4 = Erp::Products::Brand.create(
+  name: 'HK Incotech 04'
+)
+
 puts "Create sample products"
 Erp::Products::Product.where(code: 'P0001').destroy_all
 product1 = Erp::Products::Product.create(
   code: 'P0001',
   name: 'Sweet Cake Love',
   category_id: category1.id,
+  brand_id: brand1.id,
   creator_id: user.id,
   price: 120000,
   cost: 950000,
@@ -46,6 +65,7 @@ product2 = Erp::Products::Product.create(
   code: 'P0002',
   name: 'Dark Chocalate USA',
   category_id: category1.id,
+  brand_id: brand2.id,
   creator_id: user.id,
   price: 280000,
   cost: 200000,
@@ -61,6 +81,7 @@ product3 = Erp::Products::Product.create(
   code: 'P0003',
   name: 'Bobby Bear - Small',
   category_id: category2.id,
+  brand_id: brand3.id,
   creator_id: user.id,
   price: 180000,
   cost: 130000,
@@ -77,6 +98,7 @@ product4 = Erp::Products::Product.create(
   code: 'P0004',
   name: 'Toy - Small Train',
   category_id: category2.id,
+  brand_id: brand4.id,
   creator_id: user.id,
   price: 90000,
   cost: 60000,
