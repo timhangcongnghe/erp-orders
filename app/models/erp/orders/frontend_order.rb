@@ -14,6 +14,7 @@ module Erp::Orders
 				self.frontend_order_details.create(product_id: item.product_id, quantity: item.quantity)
 			end
 		end
+		after_save :update_cache_total
 		
 		# class const
 		STATUS_NEW = 'new'
@@ -37,5 +38,20 @@ module Erp::Orders
     def display_note
       note.gsub("\r\n", "<br/>").html_safe
     end
+    
+    # get total amount
+    def total
+			return frontend_order_details.sum('price * quantity')
+		end
+    
+    # Update cache total
+    def update_cache_total
+			self.update_column(:cache_total, self.total)
+		end
+    
+    # Cache total
+    def self.cache_total
+			self.sum("erp_orders_frontend_orders.cache_total")
+		end
   end
 end
