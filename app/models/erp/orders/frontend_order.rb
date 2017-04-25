@@ -14,6 +14,7 @@ module Erp::Orders
 				self.frontend_order_details.create(product_id: item.product_id, quantity: item.quantity)
 			end
 		end
+		before_create :create_order_code
 		after_save :update_cache_total
 		
 		# class const
@@ -52,6 +53,23 @@ module Erp::Orders
     # Cache total
     def self.cache_total
 			self.sum("erp_orders_frontend_orders.cache_total")
+		end
+    
+    def create_order_code
+			# code format: HK17041234
+			# @todo: check order code is unique
+			num = rand(9999)
+			self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3]+created_at.strftime("%m")).to_s+num.to_s.rjust(4, '0')
+			
+			#lastest = FrontendOrder.where('extract(year from created_at) = ?', Time.now.year)
+			#											.where('extract(month from created_at) = ?', Time.now.month)
+			#											.order("code DESC").first
+			#if !lastest.nil? && !lastest.code.nil?
+			#	num = lastest.code[6..(-1)].to_i + 1
+			#	self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3]+created_at.strftime("%m")).to_s+num.to_s.rjust(4, '0')
+			#else
+			#	self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3].to_s+created_at.strftime("%m")).to_s+1.to_s.rjust(4, '0')
+			#end
 		end
   end
 end
