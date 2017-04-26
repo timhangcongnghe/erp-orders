@@ -56,20 +56,13 @@ module Erp::Orders
 		end
     
     def create_order_code
-			# code format: HK17041234
-			# @todo: check order code is unique
-			num = rand(9999)
-			self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3]+created_at.strftime("%m")).to_s+num.to_s.rjust(4, '0')
-			
-			#lastest = FrontendOrder.where('extract(year from created_at) = ?', Time.now.year)
-			#											.where('extract(month from created_at) = ?', Time.now.month)
-			#											.order("code DESC").first
-			#if !lastest.nil? && !lastest.code.nil?
-			#	num = lastest.code[6..(-1)].to_i + 1
-			#	self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3]+created_at.strftime("%m")).to_s+num.to_s.rjust(4, '0')
-			#else
-			#	self.code = "HK%.4d" % (created_at.strftime("%Y")[2..3].to_s+created_at.strftime("%m")).to_s+1.to_s.rjust(4, '0')
-			#end
+			lastest = FrontendOrder.all.order("id DESC").last
+			num = lastest.id.to_i + 1
+			if !lastest.nil?
+				self.code = "SO%.3d" % (rand(1..999)).to_s+(num*4).to_s.rjust(5, '0')
+			else
+				self.code = "SO%.3d" % (rand(1..999)).to_s+(1*4).to_s.rjust(5, '0')
+			end
 		end
   end
 end
