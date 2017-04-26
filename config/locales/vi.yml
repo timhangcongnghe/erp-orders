@@ -149,3 +149,21 @@ vi:
             remain_amount: "Còn nợ"
             receive: "Thu tiền"
             pay: "Trả tiền"
+        frontend_orders:
+          index:
+            fontend_orders: "Tất cả đơn hàng trên website"
+            order_code: "Mã ĐH"
+            order_date: "Ngày đặt hàng"
+            customer: "Người đặt hàng"
+            consignee: "Người nhận hàng"
+            total: "Tổng đơn hàng"
+            status: "Trạng thái"
+          list:
+            order_code: "Mã ĐH"
+            order_date: "Ngày đặt hàng"
+            customer: "Người đặt hàng"
+            consignee: "Người nhận hàng"
+            total: "Tổng đơn hàng"
+            status: "Trạng thái"
+            actions: "Thao tác"
+            no_matching_records_found: "Không tìm thấy đơn hàng trong danh sách"
