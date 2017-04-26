@@ -18,6 +18,17 @@ Erp::Orders::Engine.routes.draw do
           get 'order_line_form'
 				end
 			end
+      resources :frontend_orders do
+        collection do
+          post 'list'
+          get 'frontend_order_details'
+					#delete 'delete_all'
+					#put 'set_confirm'
+					#put 'set_cancel'
+					#put 'set_confirm_all'
+					#put 'set_cancel_all'
+        end
+      end
     end
   end
 end

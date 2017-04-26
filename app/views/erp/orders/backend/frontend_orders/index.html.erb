@@ -1,0 +1,63 @@
+<% content_for :title do %>
+    <%= t('.fontend_orders') %>
+<% end %>
+
+<% content_for :page_title do %>
+    <i class="fa fa-file-text"></i> <%= t('.fontend_orders') %>
+<% end %>
+
+<%= erp_datalist(
+    url: erp_orders.list_backend_frontend_orders_path,
+    keywords: [
+        {
+            text: t('.order_code'), name: 'erp_orders_fontend_orders.code'
+        },
+        {
+            text: t('.product'), name: 'erp_products_products.name'
+        },
+        {
+            text: t('.key_customer'), name: 'erp_contacts_contacts.customer_name'
+        },
+        {
+            text: t('.key_supplier'), name: 'erp_contacts_contacts.supplier_name'
+        },
+        {
+            text: t('.salesperson'), name: 'erp_users.name'
+        },
+        {
+            text: t('.warehouse'), name: 'erp_warehouses_warehouses.short_name'
+        },
+        {
+            text: t('creator'),
+            name: 'erp_users.name',
+            select: {
+                name: 'erp_users.id',
+                data_url: erp.dataselect_backend_users_path
+            }
+        }
+    ],
+    actions: [
+    ],
+    filters: [
+    ],
+    columns: [
+        {
+            text: t('.order_code'), name: 'order_code', value: true, checked: true
+        },
+        {
+            text: t('.order_date'), name: 'order_date', value: true, checked: true
+        },
+        {
+            text: t('.customer'), name: 'customer', value: true, checked: true
+        },
+        {
+            text: t('.consignee'), name: 'consignee', value: true, checked: true
+        },
+        {
+            text: t('.total'), name: 'total', value: true, checked: true
+        },
+        {
+            text: t('.status'), name: 'status', value: true, checked: true
+        }
+    ]
+) %>

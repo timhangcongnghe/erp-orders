@@ -1,0 +1,108 @@
+<div class="col-md-6">
+    <div class="portlet grey-cascade box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Thông tin khách hàng </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row static-info">
+                <div class="col-md-5 name"> Tên KH: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_customer_data('name') %> </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Email: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_customer_data('email') %> </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Địa chỉ: </div>
+                <div class="col-md-7 value">
+                    <%= @frontend_order.get_customer_data('address') %>,
+                    <%= @frontend_order.get_customer_data('district') %>,
+                    <%= @frontend_order.get_customer_data('state') %>
+                </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Điện thoại: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_customer_data('phone') %> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="portlet grey-cascade box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Địa chỉ giao hàng </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row static-info">
+                <div class="col-md-5 name"> Người nhận: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_consignee_data('name') %> </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Email: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_consignee_data('email') %> </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Địa chỉ: </div>
+                <div class="col-md-7 value">
+                    <%= @frontend_order.get_consignee_data('address') %>,
+                    <%= @frontend_order.get_consignee_data('district') %>,
+                    <%= @frontend_order.get_consignee_data('state') %>
+                </div>
+            </div>
+            <div class="row static-info">
+                <div class="col-md-5 name"> Điện thoại: </div>
+                <div class="col-md-7 value"> <%= @frontend_order.get_consignee_data('phone') %> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-12">
+    <div class="portlet grey-cascade box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-opencart"></i>Chi tiết đơn đặt hàng </div>
+        </div>
+        <div class="portlet-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped flip-content">
+                    <thead class="flip-content">
+                        <tr>
+                            <th width="20%" class="text-left">Mã sản phẩm</th>
+                            <th class="numeric">Tên sản phẩm</th>
+                            <th class="numeric text-right">Đơn giá</th>
+                            <th class="numeric text-right">Số lượng</th>
+                            <th class="numeric text-right">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @frontend_order.frontend_order_details.each do |order_detail| %>
+                        <tr>
+                            <td class="text-left"><strong>#<%= order_detail.product.code %></strong></td>
+                            <td class="text-left"><%= order_detail.product.name %></td>
+                            <td class="numeric text-right"><%= format_number(order_detail.product.price) %> VNĐ</td>
+                            <td class="numeric text-right"><%= format_number(order_detail.quantity) %></td>
+                            <td class="numeric text-right"><%= format_number(order_detail.total) %> VNĐ</td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-6"> </div>
+                    <div class="col-md-6">
+                        <div class="well">
+                            <div class="row static-info align-reverse">
+                                <div class="col-md-8 name"> Tổng đơn hàng: </div>
+                                <div class="col-md-4 value"> <%= format_number(@frontend_order.cache_total) %> VNĐ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

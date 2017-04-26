@@ -1,0 +1,85 @@
+<table class="table table-advance table-hover table-striped order-column" id="">
+    <thead>
+        <tr>
+            <th width='1%'>
+                <%= erp_datalist_check_all %>
+            </th>
+            <% if get_columns(params).include?("order_code") %>
+                <th>
+                    <%= t('.order_code') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("order_date") %>
+                <th class="sortable" sort-by='erp_orders_frontend_orders.created_at'>
+                    <%= t('.order_date') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("customer") %>
+                <th>
+                    <%= t('.customer') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("consignee") %>
+                <th>
+                    <%= t('.consignee') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("total") %>
+                <th>
+                    <%= t('.total') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("status") %>
+                <th>
+                    <%= t('.status') %>
+                </th>
+            <% end %>
+            <% if get_columns(params).include?("creator") %>
+                <th>
+                    <%= t('.creator') %>
+                </th>
+            <% end %>
+            <th width="7%"><%= t('.actions') %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @frontend_orders.each do |frontend_order| %>
+            <tr class="odd gradeX has-child-table" data-url="<%= erp_orders.frontend_order_details_backend_frontend_orders_path(id: frontend_order.id) %>"">
+                <td>
+                    <%= erp_datalist_check_row(id: frontend_order.id) %>
+                </td>
+                <% if get_columns(params).include?("order_code") %>
+                <td>
+                    <i class="fa fa-plus expand tr-expand-button"></i>
+                    <strong><%= "#" + frontend_order.code %></strong>
+                </td>
+                <% end %>
+                <% if get_columns(params).include?("order_date") %>
+                <td><%= frontend_order.created_at.strftime("%d/%m/%Y %I:%M%p") %></td>
+                <% end %>
+                <% if get_columns(params).include?("customer") %>
+                <td><%= frontend_order.get_customer_data('name') %></td>
+                <% end %>
+                <% if get_columns(params).include?("consignee") %>
+                <td><%= frontend_order.get_consignee_data('name') %></td>
+                <% end %>
+                <% if get_columns(params).include?("total") %>
+                <td><%= format_number(frontend_order.cache_total) %> VNĐ</td>
+                <% end %>
+                <% if get_columns(params).include?("status") %>
+                <td>
+                    <%= status_label(frontend_order.status) %>
+                </td>
+                <% end %>
+                <td>
+                    
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<% if @frontend_orders.empty? %>
+    <div class="datalist-empty-line"><%= t('.no_matching_records_found') %></div>
+<% end %>
+    
+<%= erp_datalist_pagination(@frontend_orders) %>
