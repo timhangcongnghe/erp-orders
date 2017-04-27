@@ -57,8 +57,8 @@ module Erp::Orders
     
     def create_order_code
 			lastest = FrontendOrder.all.order("id DESC").last
-			num = lastest.id.to_i + 1
 			if !lastest.nil?
+				num = lastest.id.to_i + 1
 				self.code = "SO%.3d" % (rand(1..999)).to_s+(num*4).to_s.rjust(5, '0')
 			else
 				self.code = "SO%.3d" % (rand(1..999)).to_s+(1*4).to_s.rjust(5, '0')
