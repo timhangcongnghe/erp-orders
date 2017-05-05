@@ -47,6 +47,7 @@ Erp::Products::Product.where(code: 'P0001').destroy_all
 product1 = Erp::Products::Product.create(
   code: 'P0001',
   name: 'Sweet Cake Love',
+  short_name: 'Sweet Cake Love',
   category_id: category1.id,
   brand_id: brand1.id,
   creator_id: user.id,
@@ -64,6 +65,7 @@ Erp::Products::Product.where(code: 'P0002').destroy_all
 product2 = Erp::Products::Product.create(
   code: 'P0002',
   name: 'Dark Chocalate USA',
+  short_name: 'Dark Chocalate USA',
   category_id: category1.id,
   brand_id: brand2.id,
   creator_id: user.id,
@@ -80,6 +82,7 @@ Erp::Products::Product.where(code: 'P0003').destroy_all
 product3 = Erp::Products::Product.create(
   code: 'P0003',
   name: 'Bobby Bear - Small',
+  short_name: 'Bobby Bear - Small',
   category_id: category2.id,
   brand_id: brand3.id,
   creator_id: user.id,
@@ -97,6 +100,7 @@ Erp::Products::Product.where(code: 'P0004').destroy_all
 product4 = Erp::Products::Product.create(
   code: 'P0004',
   name: 'Toy - Small Train',
+  short_name: 'Toy - Small Train',
   category_id: category2.id,
   brand_id: brand4.id,
   creator_id: user.id,
