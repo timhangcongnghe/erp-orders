@@ -1,6 +1,7 @@
 module Erp::Orders
   class FrontendOrder < ApplicationRecord
 		validates :customer_id, :consignee_id, :presence => true
+		belongs_to :creator, class_name: "Erp::User"
     if Erp::Core.available?("contacts")
 			belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id
 			belongs_to :consignee, class_name: "Erp::Contacts::Contact", foreign_key: :consignee_id
@@ -63,6 +64,11 @@ module Erp::Orders
 			else
 				self.code = "SO%.3d" % (rand(1..999)).to_s+(1*4).to_s.rjust(5, '0')
 			end
+		end
+    
+    # get frontend orders for user
+    def self.get_frontend_orders_for_user(user)
+			self.where(creator_id: user.id)
 		end
   end
 end
