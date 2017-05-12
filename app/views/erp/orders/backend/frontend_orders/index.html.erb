@@ -13,22 +13,7 @@
             text: t('.order_code'), name: 'erp_orders_fontend_orders.code'
         },
         {
-            text: t('.product'), name: 'erp_products_products.name'
-        },
-        {
-            text: t('.key_customer'), name: 'erp_contacts_contacts.customer_name'
-        },
-        {
-            text: t('.key_supplier'), name: 'erp_contacts_contacts.supplier_name'
-        },
-        {
-            text: t('.salesperson'), name: 'erp_users.name'
-        },
-        {
-            text: t('.warehouse'), name: 'erp_warehouses_warehouses.short_name'
-        },
-        {
-            text: t('creator'),
+            text: t('.creator'),
             name: 'erp_users.name',
             select: {
                 name: 'erp_users.id',
@@ -37,8 +22,47 @@
         }
     ],
     actions: [
+        {
+            text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
+            url: erp_orders.set_confirm_all_backend_frontend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_confirm_confirm')
+        },
+        {
+            text: '<i class="fa fa-check"></i> '+t('.set_finish'),
+            url: erp_orders.set_finish_all_backend_frontend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_finish_confirm')
+        },
+        {
+            text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
+            url: erp_orders.set_cancel_all_backend_frontend_orders_path,
+            data_method: 'PUT',
+            data_confirm: t('.set_cancel_confirm')
+        },
+        {
+            divider: true
+        },
+        {
+            text: '<i class="fa fa-trash"></i> '+t('.delete'),
+            url: erp_orders.delete_all_backend_frontend_orders_path,
+            data_method: 'DELETE',
+            data_confirm: t('.delete_confirm')
+        }
     ],
     filters: [
+        {
+            text: t('.draft'), name: 'status', value: Erp::Orders::FrontendOrder::STATUS_DRAFT, checked: true
+        },
+        {
+            text: t('.confirmed'), name: 'status', value: Erp::Orders::FrontendOrder::STATUS_CONFIRMED, checked: false
+        },
+        {
+            text: t('.finished'), name: 'status', value: Erp::Orders::FrontendOrder::STATUS_FINISHED, checked: false
+        },
+        {
+            text: t('.cancelled'), name: 'status', value: Erp::Orders::FrontendOrder::STATUS_CANCELLED, checked: false
+        }
     ],
     columns: [
         {

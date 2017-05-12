@@ -8,6 +8,7 @@ module Erp::Orders
     end
     
     has_many :frontend_order_details, dependent: :destroy
+    accepts_nested_attributes_for :frontend_order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
     
     #save cart
 		def save_from_cart(cart)
@@ -19,7 +20,66 @@ module Erp::Orders
 		after_save :update_cache_total
 		
 		# class const
-		STATUS_NEW = 'new'
+		STATUS_DRAFT = 'draft'
+		STATUS_CONFIRMED = 'confirmed'
+		STATUS_FINISHED = 'finished'
+		STATUS_CANCELLED = 'cancelled'
+		
+		# Filters
+    def self.filter(query, params)
+      params = params.to_unsafe_hash
+      
+      # join with users table for search creator
+      query = query.joins(:creator)
+      
+      if Erp::Core.available?("contacts")
+				# join with contacts table for search customer
+				query = query.joins(:customer)
+				query = query.joins(:consignee)
+			end
+      
+      and_conds = []
+      
+      #filters
+      if params["filters"].present?
+        params["filters"].each do |ft|
+          or_conds = []
+          ft[1].each do |cond|
+            or_conds << "#{cond[1]["name"]} = '#{cond[1]["value"]}'"
+          end
+          and_conds << '('+or_conds.join(' OR ')+')' if !or_conds.empty?
+        end
+      end
+      
+      #keywords
+      if params["keywords"].present?
+        params["keywords"].each do |kw|
+          or_conds = []
+          kw[1].each do |cond|
+            or_conds << "LOWER(#{cond[1]["name"]}) LIKE '%#{cond[1]["value"].downcase.strip}%'"
+          end
+          and_conds << '('+or_conds.join(' OR ')+')'
+        end
+      end
+      
+      # add conditions to query
+      query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
+      
+      # search by a date
+#      if params[:date].present?
+#				date = params[:date].to_date
+#				query = query.where("order_date >= ? AND order_date <= ?", date.beginning_of_day, date.end_of_day)
+#			end
+      
+      return query
+    end
+    
+    def self.search(params)
+      query = self.order("created_at DESC")
+      query = self.filter(query, params)
+      
+      return query
+    end		
 		
 		# get data column
     def get_data
@@ -69,6 +129,45 @@ module Erp::Orders
     # get frontend orders for user
     def self.get_frontend_orders_for_user(user)
 			self.where(creator_id: user.id)
+		end
+    
+    def set_confirm
+      update_attributes(status: Erp::Orders::FrontendOrder::STATUS_CONFIRMED)
+    end
+    
+    def set_finish
+      update_attributes(status: Erp::Orders::FrontendOrder::STATUS_FINISHED)
+    end
+    
+    def set_cancel
+      update_attributes(status: Erp::Orders::FrontendOrder::STATUS_CANCELLED)
+    end
+    
+    def self.set_confirm_all
+      update_all(status: Erp::Orders::FrontendOrder::STATUS_CONFIRMED)
+    end
+    
+    def self.set_finish_all
+      update_all(status: Erp::Orders::FrontendOrder::STATUS_FINISHED)
+    end
+    
+    def self.set_cancel_all
+      update_all(status: Erp::Orders::FrontendOrder::STATUS_CANCELLED)
+    end
+    
+    # check if order is cancelled
+		def confirmed?
+			return self.status == Erp::Orders::FrontendOrder::STATUS_CONFIRMED
+		end
+    
+    # check if order is finished
+		def finished?
+			return self.status == Erp::Orders::FrontendOrder::STATUS_FINISHED
+		end
+    
+    # check if order is cancelled
+		def cancelled?
+			return self.status == Erp::Orders::FrontendOrder::STATUS_CANCELLED
 		end
   end
 end

@@ -1,5 +1,3 @@
-require_dependency "erp/application_controller"
-
 module Erp
   module Orders
     module Backend

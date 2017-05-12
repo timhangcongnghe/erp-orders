@@ -22,11 +22,14 @@ Erp::Orders::Engine.routes.draw do
         collection do
           post 'list'
           get 'frontend_order_details'
-					#delete 'delete_all'
-					#put 'set_confirm'
-					#put 'set_cancel'
-					#put 'set_confirm_all'
-					#put 'set_cancel_all'
+          get 'frontend_order_line_form'
+					delete 'delete_all'
+					put 'set_confirm'
+					put 'set_finish'
+					put 'set_cancel'
+					put 'set_confirm_all'
+					put 'set_finish_all'
+					put 'set_cancel_all'
         end
       end
     end

@@ -1,0 +1,34 @@
+<input type="hidden" name="order[frontend_order_details_attributes][<%= uid %>][id]" value="<%= order_detail.id %>">
+<input type="hidden" name="order[frontend_order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
+<input type="hidden" name="order[frontend_order_details_attributes][<%= uid %>][_destroy]" value="">
+<td><%= order_detail.product_code %></td>
+<td><%= order_detail.product_name %></td>
+<td class="text-right">
+    <%= erp_form_control("number", {
+        name: 'order[frontend_order_details_attributes][' + uid + '][quantity]',
+        value: order_detail.quantity,
+        text: order_detail.quantity,
+        class: "line_quantity inline"
+    }) %>
+</td>
+<td class="text-right">
+    <%= erp_form_control("number", {
+        name: 'order[frontend_order_details_attributes][' + uid + '][price]',
+        value: order_detail.price,
+        text: order_detail.price,
+        class: "line_unit_price inline"
+    }) %>
+</td>
+<td>
+    <button class="btn btn-primary btn-xs">
+        Add tax
+    </button>
+</td>
+<td class="text-right">
+    <span class="line_total text-semibold"></span>
+</td>
+<td class="text-right">
+    <%= erp_form_control("addableform_remove_button", {
+        is_nested_form: true
+    }) %>
+</td>

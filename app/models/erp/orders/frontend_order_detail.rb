@@ -31,5 +31,15 @@ module Erp::Orders
     def total
       quantity*price
     end
+    
+    # display product code
+    def product_code
+			product.present? ? product.code : ""
+		end
+    
+    # display product name
+    def product_name
+			product.present? ? product.name : ""
+		end
   end
 end

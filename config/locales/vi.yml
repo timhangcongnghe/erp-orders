@@ -150,14 +150,44 @@ vi:
             receive: "Thu tiền"
             pay: "Trả tiền"
         frontend_orders:
+          destroy:
+            success: "Đơn hàng đã xóa thành công."
+          set_confirm:
+            success: "Đơn hàng đã được xác nhận thành công."
+          set_finish:
+            success: "Đơn hàng đã kết thúc giao dịch thành công."
+          set_cancel:
+            success: "Đơn hàng đã được hủy thành công."
+          delete_all:
+            success: "Các đơn hàng vừa chọn đã được xóa thành công."
+          set_confirm_all:
+            success: "Các đơn hàng vừa chọn đã được xác nhận thành công."
+          set_finish_all:
+            success: "Các đơn hàng vừa chọn đã kết thúc giao dịch thành công."
+          set_cancel_all:
+            success: "Các đơn hàng vừa chọn đã được hủy thành công."
+            
           index:
             fontend_orders: "Tất cả đơn hàng trên website"
-            order_code: "Mã ĐH"
+            order_code: "Mã đơn hàng"
+            creator: "Thành viên"
             order_date: "Ngày đặt hàng"
             customer: "Người đặt hàng"
             consignee: "Người nhận hàng"
             total: "Tổng đơn hàng"
             status: "Trạng thái"
+            set_confirm: "Xác nhận đơn hàng"
+            set_confirm_confirm: "Bạn có muốn xác nhận các đơn hàng này?"
+            set_finish: "Kết thúc giao dịch"
+            set_finish_confirm: "Bạn chắc chắn đã giao dịch hoàn tất các đơn hàng này. Tiếp tục xác nhận?"
+            set_cancel: "Hủy đơn hàng"
+            set_cancel_confirm: "Bạn có muốn hủy các đơn hàng này?"
+            delete: "Xóa đơn hàng"
+            delete_confirm: "Bạn chắc chắn muốn xóa các đơn hàng này?"
+            draft: "Chưa xác nhận"
+            confirmed: "Đã xác nhận"
+            finished: "Giao dịch xong"
+            cancelled: "Đã bị hủy"
           list:
             order_code: "Mã ĐH"
             order_date: "Ngày đặt hàng"
@@ -167,3 +197,39 @@ vi:
             status: "Trạng thái"
             actions: "Thao tác"
             no_matching_records_found: "Không tìm thấy đơn hàng trong danh sách"
+            draft: "Chưa xác nhận"
+            confirmed: "Đã xác nhận"
+            finished: "Hoàn tất"
+            cancelled: "Đã bị hủy"
+            edit: "Chỉnh sửa"
+            delete: "Xóa đơn hàng"
+            delete_confirm: "Bạn thực sự muốn xóa đơn hàng?"
+            confirm: "Xác nhận đơn hàng"
+            confirm_confirm: "Bạn có chắc muốn xác nhận đơn hàng này?"
+            finish: "Kết thúc giao dịch"
+            finish_confirm: "Bạn chắc chắn đã giao dịch hoàn tất đơn hàng này. Tiếp tục xác nhận?"
+            cancel: "Hủy đơn hàng"
+            cancel_confirm: "Bạn chắc chắn muốn hủy đơn hàng này?"
+            re_opened: "Khôi phục / xác nhận"
+            opened_confirm: "Bạn chắc chắn muốn khôi phục lại và xác nhận đơn hàng này?"
+          edit:
+            orders: "Đơn hàng"
+            order_details: "Chi tiết đơn hàng"
+            edit: "Chỉnh sửa đơn hàng"
+          form:
+            customer: "Thông tin đặt hàng"
+            consignee: "Thông tin giao hàng"
+            product: "Sản phẩm"
+            help_product: "Tìm kiếm và thêm sản phẩm vào danh sách đơn hàng"
+            choose_product: "Tìm và thêm sản phẩm vào danh sách đơn hàng"
+            add: "Thêm vào danh sách"
+            product_code: "Mã sản phẩm"
+            product_name: "Tên sản phẩm"
+            quantity: "Số lượng"
+            price: "Giá bán"
+            tax: "Thuế"
+            total: "Thành tiền"
+            action: "Tùy chọn"
+            order_lines: "Danh sách sản phẩm"
+            other_information: "Thông tin khác"
+            

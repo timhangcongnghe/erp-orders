@@ -1,0 +1,92 @@
+<%= form_for([erp_orders, :backend, order], html: {multipart: true}) do |f| %>
+    <div class="form-body">        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tabbable-custom ">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_5_1" data-toggle="tab"> <%= t('.order_lines') %> </a>
+                        </li>
+                        <li>
+                            <a href="#tab_5_2" data-toggle="tab"> <%= t('.other_information') %> </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content order-details">
+                        <div class="tab-pane addableform-table active" id="tab_5_1">
+                            <%= erp_form_control("addableform", {
+                                type: 'table',
+                                add_button: t('.add'),
+                                partial: 'erp/orders/backend/frontend_orders/frontend_order_line_form',
+                                partial_url: erp_orders.frontend_order_line_form_backend_frontend_orders_path,
+                                items: @order.frontend_order_details,
+                                item: :order_detail,
+                                add_control_selector: "input[name='product_id']",
+                                add_control: erp_form_control("dataselect", {
+                                    name: 'product_id',
+                                    placeholder: t('.choose_product'),
+                                    label: t('.product'),
+                                    help: t('.help_product'),
+                                    url: erp_products.dataselect_backend_products_path(format: 'json'),
+                                    create: {
+                                        url: erp_products.new_backend_product_path,
+                                        title: t('.create_product'),
+                                        container_selector: '.new_product',
+                                        input_selector: 'input[name="product[name]"]'
+                                    },
+                                    edit: {
+                                        url: erp_products.edit_backend_product_path(id: ':value'),
+                                        title: t('.edit_product'),
+                                        container_selector: '.edit_product',
+                                    }
+                                }),
+                                thead: "<th>#{t('.product_code')}</th>
+                                        <th>#{t('.product_name')}</th>                                        
+                                        <th class='text-right'>#{t('.quantity')}</th>
+                                        <th class='text-right'>#{t('.price')}</th>
+                                        <th>#{t('.tax')}</th>
+                                        <th class='text-right'>#{t('.total')}</th>                                        
+                                        <th class='text-right'>#{t('.action')}</th>"
+                            }) %>
+                            
+                            <table class="table">
+                                <tr>
+                                    <td width="90%" class="text-right text-semibold">Tổng cộng:</td>
+                                    <td class="text-right">
+                                        <h4>
+                                            <span class="order_total text-bold"></span>
+                                        </h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane addableform-table" id="tab_5_2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= erp_component('button/save', {
+        text: t('.submit')
+    }) %>
+    <%= erp_component('button/cancel', {
+        text: t('.cancel'),
+        href: erp_orders.backend_frontend_orders_path
+    }) %>
+<% end %>

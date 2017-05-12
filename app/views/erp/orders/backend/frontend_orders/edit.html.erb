@@ -1,0 +1,28 @@
+<% content_for :title do %>
+    <%= t('.edit') %>
+<% end %>
+
+<% content_for :page_title do %>    
+    <a href="<%= erp_orders.backend_frontend_orders_path %>">
+    <i class="fa fa-users"></i> <%= t('.orders') %>
+    </a> / <%= @order.code %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <div class="btn-group">
+        <div class="clearfix">
+        </div>
+    </div>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+        <% if @order.errors.any? %>
+            <%= erp_form_control("form_error_message") %>
+        <% end %>
+        
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <%= render 'form', order: @order %>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>

@@ -43,43 +43,85 @@
         </tr>
     </thead>
     <tbody>
-        <% @frontend_orders.each do |frontend_order| %>
-            <tr class="odd gradeX has-child-table" data-url="<%= erp_orders.frontend_order_details_backend_frontend_orders_path(id: frontend_order.id) %>"">
+        <% @orders.each do |order| %>
+            <tr class="odd gradeX has-child-table" data-url="<%= erp_orders.frontend_order_details_backend_frontend_orders_path(id: order.id) %>">
                 <td>
-                    <%= erp_datalist_check_row(id: frontend_order.id) %>
+                    <%= erp_datalist_check_row(id: order.id) %>
                 </td>
                 <% if get_columns(params).include?("order_code") %>
                 <td>
                     <i class="fa fa-plus expand tr-expand-button"></i>
-                    <strong><%= "#" + frontend_order.code %></strong>
+                    <strong><%= "#" + order.code %></strong>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("order_date") %>
-                <td><%= frontend_order.created_at.strftime("%d/%m/%Y %I:%M%p") %></td>
+                <td><%= order.created_at.strftime("%d/%m/%Y %I:%M%p") %></td>
                 <% end %>
                 <% if get_columns(params).include?("customer") %>
-                <td><%= frontend_order.get_customer_data('name') %></td>
+                <td><%= order.get_customer_data('name') %></td>
                 <% end %>
                 <% if get_columns(params).include?("consignee") %>
-                <td><%= frontend_order.get_consignee_data('name') %></td>
+                <td><%= order.get_consignee_data('name') %></td>
                 <% end %>
                 <% if get_columns(params).include?("total") %>
-                <td><%= format_number(frontend_order.cache_total) %> VNĐ</td>
+                <td><%= format_number(order.cache_total) %> VNĐ</td>
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
-                    <%= status_label(frontend_order.status) %>
+                    <%= status_label(order.status) %>
                 </td>
                 <% end %>
                 <td>
-                    
+                    <%
+                        actions = []
+                        actions << {
+                            text: '<i class="fa fa-edit"></i> '+t('.edit'),
+                            url: erp_orders.edit_backend_frontend_order_path(order),
+                            hide: (order.finished? or order.cancelled?)
+                        }
+                        actions << {
+                            text: (order.cancelled? == false ? '<i class="fa fa-check"></i> '+t('.confirm') : '<i class="fa fa-undo"></i> '+t('.re_opened')),
+                            url: erp_orders.set_confirm_backend_frontend_orders_path(id: order),
+                            data_method: 'PUT',
+                            hide: (order.confirmed? or order.finished?),
+                            class: 'ajax-link',
+                            data_confirm: order.cancelled? == false ? t('.confirm_confirm') : t('.opened_confirm')
+                        }
+                        actions << {
+                            text: '<i class="fa fa-check"></i> '+t('.finish'),
+                            url: erp_orders.set_finish_backend_frontend_orders_path(id: order),
+                            data_method: 'PUT',
+                            hide: !order.confirmed?,
+                            class: 'ajax-link',
+                            data_confirm: t('.finish_confirm')
+                        }
+                        actions << {
+                            text: '<i class="fa fa-ban"></i> '+t('.cancel'),
+                            url: erp_orders.set_cancel_backend_frontend_orders_path(id: order),
+                            data_method: 'PUT',
+                            hide: (order.finished? or order.cancelled?),
+                            class: 'ajax-link',
+                            data_confirm: t('.cancel_confirm')
+                        }
+                        actions << { divider: true } if !order.finished?
+                        actions << {
+                            text: '<i class="fa fa-trash"></i> '+t('.delete'),
+                            url: erp_orders.backend_frontend_order_path(order),
+                            data_method: 'DELETE',
+                            class: 'ajax-link',
+                            data_confirm: t('.delete_confirm')
+                        }
+                    %>
+                    <%= erp_datalist_row_actions(
+                        actions
+                    ) %>
                 </td>
             </tr>
         <% end %>
     </tbody>
 </table>
-<% if @frontend_orders.empty? %>
+<% if @orders.empty? %>
     <div class="datalist-empty-line"><%= t('.no_matching_records_found') %></div>
 <% end %>
     
-<%= erp_datalist_pagination(@frontend_orders) %>
+<%= erp_datalist_pagination(@orders) %>
