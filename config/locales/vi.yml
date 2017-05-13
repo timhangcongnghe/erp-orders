@@ -232,4 +232,5 @@ vi:
             action: "Tùy chọn"
             order_lines: "Danh sách sản phẩm"
             other_information: "Thông tin khác"
-            
+            note: "Ghi chú đơn hàng"
+            placeholder_order_note: "Nhập ghi chú cho đơn hàng"

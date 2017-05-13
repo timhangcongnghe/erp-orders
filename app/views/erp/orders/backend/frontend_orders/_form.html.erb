@@ -2,16 +2,82 @@
     <div class="form-body">        
         <div class="row">
             <div class="col-md-6">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-shopping-cart font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold"> Thông tin đặt hàng</span>
+                    </div>
+                </div>
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
-                        
+                        <div class="form-group">
+                            <label>Người đặt hàng:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_customer_data('name') %></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ:</label>
+                            <div class="form-control">
+                                <span>
+                                    <%= order.get_customer_data('address') %>,
+                                    <%= order.get_customer_data('district') %>,
+                                    <%= order.get_customer_data('state') %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Điện thoại:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_customer_data('phone') %></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ email:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_customer_data('email') %></strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-truck font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold"> Thông tin giao hàng</span>
+                    </div>
+                </div>
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
-                        
+                        <div class="form-group">
+                            <label>Người nhận hàng:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_consignee_data('name') %></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ:</label>
+                            <div class="form-control">
+                                <span>
+                                    <%= order.get_consignee_data('address') %>,
+                                    <%= order.get_consignee_data('district') %>,
+                                    <%= order.get_consignee_data('state') %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Điện thoại:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_consignee_data('phone') %></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ email:</label>
+                            <div class="form-control">
+                                <strong><%= order.get_consignee_data('email') %></strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,6 +142,30 @@
                             </table>
                         </div>
                         <div class="tab-pane addableform-table" id="tab_5_2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Mã đơn hàng:</label>
+                                        <div class="form-control">
+                                            <strong>#<%= order.code %></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Ngày đặt hàng:</label>
+                                        <div class="form-control">
+                                            <strong><%= order.created_at.strftime('%d/%m/%Y %I:%M %p') %></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%= erp_form_control("textarea", {
+                                name: 'order[note]',
+                                value: order.note,
+                                label: t('.note'),
+                                placeholder: t('.placeholder_order_note')
+                            }) %>
                         </div>
                     </div>
                 </div>
