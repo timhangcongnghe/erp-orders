@@ -1,5 +1,8 @@
 module Erp::Orders
   class FrontendOrderMailer < Erp::ApplicationMailer
+    helper Erp::ApplicationHelper
+    helper Erp::OnlineStore::ApplicationHelper
+    
     def sending_admin_email_order_confirmation(order)
       # @todo: How to send an order to another email
       # @admin = Erp::Contacts::Contact.first
