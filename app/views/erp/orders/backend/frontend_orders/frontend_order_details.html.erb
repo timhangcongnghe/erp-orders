@@ -83,7 +83,7 @@
                         <% @order.frontend_order_details.each do |order_detail| %>
                         <tr>
                             <td class="text-left"><strong>#<%= order_detail.product.code %></strong></td>
-                            <td class="text-left"><%= order_detail.product.name %></td>
+                            <td class="text-left"><%= link_to(order_detail.product.name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %></td>
                             <td class="numeric text-right"><%= format_number(order_detail.product.price) %> VNĐ</td>
                             <td class="numeric text-right"><%= format_number(order_detail.quantity) %></td>
                             <td class="numeric text-right"><%= format_number(order_detail.total) %> VNĐ</td>

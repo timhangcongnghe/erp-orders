@@ -2,7 +2,7 @@
 <input type="hidden" name="order[frontend_order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
 <input type="hidden" name="order[frontend_order_details_attributes][<%= uid %>][_destroy]" value="">
 <td><%= order_detail.product_code %></td>
-<td><%= order_detail.product_name %></td>
+<td><%= link_to(order_detail.product_name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %></td>
 <td class="text-right">
     <%= erp_form_control("number", {
         name: 'order[frontend_order_details_attributes][' + uid + '][quantity]',
