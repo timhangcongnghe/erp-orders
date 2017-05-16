@@ -16,7 +16,7 @@ module Erp::Orders
 				self.frontend_order_details.create(product_id: item.product_id, quantity: item.quantity)
 			end
 		end
-		before_create :create_order_code
+		before_create :generate_order_code
 		after_save :update_cache_total
 		
 		# class const
@@ -116,14 +116,11 @@ module Erp::Orders
 			self.sum("erp_orders_frontend_orders.cache_total")
 		end
     
-    def create_order_code
-			lastest = FrontendOrder.all.order("id DESC").last
-			if !lastest.nil?
-				num = lastest.id.to_i + 1
-				self.code = "SO%.3d" % (rand(1..999)).to_s+(num*4).to_s.rjust(5, '0')
-			else
-				self.code = "SO%.3d" % (rand(1..999)).to_s+(1*4).to_s.rjust(5, '0')
-			end
+    # Generates a random string from a set of easily readable characters
+		def generate_order_code
+			size = 4
+			charset = %w{0 1 2 3 4 6 7 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
+			self.code = "DH" + Time.now.strftime("%Y").last(2) + (0...size).map{ charset.to_a[rand(charset.size)] }.join
 		end
     
     # get frontend orders for user
