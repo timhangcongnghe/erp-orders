@@ -24,6 +24,7 @@ module Erp::Orders
 		STATUS_CONFIRMED = 'confirmed'
 		STATUS_FINISHED = 'finished'
 		STATUS_CANCELLED = 'cancelled'
+		STATUS_IS_ACTIVE = [STATUS_DRAFT, STATUS_CONFIRMED]
 		
 		# Filters
     def self.filter(query, params)
@@ -121,11 +122,6 @@ module Erp::Orders
 			size = 4
 			charset = %w{0 1 2 3 4 6 7 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
 			self.code = "DH" + Time.now.strftime("%Y").last(2) + (0...size).map{ charset.to_a[rand(charset.size)] }.join
-		end
-    
-    # get frontend orders for user
-    def self.get_frontend_orders_for_user(user)
-			self.where(creator_id: user.id)
 		end
     
     def set_confirm
