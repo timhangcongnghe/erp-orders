@@ -16,7 +16,7 @@ Erp::User.class_eval do
   end
   
   def orders_cancelled
-    get_frontend_orders_for_user.where(status: 'ss')
+    get_frontend_orders_for_user.where(status: Erp::Orders::FrontendOrder::STATUS_CANCELLED)
   end
   
   # Tong so luong san pham cua don hang da giao dich thanh cong
