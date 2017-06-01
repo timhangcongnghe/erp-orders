@@ -38,7 +38,7 @@ module Erp::Orders
 		end
     
     # display product name
-    def product_name
+    def display_product_name
 			product.present? ? product.name : ""
 		end
   end
