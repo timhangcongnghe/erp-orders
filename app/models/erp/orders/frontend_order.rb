@@ -11,11 +11,39 @@ module Erp::Orders
     accepts_nested_attributes_for :frontend_order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
     
     #save cart
-		def save_from_cart(cart)
+    def save_from_cart(cart)
+			order_details = []
+			
 			cart.cart_items.each do |item|
-				self.frontend_order_details.create(product_id: item.product_id, quantity: item.quantity)
+				
+				order_detail = (order_details.select {|o| o.product_id == item.product_id}).first
+				if order_detail.nil?
+					order_detail = self.frontend_order_details.new(product_id: item.product_id, quantity: item.quantity)
+					order_details << order_detail
+				else
+					order_detail.quantity += item.quantity
+				end
+				
+				# gifts
+				item.product.products_gifts.each do |gift|
+					order_detail = (order_details.select {|o| o.product_id == gift.gift_id}).first
+					if order_detail.nil?
+						order_detail = self.frontend_order_details.new(
+								product_id: gift.gift_id,
+								quantity: gift.total_quantity(item),
+								price: gift.price,
+								description: 'Quà tặng')
+						order_details << order_detail
+					else
+						order_detail.quantity += gift.quantity
+					end
+				end
+				
 			end
+			
+			order_details.each(&:save)
 		end
+    
 		before_create :generate_order_code
 		after_save :update_cache_total
 		
