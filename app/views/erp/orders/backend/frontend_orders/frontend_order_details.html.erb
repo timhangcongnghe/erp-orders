@@ -2,19 +2,19 @@
     <div class="portlet grey-cascade box">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-user"></i>Thông tin khách hàng </div>
+                <i class="fa fa-user"></i><%= t('.customer_info') %> </div>
         </div>
         <div class="portlet-body">
             <div class="row static-info">
-                <div class="col-md-5 name"> Tên KH: </div>
+                <div class="col-md-5 name"> <%= t('.customer') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_customer_data('name') %> </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Email: </div>
+                <div class="col-md-5 name"> <%= t('.email') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_customer_data('email') %> </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Địa chỉ: </div>
+                <div class="col-md-5 name"> <%= t('.address') %>: </div>
                 <div class="col-md-7 value">
                     <%= @order.get_customer_data('address') %>,
                     <%= @order.get_customer_data('district') %>,
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Điện thoại: </div>
+                <div class="col-md-5 name"> <%= t('.phone') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_customer_data('phone') %> </div>
             </div>
         </div>
@@ -33,19 +33,19 @@
     <div class="portlet grey-cascade box">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-user"></i>Địa chỉ giao hàng </div>
+                <i class="fa fa-user"></i><%= t('.shipping_address') %> </div>
         </div>
         <div class="portlet-body">
             <div class="row static-info">
-                <div class="col-md-5 name"> Người nhận: </div>
+                <div class="col-md-5 name"> <%= t('.consignee') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_consignee_data('name') %> </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Email: </div>
+                <div class="col-md-5 name"> <%= t('.email') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_consignee_data('email') %> </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Địa chỉ: </div>
+                <div class="col-md-5 name"> <%= t('.address') %>: </div>
                 <div class="col-md-7 value">
                     <%= @order.get_consignee_data('address') %>,
                     <%= @order.get_consignee_data('district') %>,
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="row static-info">
-                <div class="col-md-5 name"> Điện thoại: </div>
+                <div class="col-md-5 name"> <%= t('.phone') %>: </div>
                 <div class="col-md-7 value"> <%= @order.get_consignee_data('phone') %> </div>
             </div>
         </div>
@@ -65,28 +65,28 @@
     <div class="portlet grey-cascade box">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-opencart"></i>Chi tiết đơn đặt hàng </div>
+                <i class="fa fa-opencart"></i><%= t('.order_details') %> </div>
         </div>
         <div class="portlet-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped flip-content">
                     <thead class="flip-content">
                         <tr>
-                            <th width="20%" class="text-left">Mã sản phẩm</th>
-                            <th class="numeric">Tên sản phẩm</th>
-                            <th class="numeric text-right">Đơn giá</th>
-                            <th class="numeric text-right">Số lượng</th>
-                            <th class="numeric text-right">Thành tiền</th>
+                            <th width="20%" class="text-left"><%= t('.product_code') %></th>
+                            <th class="numeric"><%= t('.product_name') %></th>
+                            <th class="numeric text-right"><%= t('.price') %></th>
+                            <th class="numeric text-right"><%= t('.quantity') %></th>
+                            <th class="numeric text-right"><%= t('.total') %></th>
                         </tr>
                     </thead>
                     <tbody>
                         <% @order.frontend_order_details.each do |order_detail| %>
                         <tr>
                             <td class="text-left"><strong>#<%= order_detail.product.code %></strong></td>
-                            <td class="text-left"><%= link_to(order_detail.product.name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %></td>
-                            <td class="numeric text-right"><%= format_number(order_detail.product.price) %> VNĐ</td>
+                            <td class="text-left"><%= link_to(order_detail.product.name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %> <%= '(Tặng kèm)' if order_detail.description == 'Quà tặng' %></td>
+                            <td class="numeric text-right format-price"><%= order_detail.price == 0 ? t('.free') : format_price(order_detail.price) %></td>
                             <td class="numeric text-right"><%= format_number(order_detail.quantity) %></td>
-                            <td class="numeric text-right"><%= format_number(order_detail.total) %> VNĐ</td>
+                            <td class="numeric text-right format-price"><%= order_detail.total == 0 ? t('.free') : format_price(order_detail.total) %></td>
                         </tr>
                         <% end %>
                     </tbody>
@@ -96,8 +96,8 @@
                     <div class="col-md-6">
                         <div class="well">
                             <div class="row static-info align-reverse">
-                                <div class="col-md-8 name"> Tổng đơn hàng: </div>
-                                <div class="col-md-4 value"> <%= format_number(@order.cache_total) %> VNĐ</div>
+                                <div class="col-md-8 name"> <%= t('.total_order') %> </div>
+                                <div class="col-md-4 value format-price"> <%= format_price(@order.cache_total) %></div>
                             </div>
                         </div>
                     </div>

@@ -64,7 +64,7 @@
                 <td><%= order.get_consignee_data('name') %></td>
                 <% end %>
                 <% if get_columns(params).include?("total") %>
-                <td><%= format_number(order.cache_total) %> VNĐ</td>
+                <td><strong class="format-price"><%= format_price(order.cache_total) %></strong></td>
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
