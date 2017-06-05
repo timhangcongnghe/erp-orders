@@ -28,6 +28,9 @@ module Erp::Orders
 			end
 		end
     
+    # class const
+    STYLE_GIFT = 'gift'
+    
     def total
       quantity*price
     end

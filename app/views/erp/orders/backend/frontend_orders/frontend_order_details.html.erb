@@ -83,7 +83,7 @@
                         <% @order.frontend_order_details.each do |order_detail| %>
                         <tr>
                             <td class="text-left"><strong>#<%= order_detail.product.code %></strong></td>
-                            <td class="text-left"><%= link_to(order_detail.product.name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %> <%= '(Tặng kèm)' if order_detail.description == 'Quà tặng' %></td>
+                            <td class="text-left"><%= link_to(order_detail.product.name, erp_products.edit_backend_product_path(order_detail.product), target: '_blank') %> <%= '(Tặng kèm)' if order_detail.description == Erp::Orders::FrontendOrderDetail::STYLE_GIFT %></td>
                             <td class="numeric text-right format-price"><%= order_detail.price == 0 ? t('.free') : format_price(order_detail.price) %></td>
                             <td class="numeric text-right"><%= format_number(order_detail.quantity) %></td>
                             <td class="numeric text-right format-price"><%= order_detail.total == 0 ? t('.free') : format_price(order_detail.total) %></td>
