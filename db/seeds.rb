@@ -27,19 +27,23 @@ unit2 = Erp::Products::Unit.create(name: "Hộp", creator_id: user.id)
 puts "Create sample brands"
 Erp::Products::Brand.where(name: 'HK Incotech 01').destroy_all
 brand1 = Erp::Products::Brand.create(
-  name: 'HK Incotech 01'
+  name: 'HK Incotech 01',
+  creator_id: user.id
 )
 Erp::Products::Brand.where(name: 'HK Incotech 02').destroy_all
 brand2 = Erp::Products::Brand.create(
-  name: 'HK Incotech 02'
+  name: 'HK Incotech 02',
+  creator_id: user.id
 )
 Erp::Products::Brand.where(name: 'HK Incotech 03').destroy_all
 brand3 = Erp::Products::Brand.create(
-  name: 'HK Incotech 03'
+  name: 'HK Incotech 03',
+  creator_id: user.id
 )
 Erp::Products::Brand.where(name: 'HK Incotech 04').destroy_all
 brand4 = Erp::Products::Brand.create(
-  name: 'HK Incotech 04'
+  name: 'HK Incotech 04',
+  creator_id: user.id
 )
 
 puts "Create sample products"
