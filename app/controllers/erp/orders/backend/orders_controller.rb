@@ -11,7 +11,7 @@ module Erp
         
         # POST /orders/list
         def list
-          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 5)
+          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 10)
           
           render layout: nil
         end
@@ -102,7 +102,7 @@ module Erp
                 'type': 'success'
               }
             }
-          end          
+          end
         end
         
         # dataselect /orders
@@ -182,7 +182,7 @@ module Erp
     
           # Only allow a trusted parameter "white list" through.
           def order_params
-            params.fetch(:order, {}).permit(:order_date, :customer_id, :warehouse_id, :salesperson_id,
+            params.fetch(:order, {}).permit(:order_date, :customer_id, :supplier_id, :employee_id,
                                             :order_details_attributes => [ :id, :product_id, :order_id, :quantity, :price, :description, :_destroy ])
           end
       end

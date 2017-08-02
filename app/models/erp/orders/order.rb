@@ -1,13 +1,10 @@
 module Erp::Orders
   class Order < ApplicationRecord
     belongs_to :creator, class_name: "Erp::User"
-    belongs_to :salesperson, class_name: "Erp::User", foreign_key: :salesperson_id, optional: true
+    belongs_to :employee, class_name: "Erp::User", foreign_key: :employee_id
     if Erp::Core.available?("contacts")
-			belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id, optional: true
-			belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id, optional: true
-		end
-    if Erp::Core.available?("warehouses")
-			belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse", foreign_key: :warehouse_id, optional: true
+			belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id
+			belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id
 		end
     has_many :order_details, dependent: :destroy
     accepts_nested_attributes_for :order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
@@ -30,6 +27,9 @@ module Erp::Orders
     STATUS_CANCELLED = 'cancelled'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
     
+    TYPE_CUSTOMER_ORDER = 'sales'
+    TYPE_PURCHASE_ORDER = 'purchase'
+    
     # Filters
     def self.filter(query, params)
       params = params.to_unsafe_hash
@@ -37,17 +37,12 @@ module Erp::Orders
       # join with users table for search creator
       query = query.joins(:creator)
       
-      # join with users table for search salesperson
-      query = query.joins(:salesperson)
+      # join with users table for search employee
+      query = query.joins(:employee)
       
       if Erp::Core.available?("contacts")
 				# join with contacts table for search customer
 				query = query.joins(:customer)
-			end
-      
-      if Erp::Core.available?("warehouses")
-				# join with warehouses table for search warehouse
-				query = query.joins(:warehouse)
 			end
       
       and_conds = []
@@ -117,16 +112,9 @@ module Erp::Orders
 			end
 		end
     
-    # display salesperson
-    def salesperson_name
-			salesperson.present? ? salesperson.name : ''
-		end
-    
-    if Erp::Core.available?("warehouses")
-			# display warehouse
-			def warehouse_name
-				warehouse.present? ? warehouse.warehouse_name : ''
-			end
+    # display employee
+    def employee_name
+			employee.present? ? employee.name : ''
 		end
     
     # get total amount

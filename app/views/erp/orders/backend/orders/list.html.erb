@@ -24,9 +24,9 @@
                     <%= t('.supplier') %>
                 </th>
             <% end %>
-            <% if get_columns(params).include?("salesperson") %>
+            <% if get_columns(params).include?("employee") %>
                 <th>
-                    <%= t('.salesperson') %>
+                    <%= t('.employee') %>
                 </th>
             <% end %>
             <% if get_columns(params).include?("total") %>
@@ -80,8 +80,8 @@
                 <% if get_columns(params).include?("supplier") %>
                 <td><%= order.supplier_name %></td>
                 <% end %>
-                <% if get_columns(params).include?("salesperson") %>
-                <td><%= order.salesperson_name %></td>
+                <% if get_columns(params).include?("employee") %>
+                <td><%= order.employee_name %></td>
                 <% end %>
                 <% if get_columns(params).include?("total") %>
                 <td><%= order.total %></td>

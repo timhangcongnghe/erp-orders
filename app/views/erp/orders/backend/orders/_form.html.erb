@@ -134,11 +134,11 @@
                                 <div class="col-md-6">
                                     <h4><%= t('.sales_information') %></h4>
                                     <%= erp_form_control("dataselect", {
-                                        name: 'order[salesperson_id]',
-                                        value: order.salesperson_id,
-                                        text: order.salesperson_name,
-                                        placeholder: t('.choose_salesperson'),
-                                        label: t('.salesperson'),
+                                        name: 'order[employee_id]',
+                                        value: order.employee_id,
+                                        text: order.employee_name,
+                                        placeholder: t('.choose_employee'),
+                                        label: t('.employee'),
                                         url: erp.dataselect_backend_users_path(format: 'json'),
                                         create: {
                                             url: erp.new_backend_user_path,
@@ -147,23 +147,6 @@
                                             input_selector: 'input[name="user[name]"]'
                                         }
                                     }) %>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4><%= t('.shipping_information') %></h4>
-                                    <%= erp_form_control("dataselect", {
-                                        name: 'order[warehouse_id]',
-                                        value: order.warehouse_id,
-                                        text: order.warehouse_name,
-                                        placeholder: t('.choose_warehouse'),
-                                        label: t('.warehouse'),
-                                        url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
-                                        create: {
-                                            url: erp_warehouses.new_backend_warehouse_url,
-                                            title: t('.create'),
-                                            container_selector: '.new_warehouse',
-                                            input_selector: 'input[name="warehouse[name]"]'
-                                        }
-                                    }) %>                                    
                                 </div>
                             </div>
                         </div>
