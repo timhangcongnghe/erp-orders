@@ -1,54 +1,13 @@
 <%= form_for([erp_orders, :backend, order], html: {multipart: true}) do |f| %>
+    <% if @type == Erp::Orders::Order::TYPE_SALES_ORDER %>
+        <% employee_name = 'sales_employee' %>
+    <% elsif @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER %>
+        <% employee_name = 'purchase_employee' %>
+    <% else %>
+        <% employee_name = 'employee' %>
+    <% end %>
     <div class="form-body">        
         <div class="row">
-            <div class="col-md-6">
-                <div class="portlet light bordered">
-                    <div class="portlet-body form">
-                        <% if Erp::Core.available?("contacts") %>
-                            <%= erp_form_control("dataselect", {
-                                name: 'order[customer_id]',
-                                value: order.customer_id,
-                                text: order.customer_name,
-                                label: t('.customer'),
-                                placeholder: t('.select_customer'),
-                                url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
-                                create: {
-                                    url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
-                                    title: t('.create'),
-                                    container_selector: '.new_contact',
-                                    input_selector: 'input[name="contact[name]"]',
-                                    modal_size: "full"
-                                },
-                                edit: {
-                                    url: erp_contacts.edit_backend_contact_path(id: ':value'),
-                                    title: t('.edit'),
-                                    container_selector: '.edit_contact',
-                                }
-                            }) %>
-                            <%= erp_form_control("dataselect", {
-                                name: 'order[supplier_id]',
-                                value: order.supplier_id,
-                                text: order.supplier_name,
-                                label: t('.supplier'),
-                                placeholder: t('.select_supplier'),
-                                url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
-                                create: {
-                                    url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
-                                    title: t('.create'),
-                                    container_selector: '.new_contact',
-                                    input_selector: 'input[name="contact[name]"]',
-                                    modal_size: "full"
-                                },
-                                edit: {
-                                    url: erp_contacts.edit_backend_contact_path(id: ':value'),
-                                    title: t('.edit'),
-                                    container_selector: '.edit_contact',
-                                }
-                            }) %>
-                        <% end %>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
@@ -56,7 +15,91 @@
                             label: t('.order_date'),
                             name: 'order[order_date]',
                             value: order.order_date,
-                            placeholder: t('.choose_order_date')
+                            placeholder: t('.choose_order_date'),
+                            required: true,
+                            errors: order.errors.full_messages_for(:order_date)
+                        }) %>
+                        <% if Erp::Core.available?("contacts") %>
+                            <% if @type == Erp::Orders::Order::TYPE_SALES_ORDER %>
+                                <input type="hidden" name="order[supplier_id]" value="<%= order.supplier_id %>" />
+                                <%= erp_form_control("dataselect", {
+                                    name: 'order[customer_id]',
+                                    value: order.customer_id,
+                                    text: order.customer_name,
+                                    label: t('.customer'),
+                                    placeholder: t('.select_customer'),
+                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
+                                    create: {
+                                        url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
+                                        title: t('.create'),
+                                        container_selector: '.new_contact',
+                                        input_selector: 'input[name="contact[name]"]',
+                                        modal_size: "full"
+                                    },
+                                    edit: {
+                                        url: erp_contacts.edit_backend_contact_path(id: ':value'),
+                                        title: t('.edit'),
+                                        container_selector: '.edit_contact',
+                                    },
+                                    required: true,
+                                    errors: order.errors.full_messages_for(:customer_id)
+                                }) %>
+                            <% end %>
+                            <% if @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER %>
+                                <input type="hidden" name="order[customer_id]" value="<%= order.customer_id %>" />
+                                <%= erp_form_control("dataselect", {
+                                    name: 'order[supplier_id]',
+                                    value: order.supplier_id,
+                                    text: order.supplier_name,
+                                    label: t('.supplier'),
+                                    placeholder: t('.select_supplier'),
+                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
+                                    create: {
+                                        url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
+                                        title: t('.create'),
+                                        container_selector: '.new_contact',
+                                        input_selector: 'input[name="contact[name]"]',
+                                        modal_size: "full"
+                                    },
+                                    edit: {
+                                        url: erp_contacts.edit_backend_contact_path(id: ':value'),
+                                        title: t('.edit'),
+                                        container_selector: '.edit_contact',
+                                    },
+                                    required: true,
+                                    errors: order.errors.full_messages_for(:supplier_id)
+                                }) %>
+                            <% end %>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-body form">
+                        <%= erp_form_control('text', {
+                            label: t('.code'),
+                            name: 'order[code]',
+                            value: order.code,
+                            help: t('.help_code'),
+                            placeholder: t('.placeholder_code'),
+                            errors: order.errors.full_messages_for(:code)
+                        }) %>
+                        <%= erp_form_control("dataselect", {
+                            name: 'order[employee_id]',
+                            value: order.employee_id,
+                            text: order.employee_name,
+                            placeholder: t('.choose_employee'),
+                            label: t(".#{employee_name}"),
+                            url: erp.dataselect_backend_users_path(format: 'json'),
+                            create: {
+                                url: erp.new_backend_user_path,
+                                title: t('.create'),
+                                container_selector: '.new_user',
+                                input_selector: 'input[name="user[name]"]'
+                            },
+                            required: true,
+                            errors: order.errors.full_messages_for(:employee_id)
                         }) %>
                     </div>
                 </div>
@@ -69,15 +112,12 @@
                         <li class="active">
                             <a href="#tab_5_1" data-toggle="tab"> <%= t('.order_lines') %> </a>
                         </li>
-                        <li>
-                            <a href="#tab_5_2" data-toggle="tab"> <%= t('.other_information') %> </a>
-                        </li>
                         <% if Erp::Core.available?("payments") %>
                             <li>
-                                <a href="#tab_5_3" data-toggle="tab"> <%= t('.order_history') %> </a>
+                                <a href="#tab_5_2" data-toggle="tab"> <%= t('.order_history') %> </a>
                             </li>
                             <li>
-                                <a href="#tab_5_4" data-toggle="tab"> <%= t('.order_debt') %> </a>
+                                <a href="#tab_5_3" data-toggle="tab"> <%= t('.order_debt') %> </a>
                             </li>
                         <% end %>
                     </ul>
@@ -129,29 +169,8 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="tab-pane" id="tab_5_2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4><%= t('.sales_information') %></h4>
-                                    <%= erp_form_control("dataselect", {
-                                        name: 'order[employee_id]',
-                                        value: order.employee_id,
-                                        text: order.employee_name,
-                                        placeholder: t('.choose_employee'),
-                                        label: t('.employee'),
-                                        url: erp.dataselect_backend_users_path(format: 'json'),
-                                        create: {
-                                            url: erp.new_backend_user_path,
-                                            title: t('.create'),
-                                            container_selector: '.new_user',
-                                            input_selector: 'input[name="user[name]"]'
-                                        }
-                                    }) %>
-                                </div>
-                            </div>
-                        </div>
                         <% if Erp::Core.available?("payments") %>
-                            <div class="tab-pane" id="tab_5_3">
+                            <div class="tab-pane" id="tab_5_2">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -177,7 +196,7 @@
                                     no_border: true
                                 )%>
                             </div>
-                            <div class="tab-pane" id="tab_5_4">
+                            <div class="tab-pane" id="tab_5_3">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">

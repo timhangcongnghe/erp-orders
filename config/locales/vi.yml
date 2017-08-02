@@ -32,7 +32,7 @@ vi:
             order_date: "Ngày đặt hàng"
             customer: "Khách hàng"
             supplier: "Nhà cung cấp"
-            employee: "Nhân viên phụ trách"
+            employee: "Nhân viên"
             total: "Tổng cộng"
             remain: "Còn nợ"
             debt_deadline: "Hạn thanh toán"
@@ -42,7 +42,7 @@ vi:
             actions: "Thao tác"
             delete: "Xóa đơn hàng"
             orders: "Đơn đặt hàng"
-            delete_confirm: "Các đơn hàng đã chọn sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
+            delete_confirm: "Không thể hoàn tác đơn hàng. Bạn có chắc chắn muốn xóa?"
             product: "Hàng hóa (mã/tên)"
             customer: "Khách hàng"
             key_customer: "Khách hàng (mã/tên/sđt)"
@@ -68,7 +68,7 @@ vi:
             order_date: "Ngày đặt hàng"
             customer: "Khách hàng"
             supplier: "Nhà cung cấp"
-            employee: "Nhân viên phụ trách"
+            employee: "Nhân viên"
             total: "Tổng cộng"
             remain: "Còn nợ"
             debt_deadline: "Hạn thanh toán"
@@ -79,7 +79,7 @@ vi:
             edit: "Cập nhật thông tin"
             view: "Xem đơn hàng"
             delete: "Xóa đơn hàng"
-            delete_confirm: "Cảnh báo: Đơn hàng này sẽ bị xóa vĩnh viễn. <br>Bạn có chắc chắn muốn xóa?"
+            delete_confirm: "Không thể hoàn tác đơn hàng. Bạn có chắc chắn muốn xóa?"
             draft: "Lưu tạm"
             confirmed: "Đã xác nhận"
             cancelled: "Đã hủy"
@@ -100,6 +100,7 @@ vi:
             receive_ncc: "Nhận tiền NCC"
             receive_kh: "Thu tiền KH"
             payment_record: "Phiếu thanh toán"
+            no_matching_records_found: "Danh sách đơn hàng không được tìm thấy"
           new:
             orders: "Tất cả đơn hàng"
             create: "Thêm đơn hàng"
@@ -112,8 +113,11 @@ vi:
           show:
             view: "Chi tiết đơn hàng"
           form:
-            customer: "Khách hàng (bên mua)"
-            supplier: "Nhà cung cấp (bên bán)"
+            code: "Mã đơn hàng"
+            help_code: "Mã sẽ tạo tự động nếu bạn bỏ trống"
+            placeholder_code: "Nhập mã tùy chỉnh cho đơn hàng"
+            customer: "Khách hàng"
+            supplier: "Nhà cung cấp"
             order_date: "Ngày đặt hàng"
             expiration_date: "Hạn thanh toán công nợ đến: "
             extend_debt_deadline: "Gia hạn công nợ"
@@ -122,7 +126,7 @@ vi:
             choose_order_date: "Chọn ngày đặt hàng"
             choose_expiration_date: "Chọn ngày hết hạn"
             choose_employee: "Chọn nhân viên phụ trách"
-            choose_warehouse: "Chọn kho bãi"
+            choose_code: "Chọn kho bãi"
             other_information: "Thông tin thêm"
             order_lines: "Danh sách hàng hóa"
             order_history: "Thanh toán"
@@ -131,6 +135,8 @@ vi:
             warehouse: "Kho hàng"
             sales_information: "Thông tin bán hàng"
             employee: "Nhân viên phụ trách"
+            sales_employee: "Nhân viên bán hàng"
+            purchase_employee: "Nhân viên mua hàng"
             add: "Thêm"
             submit: "Lưu"
             cancel: "Hủy"
@@ -249,3 +255,25 @@ vi:
             email: "Email"
             address: "Địa chỉ"
             phone: "Điện thoại"
+  activerecord:
+    errors:
+      models:
+        erp/orders/order:
+          attributes:
+            code:
+              taken: "đã tồn tại, vui lòng cung cấp một mã khác"
+            order_date:
+              blank: "không được để trống"
+            customer_id:
+              blank: "không được để trống"
+            supplier_id:
+              blank: "không được để trống"
+            employee_id:
+              blank: "không được để trống"
+    attributes:
+      erp/orders/order:
+        code: "Mã đơn hàng"
+        order_date: "Ngày đặt hàng"
+        customer_id: "Khách hàng"
+        supplier_id: "Nhà cung cấp"
+        employee_id: "Nhân viên"

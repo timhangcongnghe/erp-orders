@@ -14,6 +14,9 @@ module Erp::Orders
 			has_many :debts, class_name: "Erp::Payments::Debt"
 		end
     
+    validates :code, uniqueness: true
+    validates :customer_id, :supplier_id, :order_date, :employee_id, presence: true
+    
     after_save :update_cache_payment_status
     after_save :update_cache_total
     
@@ -27,7 +30,7 @@ module Erp::Orders
     STATUS_CANCELLED = 'cancelled'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
     
-    TYPE_CUSTOMER_ORDER = 'sales'
+    TYPE_SALES_ORDER = 'sales'
     TYPE_PURCHASE_ORDER = 'purchase'
     
     # Filters
@@ -296,6 +299,15 @@ module Erp::Orders
     # count orders by date range
     def self.get_by_time(from_date, to_date)
 			self.where("order_date >= ? AND order_date <= ?", from_date.beginning_of_day, to_date.end_of_day)
+		end
+    
+    # Generate code
+    after_save :generate_code
+    def generate_code
+			if !code.present?
+				str = (sales? ? 'SO' : 'PO')
+				update_columns(code: str + id.to_s.rjust(5, '0'))
+			end
 		end
   end
 end

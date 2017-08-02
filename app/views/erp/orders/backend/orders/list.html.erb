@@ -25,7 +25,7 @@
                 </th>
             <% end %>
             <% if get_columns(params).include?("employee") %>
-                <th>
+                <th class="text-center">
                     <%= t('.employee') %>
                 </th>
             <% end %>
@@ -50,7 +50,7 @@
                 </th>
             <% end %>
             <% if get_columns(params).include?("creator") %>
-                <th>
+                <th class="text-center">
                     <%= t('.creator') %>
                 </th>
             <% end %>
@@ -72,7 +72,7 @@
                 <td><%= link_to order.code, erp_orders.edit_backend_order_path(order) %></td>
                 <% end %>
                 <% if get_columns(params).include?("order_date") %>
-                <td><%= order.order_date.strftime("%d/%m/%Y") %></td>
+                <td><%= format_date(order.order_date) %></td>
                 <% end %>
                 <% if get_columns(params).include?("customer") %>
                 <td><%= order.customer_name %></td>
@@ -81,13 +81,17 @@
                 <td><%= order.supplier_name %></td>
                 <% end %>
                 <% if get_columns(params).include?("employee") %>
-                <td><%= order.employee_name %></td>
+                <td>
+                    <%= erp_component('avatar', {
+                        user: order.employee
+                    }) %>
+                </td>
                 <% end %>
                 <% if get_columns(params).include?("total") %>
-                <td><%= order.total %></td>
+                <td><%= format_price(order.cache_total) %></td>
                 <% end %>
                 <% if get_columns(params).include?("remain") %>
-                <td><%= order.remain_amount %></td>
+                <td><%= format_price(order.remain_amount) %></td>
                 <% end %>
                 <% if get_columns(params).include?("deadline") %>
                 <td><%= format_date(order.get_payment_deadline) %></td>
@@ -106,7 +110,7 @@
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("created_at") %>
-                <td><%= order.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= format_date(order.created_at) %></td>
                 <% end %>
                 <td>
                     <%= order_dropdown_actions(order) %>

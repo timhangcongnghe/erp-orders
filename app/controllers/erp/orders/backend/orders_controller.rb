@@ -24,6 +24,14 @@ module Erp
         def new
           @order = Order.new
           @order.order_date = Time.now
+          @order.employee = current_user
+          @type = params[:type]
+          @owner = Erp::Contacts::Contact::get_main_contact
+          if @type == Erp::Orders::Order::TYPE_SALES_ORDER
+            @order.supplier_id = @owner.id
+          else
+            @order.customer_id = @owner.id
+          end
           
           if request.xhr?
             render '_form', layout: nil, locals: {order: @order}
@@ -32,6 +40,7 @@ module Erp
     
         # GET /orders/1/edit
         def edit
+          @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
         end
     
         # POST /orders
@@ -182,7 +191,7 @@ module Erp
     
           # Only allow a trusted parameter "white list" through.
           def order_params
-            params.fetch(:order, {}).permit(:order_date, :customer_id, :supplier_id, :employee_id,
+            params.fetch(:order, {}).permit(:code, :order_date, :customer_id, :supplier_id, :employee_id,
                                             :order_details_attributes => [ :id, :product_id, :order_id, :quantity, :price, :description, :_destroy ])
           end
       end

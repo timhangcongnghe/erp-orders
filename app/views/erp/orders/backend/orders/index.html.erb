@@ -6,14 +6,6 @@
     <i class="fa fa-file-text"></i> <%= t('.orders') %>
 <% end %>
 
-<% content_for :page_toolbar do %>
-    <%= erp_component('button/create', {
-        text: t('.create'),
-        href: erp_orders.new_backend_order_path,
-        class: 'btn-noborder'
-    }) %>
-<% end %>
-
 <%= erp_datalist(
     url: erp_orders.list_backend_orders_path,
     keywords: [
