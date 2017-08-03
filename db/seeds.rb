@@ -172,8 +172,7 @@ orders_order1 = Erp::Orders::Order.create(
   order_date: Time.now - 1.day,
   status: "draft",
   creator_id: user.id,
-  salesperson_id: user.id,
-  warehouse_id: warehouse.id
+  employee_id: user.id
 )
 puts orders_order1.errors.to_json if !orders_order1.errors.empty?
 
@@ -205,8 +204,7 @@ orders_order2 = Erp::Orders::Order.create(
   order_date: Time.now,
   status: "draft",
   creator_id: user.id,
-  salesperson_id: user.id,
-  warehouse_id: warehouse.id
+  employee_id: user.id
 )
 puts orders_order2.errors.to_json if !orders_order2.errors.empty?
 
@@ -239,8 +237,7 @@ purchase_order1 = Erp::Orders::Order.create(
   order_date: Time.now,
   status: "draft",
   creator_id: user.id,
-  salesperson_id: user.id,
-  warehouse_id: warehouse.id
+  employee_id: user.id
 )
 puts purchase_order1.errors.to_json if !purchase_order1.errors.empty?
 
@@ -272,8 +269,7 @@ purchase_order2 = Erp::Orders::Order.create(
   order_date: Time.now,
   status: "draft",
   creator_id: user.id,
-  salesperson_id: user.id,
-  warehouse_id: warehouse.id
+  employee_id: user.id
 )
 puts purchase_order2.errors.to_json if !purchase_order2.errors.empty?
 

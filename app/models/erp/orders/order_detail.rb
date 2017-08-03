@@ -42,7 +42,7 @@ module Erp::Orders
 			elsif order.purchase?
 				return -export_amount + import_amount
 			else
-				return nil
+				return 0
 			end
 		end
     

@@ -28,6 +28,35 @@ module Erp::Orders
     STATUS_CONFIRMED = 'confirmed'
     STATUS_CANCELLED = 'cancelled'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
+    if Erp::Core.available?("deliveries")
+			has_many :deliveries, class_name: "Erp::Deliveries::Delivery"
+			DELIVERY_STATUS_DELIVERED = 'delivered'
+			DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
+			DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
+			
+			def delivered_amount
+				count = 0
+				deliveries.each do |d|
+					count += d.delivery_details.sum(:quantity)
+				end
+				return count
+			end
+			
+			def not_delivered_count
+				items_count - delivered_amount
+			end
+			
+			def delivery_status
+				remain = not_delivered_count
+				if remain > 0
+					return Erp::Orders::Order::DELIVERY_STATUS_NOT_DELIVERY
+				elsif remain == 0
+					return Erp::Orders::Order::DELIVERY_STATUS_DELIVERED
+				else
+					return Erp::Orders::Order::DELIVERY_STATUS_OVER_DELIVERED
+				end
+			end			
+		end    
     
     PAYMENT_STATUS_PAID = 'paid'
     PAYMENT_STATUS_OVERDUE = 'overdue'
@@ -127,6 +156,11 @@ module Erp::Orders
 			return order_details.sum('price * quantity')
 		end
     
+    # items count
+    def items_count
+			order_details.sum(:quantity)
+		end
+    
     # Update cache total
     def update_cache_total
 			self.update_column(:cache_total, self.total)
@@ -223,7 +257,7 @@ module Erp::Orders
 			# get remain amount
 			def remain_amount
 				return self.ordered_amount - self.paid_amount
-			end
+			end			
 			
 			# ordered amount
 			def ordered_amount
