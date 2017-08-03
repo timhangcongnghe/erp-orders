@@ -29,14 +29,19 @@ module Erp::Orders
     STATUS_CANCELLED = 'cancelled'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
     if Erp::Core.available?("deliveries")
+			after_save :update_cache_delivery_status
 			has_many :deliveries, class_name: "Erp::Deliveries::Delivery"
 			DELIVERY_STATUS_DELIVERED = 'delivered'
 			DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
 			DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
 			
+			def delivered_deliveries
+				deliveries.where(status: Erp::Deliveries::Delivery::DELIVERY_STATUS_DELIVERED)
+			end
+			
 			def delivered_amount
 				count = 0
-				deliveries.each do |d|
+				delivered_deliveries.each do |d|
 					count += d.delivery_details.sum(:quantity)
 				end
 				return count
@@ -55,7 +60,12 @@ module Erp::Orders
 				else
 					return Erp::Orders::Order::DELIVERY_STATUS_OVER_DELIVERED
 				end
-			end			
+			end
+			
+			def update_cache_delivery_status
+				self.update_column(:cache_delivery_status, self.delivery_status)
+			end
+			
 		end    
     
     PAYMENT_STATUS_PAID = 'paid'

@@ -98,8 +98,9 @@
                 <% end %>
                 <% if get_columns(params).include?("status") %>
                 <td>
-                    <%= status_label(order.status) %>
-                    <%= status_label(order.cache_payment_status) %>
+                    <%= status_label(order.status) %><br>
+                    <%= status_label(order.cache_payment_status) %><br>
+                    <%= status_label(order.delivery_status) %><br>
                 </td>
                 <% end %>
                 <% if get_columns(params).include?("creator") %>

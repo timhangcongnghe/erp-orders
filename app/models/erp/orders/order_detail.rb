@@ -1,7 +1,8 @@
 module Erp::Orders
   class OrderDetail < ApplicationRecord
     validates :product_id, :presence => true
-    belongs_to :order
+    belongs_to :order, class_name: 'Erp::Orders::Order'
+    after_save order.update_cache_delivery_status
     belongs_to :product, class_name: 'Erp::Products::Product'
     if Erp::Core.available?("deliveries")
 			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"

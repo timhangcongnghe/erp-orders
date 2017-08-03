@@ -101,6 +101,9 @@ vi:
             receive_kh: "Thu tiền KH"
             payment_record: "Phiếu thanh toán"
             no_matching_records_found: "Danh sách đơn hàng không được tìm thấy"
+            not_delivery: "Đơn hàng chưa giao"
+            delivered: "Đơn hàng đã giao"
+            not_delivered: "Đơn hàng giao dư"
           new:
             orders: "Tất cả đơn hàng"
             create: "Thêm đơn hàng"
