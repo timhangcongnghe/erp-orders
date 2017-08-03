@@ -21,17 +21,18 @@ module Erp::Orders
     after_save :update_cache_total
     
     # class const
-    STATUS_PAID = 'paid'
-    STATUS_OVERDUE = 'overdue'
-    STATUS_DEBT = 'debt'
-    STATUS_RETURN_BACK = 'return_back'
+    TYPE_SALES_ORDER = 'sales'
+    TYPE_PURCHASE_ORDER = 'purchase'
+    
     STATUS_DRAFT = 'draft'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_CANCELLED = 'cancelled'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
     
-    TYPE_SALES_ORDER = 'sales'
-    TYPE_PURCHASE_ORDER = 'purchase'
+    PAYMENT_STATUS_PAID = 'paid'
+    PAYMENT_STATUS_OVERDUE = 'overdue'
+    PAYMENT_STATUS_DEBT = 'debt'
+    PAYMENT_STATUS_OVERPAID = 'overpaid'
     
     # Filters
     def self.filter(query, params)
@@ -46,6 +47,7 @@ module Erp::Orders
       if Erp::Core.available?("contacts")
 				# join with contacts table for search customer
 				query = query.joins(:customer)
+				query = query.joins(:supplier)
 			end
       
       and_conds = []
@@ -243,21 +245,21 @@ module Erp::Orders
 				status = ''
 				if self.status == Erp::Orders::Order::STATUS_CONFIRMED
 					if remain_amount == 0
-						status = Erp::Orders::Order::STATUS_PAID
+						status = Erp::Orders::Order::PAYMENT_STATUS_PAID
 					elsif remain_amount > 0
-						if Time.now < get_payment_deadline.end_of_day
-							status = Erp::Orders::Order::STATUS_DEBT
+						if Time.current < get_payment_deadline.end_of_day
+							status = Erp::Orders::Order::PAYMENT_STATUS_DEBT
 						else
-							status = Erp::Orders::Order::STATUS_OVERDUE
+							status = Erp::Orders::Order::PAYMENT_STATUS_OVERDUE
 						end
 					else
-						status = Erp::Orders::Order::STATUS_RETURN_BACK
+						status = Erp::Orders::Order::PAYMENT_STATUS_OVERPAID
 					end
 				elsif self.status == Erp::Orders::Order::STATUS_CANCELLED
 					if remain_amount == 0
 						status = ''
 					else
-						status = Erp::Orders::Order::STATUS_RETURN_BACK
+						status = Erp::Orders::Order::PAYMENT_STATUS_OVERPAID
 					end
 				end
 				
@@ -274,7 +276,7 @@ module Erp::Orders
 				if !debts.empty?
 					self.debts.last.deadline
 				else
-					Time.now
+					self.order_date
 				end
 			end
 			

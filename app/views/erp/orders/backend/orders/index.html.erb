@@ -87,16 +87,16 @@
             divider: true
         },
         {
-            text: t('.paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_PAID, checked: false
+            text: t('.paid'), name: 'cache_payment_status', value: Erp::Orders::Order::PAYMENT_STATUS_PAID, checked: false
         },
         {
-            text: t('.not_paid'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_OVERDUE, checked: false
+            text: t('.not_paid'), name: 'cache_payment_status', value: Erp::Orders::Order::PAYMENT_STATUS_OVERDUE, checked: false
         },
         {
-            text: t('.debt'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_DEBT, checked: false
+            text: t('.debt'), name: 'cache_payment_status', value: Erp::Orders::Order::PAYMENT_STATUS_DEBT, checked: false
         },
         {
-            text: t('.return_back'), name: 'cache_payment_status', value: Erp::Orders::Order::STATUS_RETURN_BACK, checked: false
+            text: t('.return_back'), name: 'cache_payment_status', value: Erp::Orders::Order::PAYMENT_STATUS_OVERPAID, checked: false
         }
     ],
     columns: [
