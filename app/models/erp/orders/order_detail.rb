@@ -2,12 +2,12 @@ module Erp::Orders
   class OrderDetail < ApplicationRecord
     validates :product_id, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
-    after_save order.update_cache_delivery_status
     belongs_to :product, class_name: 'Erp::Products::Product'
     if Erp::Core.available?("deliveries")
 			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
 		end
     after_save :order_update_cache_payment_status
+    after_save :order_update_cache_delivery_status
     after_save :update_order_cache_total
     
     # update order cache total
@@ -21,6 +21,13 @@ module Erp::Orders
     def order_update_cache_payment_status
 			if order.present?
 				order.update_cache_payment_status
+			end
+		end
+    
+    # update order cache payment status
+    def order_update_cache_delivery_status
+			if order.present?
+				order.update_cache_delivery_status
 			end
 		end
     
