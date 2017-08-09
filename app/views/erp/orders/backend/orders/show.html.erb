@@ -1,4 +1,179 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title do %>
+    <%= t('.show') %> # <%= @order.code %>
+<% end %>
 
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+<% content_for :page_title do %>    
+    <a href="<%= erp_orders.backend_orders_path %>">
+    <i class="glyphicon glyphicon-shopping-cart"></i> <%= t('.orders') %>
+    </a> / <%= t('.show_order') %> # <%= @order.code %>
+<% end %>
+
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_orders.new_backend_order_path,
+        class: 'btn-noborder'
+    }) %>
+    <%= erp_component('button/edit', {
+        text: t('.edit'),
+        href: erp_orders.edit_backend_order_path(@order)
+    }) %>
+    <%= erp_component('button/actions', {
+        actions:
+        [
+            {
+                text: '<i class="fa fa-check"></i> '+t('confirm'),
+                url: erp_orders.set_confirm_backend_orders_path(id: @order.id),
+                data_method: 'PUT',
+                hide: false,
+                class: 'link-method'
+            },
+            {divider: true},
+            {
+                text: '<i class="fa fa-file-excel-o"></i> '+t('export_excel'),
+                url: '',
+                data_method: 'PUT',
+                hide: false,
+                class: 'link-method'
+            },
+            {
+                text: '<i class="fa fa-file-pdf-o"></i> '+t('export_pdf'),
+                url: '',
+                data_method: 'PUT',
+                hide: false,
+                class: 'link-method'
+            },
+            {divider: true},
+            {
+                text: '<i class="glyphicon glyphicon-trash"></i> '+t('.set_deleted'),
+                href: erp_orders.backend_order_path(@order),
+                data_method: 'PUT',
+                data_confirm: t('delete_confirm'),
+                class: 'link-method'
+            }
+        ],
+        text: t('.options'),
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="custom-invoice invoice-content-2 bordered">
+            <div class="row invoice-head">
+                <div class="col-md-6 col-xs-6">
+                    <div class="invoice-logo inv-name">
+                        <h1 class="uppercase"><%= @order.sales? ? t('.sales_order') : t('.purchase_order') %></h1>
+                        <p class="invoice-desc inv-date">
+                            <%= t('.day') %> <%= @order.order_date.strftime('%d') %>
+                            <%= t('.month') %> <%= @order.order_date.strftime('%m') %>
+                            <%= t('.year') %> <%= @order.order_date.strftime('%Y') %>
+                        </p>
+                        <p class="invoice-desc inv-code"><%= t('.code') %>: <%= @order.code %></p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <div class="company-address">
+                        <span class="bold uppercase"><%= Erp::Contacts::Contact.get_main_contact.name %></span>
+                        <br/> <%= Erp::Contacts::Contact.get_main_contact.address %>
+                    </div>
+                </div>
+            </div>
+            <div class="row invoice-cust-add">
+                <div class="col-xs-6">
+                    <h2 class="invoice-title uppercase"><%= @order.sales? ? t('.sales_information') : t('.purchase_information') %></h2>
+                    <ul class="list-unstyled">
+                        <li>
+                            <%= @order.sales? ? t('.customer') : t('.supplier') %>:
+                            <strong class="invoice-desc"><%= @order.sales? ? @order.customer_name : @order.supplier_name %></strong>
+                        </li>
+                        <li><%= t('.address') %>: <strong class="invoice-desc inv-address">
+                        <%= @order.sales? ? @order.customer.address : @order.supplier.address %></strong> </li>
+                        <li><%= @order.sales? ? t('.reason_for_export_warehouse') : t('.reason_for_import_warehouse') %>: <strong class="invoice-desc inv-address">
+                        <%= @order.note %></strong> </li>
+                        <li><%= @order.sales? ? t('.export_warehouse') : t('.import_warehouse') %>: <strong class="invoice-desc"><%= @order.warehouse_name %></strong> </li>
+                    </ul>
+                </div>
+                <div class="col-xs-3 invoice-payment">
+                    <h2 class="invoice-title uppercase"><%= t('.payment_information') %></h2>
+                    <ul class="list-unstyled">
+                        <li><%= t('.order_date') %>: <span><%= @order.order_date.strftime('%d/%m/%Y') %></span> </li>
+                        <li><%= t('.payment_deadline') %>: <span>12/08/2017</span> </li>
+                        <li><%= t('.paid_amount') %>: <%= format_price(@order.paid_amount) %> </li>
+                        <li><%= t('.remain_amount') %>: <%= format_price(@order.remain_amount) %> </li>
+                    </ul>
+                </div>
+                <div class="col-xs-3">
+                    <h2 class="invoice-title uppercase"><%= t('.employee') %></h2>
+                    <ul class="list-unstyled">
+                        <li><strong class="invoice-desc"><%= @order.employee_name %></strong> </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row invoice-body">
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="invoice-title uppercase"><%= t('.ordinal_number') %></th>
+                                <th class="invoice-title uppercase cursor-help"
+                                    title="<%= t('.item_help') %>">
+                                    <%= t('.items') %>
+                                </th>
+                                <th class="invoice-title uppercase text-center">Loại</th>
+                                <th class="invoice-title uppercase text-center"><%= t('.units') %></th>
+                                <th class="invoice-title uppercase text-center"><%= t('.quantity') %></th>
+                                <th class="invoice-title uppercase text-right"><%= t('.price') %></th>
+                                <th class="invoice-title uppercase text-right cursor-help"
+                                    title="<%= t('.total_amount_help') %>">
+                                    <%= t('.total_amount') %>
+                                </th>
+                                <th class="invoice-title uppercase text-right"><%= t('.discount') %></th>
+                                <th class="invoice-title uppercase text-right"><%= t('.shipping_fee') %></th>
+                                <th class="invoice-title uppercase text-right cursor-help"
+                                    title="<%= t('.total_help') %>">
+                                    <%= t('.total') %>
+                                </th>
+                                <th class="invoice-title uppercase text-right"><%= t('.note') %></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @order.order_details.each_with_index do |order_detail,index| %>
+                                <tr>
+                                    <td>#<%= index+1 %></td>
+                                    <td>
+                                        <h3><%= order_detail.product_name %></h3>
+                                        <p> <%= t('.product_code') + ': ' + order_detail.product_code %> </p>
+                                    </td>
+                                    <td><%= order_detail.product_qty_name %></td>
+                                    <td class="text-center"><%= order_detail.product_unit_name %></td>
+                                    <td class="text-center sbold"><%= order_detail.quantity %></td>
+                                    <td class="text-right sbold"><%= format_price(order_detail.price) %></td>
+                                    <td class="text-right sbold"><%= format_price(order_detail.total_amount) %></td>
+                                    <td class="text-right sbold"><%= format_price(order_detail.get_discount) %></td>
+                                    <td class="text-right sbold"><%= format_price(order_detail.get_shipping_fee) %></td>
+                                    <td class="text-right sbold"><%= format_price(order_detail.total) %></td>
+                                    <td class="cursor-help" title="<%= order_detail.description %>"><%= truncate(order_detail.description, length: 15) %></td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row invoice-subtotal">
+                <div class="col-xs-4 text-left">
+                    <h2 class="invoice-title uppercase">Cộng tiền hàng</h2>
+                    <p class="invoice-desc"><%= format_price(@order.cache_total) %></p>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <h2 class="invoice-title uppercase">Tiền thuế (0%)</h2>
+                    <p class="invoice-desc"><%= format_price(0) %></p>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <h2 class="invoice-title uppercase">Tổng tiền thanh toán</h2>
+                    <p class="invoice-desc grand-total"><%= format_price(@order.cache_total) %></p>
+                </div>
+            </div>
+        </div>     
+    </div>
+</div>
