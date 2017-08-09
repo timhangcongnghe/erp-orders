@@ -1,9 +1,11 @@
 <input type="hidden" name="order[order_details_attributes][<%= uid %>][id]" value="<%= order_detail.id %>">
 <input type="hidden" name="order[order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
 <input type="hidden" name="order[order_details_attributes][<%= uid %>][_destroy]" value="">
-<td><%= order_detail.product_code %></td>
-<td><%= order_detail.product_name %></td>
-<td class="text-right">
+<td>
+    <%= order_detail.product_name %><br>
+    <strong><%= t('.product_code') %>:</strong> <%= order_detail.product_code %>
+</td>
+<td class="text-right" width="5%">
     <%= erp_form_control("number", {
         name: 'order[order_details_attributes][' + uid + '][quantity]',
         value: order_detail.quantity,
@@ -11,11 +13,30 @@
         class: "line_quantity inline"
     }) %>
 </td>
-<td class="text-right">
+<td class="text-right" width="5%">
     <%= erp_form_control("number", {
         name: 'order[order_details_attributes][' + uid + '][price]',
         value: order_detail.price,
         text: order_detail.price,
+        class: "line_unit_price inline"
+    }) %>
+</td>
+<td class="text-right">
+    <span class="line_total text-semibold"></span>
+</td>
+<td class="text-right" width="5%">
+    <%= erp_form_control("number", {
+        name: 'order[order_details_attributes][' + uid + '][discount]',
+        value: order_detail.discount,
+        text: order_detail.discount,
+        class: "line_unit_price inline"
+    }) %>
+</td>
+<td class="text-right" width="5%">
+    <%= erp_form_control("number", {
+        name: 'order[order_details_attributes][' + uid + '][shipping_fee]',
+        value: order_detail.shipping_fee,
+        text: order_detail.shipping_fee,
         class: "line_unit_price inline"
     }) %>
 </td>
@@ -26,6 +47,14 @@
 </td>
 <td class="text-right">
     <span class="line_total text-semibold"></span>
+</td>
+<td width="5%">
+    <%= erp_form_control("textarea", {
+        name: 'order[order_details_attributes][' + uid + '][description]',
+        value: order_detail.description,
+        text: order_detail.description,
+        class: "line_unit_price inline"
+    }) %>
 </td>
 <td class="text-right">
     <%= erp_form_control("addableform_remove_button", {

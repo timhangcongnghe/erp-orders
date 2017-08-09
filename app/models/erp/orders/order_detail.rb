@@ -1,6 +1,6 @@
 module Erp::Orders
   class OrderDetail < ApplicationRecord
-    validates :product_id, :presence => true
+    validates :product_id, :quantity, :price, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
     belongs_to :product, class_name: 'Erp::Products::Product'
     if Erp::Core.available?("deliveries")
@@ -67,7 +67,35 @@ module Erp::Orders
     end
     
     def product_price
-      product.nil? ? '' : product.price
+      product.nil? ? '' : product.product_price
     end
+    
+    def product_qty_name
+			product.nil? ? '' : product.category_name
+		end
+    
+    def product_unit_name
+			if !product.nil?
+				product.unit.nil? ? '' : product.unit.name
+			end
+		end
+    
+    # @todo validates
+    def total_amount
+			quantity*price
+		end
+    
+    def total
+			total_amount - get_discount + get_shipping_fee
+		end
+    
+    def get_discount
+			discount.nil? ? 0.0 : discount
+    end
+    
+    def get_shipping_fee
+			shipping_fee.nil? ? 0.0 : shipping_fee
+    end
+    
   end
 end

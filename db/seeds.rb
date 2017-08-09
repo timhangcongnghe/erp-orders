@@ -18,6 +18,7 @@ Erp::Orders::Order.all.destroy_all
     supplier_id: (key==keys[0]) ? owner.id : contact.id,
     customer_id: (key==keys[0]) ? contact.id : owner.id,
     employee_id: users.order("RANDOM()").first.id,
+    warehouse_id: Erp::Warehouses::Warehouse.order("RANDOM()").first.id,
     status: status[rand(status.count)],
     creator_id: users.order("RANDOM()").first.id
   )

@@ -6,11 +6,19 @@
     <% else %>
         <% employee_name = 'employee' %>
     <% end %>
-    <div class="form-body">        
+    <div class="form-body">
         <div class="row">
             <div class="col-md-6">
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
+                        <%= erp_form_control('text', {
+                            label: t('.code'),
+                            name: 'order[code]',
+                            value: order.code,
+                            help: t('.help_code'),
+                            placeholder: t('.placeholder_code'),
+                            errors: order.errors.full_messages_for(:code)
+                        }) %>
                         <%= erp_form_control('date', {
                             label: t('.order_date'),
                             name: 'order[order_date]',
@@ -31,14 +39,14 @@
                                     url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
                                     create: {
                                         url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
-                                        title: t('.create'),
+                                        title: t('.create_contact'),
                                         container_selector: '.new_contact',
                                         input_selector: 'input[name="contact[name]"]',
                                         modal_size: "full"
                                     },
                                     edit: {
                                         url: erp_contacts.edit_backend_contact_path(id: ':value'),
-                                        title: t('.edit'),
+                                        title: t('.edit_contact'),
                                         container_selector: '.edit_contact',
                                     },
                                     required: true,
@@ -56,14 +64,14 @@
                                     url: erp_contacts.dataselect_backend_contacts_path(format: 'json'),
                                     create: {
                                         url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
-                                        title: t('.create'),
+                                        title: t('.create_contact'),
                                         container_selector: '.new_contact',
                                         input_selector: 'input[name="contact[name]"]',
                                         modal_size: "full"
                                     },
                                     edit: {
                                         url: erp_contacts.edit_backend_contact_path(id: ':value'),
-                                        title: t('.edit'),
+                                        title: t('.edit_contact'),
                                         container_selector: '.edit_contact',
                                     },
                                     required: true,
@@ -77,14 +85,6 @@
             <div class="col-md-6">
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
-                        <%= erp_form_control('text', {
-                            label: t('.code'),
-                            name: 'order[code]',
-                            value: order.code,
-                            help: t('.help_code'),
-                            placeholder: t('.placeholder_code'),
-                            errors: order.errors.full_messages_for(:code)
-                        }) %>
                         <%= erp_form_control("dataselect", {
                             name: 'order[employee_id]',
                             value: order.employee_id,
@@ -92,14 +92,37 @@
                             placeholder: t('.choose_employee'),
                             label: t(".#{employee_name}"),
                             url: erp.dataselect_backend_users_path(format: 'json'),
-                            create: {
-                                url: erp.new_backend_user_path,
-                                title: t('.create'),
-                                container_selector: '.new_user',
-                                input_selector: 'input[name="user[name]"]'
-                            },
                             required: true,
                             errors: order.errors.full_messages_for(:employee_id)
+                        }) %>
+                        <%= erp_form_control("dataselect", {
+                            name: 'order[warehouse_id]',
+                            value: order.warehouse_id,
+                            text: order.warehouse_name,
+                            label: t('.warehouse'),
+                            placeholder: t('.select_warehouse'),
+                            url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+                            create: {
+                                url: erp_warehouses.new_backend_warehouse_path,
+                                title: t('.create_warehouse'),
+                                container_selector: '.new_warehouse',
+                                input_selector: 'input[name="warehouse[name]"]'
+                            },
+                            edit: {
+                                url: erp_warehouses.edit_backend_warehouse_path(id: ':value'),
+                                title: t('.edit_warehouse'),
+                                container_selector: '.edit_warehouse',
+                            },
+                            required: true,
+                            errors: order.errors.full_messages_for(:warehouse_id)
+                        }) %>
+                        <%= erp_form_control('textarea', {
+                            label: t('.note'),
+                            name: 'order[note]',
+                            value: order.note,
+                            placeholder: t('.placeholder_note'),
+                            rows: 1,
+                            errors: order.errors.full_messages_for(:note)
                         }) %>
                     </div>
                 </div>
@@ -149,12 +172,15 @@
                                         container_selector: '.edit_product',
                                     }
                                 }),
-                                thead: "<th>#{t('.product_code')}</th>
-                                        <th>#{t('.product_name')}</th>                                        
+                                thead: "<th>#{t('.product_name')}</th>                                        
                                         <th class='text-right'>#{t('.quantity')}</th>
                                         <th class='text-right'>#{t('.price')}</th>
+                                        <th class='text-right'>#{t('.total_amount')}</th>
+                                        <th class='text-right'>#{t('.discount')}</th>
+                                        <th class='text-right'>#{t('.shopping_fee')}</th>
                                         <th>#{t('.tax')}</th>
-                                        <th class='text-right'>#{t('.total')}</th>                                        
+                                        <th class='text-right'>#{t('.total')}</th>
+                                        <th class='text-right'>#{t('.description')}</th>
                                         <th class='text-right'>#{t('.action')}</th>"
                             }) %>
                             

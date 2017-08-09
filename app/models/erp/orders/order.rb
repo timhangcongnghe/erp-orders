@@ -3,19 +3,23 @@ module Erp::Orders
     belongs_to :creator, class_name: "Erp::User"
     belongs_to :employee, class_name: "Erp::User", foreign_key: :employee_id
     if Erp::Core.available?("contacts")
-			belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id
-			belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id
+		belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id
+		belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id
 		end
+    if Erp::Core.available?("warehouses")
+		belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse", foreign_key: :warehouse_id
+		end
+    
     has_many :order_details, dependent: :destroy
     accepts_nested_attributes_for :order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
     
     if Erp::Core.available?("payments")
-			has_many :payment_records, class_name: "Erp::Payments::PaymentRecord"
-			has_many :debts, class_name: "Erp::Payments::Debt"
+		has_many :payment_records, class_name: "Erp::Payments::PaymentRecord"
+		has_many :debts, class_name: "Erp::Payments::Debt"
 		end
     
     validates :code, uniqueness: true
-    validates :customer_id, :supplier_id, :order_date, :employee_id, presence: true
+    validates :customer_id, :supplier_id, :order_date, :employee_id, :warehouse_id, presence: true
     
     after_save :update_cache_payment_status
     after_save :update_cache_total
@@ -161,9 +165,15 @@ module Erp::Orders
 			employee.present? ? employee.name : ''
 		end
     
+    # display warehouse name
+    def warehouse_name
+			warehouse.present? ? warehouse.name : ''
+		end
+    
     # get total amount
     def total
-			return order_details.sum('price * quantity')
+			#return order_details.sum('price * quantity')
+			return order_details.sum(&:total)
 		end
     
     # items count

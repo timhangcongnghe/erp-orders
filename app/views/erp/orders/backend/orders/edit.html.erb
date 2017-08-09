@@ -28,9 +28,6 @@
         <% if @order.errors.any? %>
             <%= erp_form_control("form_error_message") %>
         <% end %>
-        <h3>
-            <span aria-hidden="true" class="icon-user"></span> <%= t('.order_details') %>
-        </h3>
         
         <!-- BEGIN SAMPLE FORM PORTLET-->
         <%= render 'form', order: @order %>

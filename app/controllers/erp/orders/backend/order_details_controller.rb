@@ -70,6 +70,7 @@ module Erp
         def order_line_form
           @order_detail = OrderDetail.new
           @order_detail.product_id = params[:add_value]
+          @order_detail.price = @order_detail.product_price
           
           render partial: params[:partial], locals: {
             order_detail: @order_detail,
@@ -85,7 +86,7 @@ module Erp
     
           # Only allow a trusted parameter "white list" through.
           def order_detail_params
-            params.fetch(:order_detail, {}).permit(:product_id, :order_id, :quantity, :price, :description)
+            params.fetch(:order_detail, {}).permit(:product_id, :order_id, :quantity, :price, :discount, :shipping_fee, :description)
           end
       end
     end
