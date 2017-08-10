@@ -3,15 +3,25 @@
 <% end %>
 
 <% content_for :page_title do %>    
-    <a href="<%= erp_orders.backend_orders_path %>">
+    <a href="
+        <%=
+            if @type == Erp::Orders::Order::TYPE_SALES_ORDER
+                erp_sales.backend_sales_orders_path
+            elsif @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER
+                erp_purchase.backend_purchase_orders_path
+            else
+                erp_orders.backend_orders_path
+            end
+        %>
+    ">
     <i class="fa fa-users"></i> <%= t('.orders') %>
-    </a> / <%= @order.code %>
+    </a> / <%= t('.edit') %> # <%= @order.code %>
 <% end %>
 
 <% content_for :page_toolbar do %>
     <%= erp_component('button/create', {
         text: t('.create'),
-        href: erp_orders.new_backend_order_path,
+        href: erp_orders.new_backend_order_path(type: @type),
         class: 'btn-noborder'
     }) %>
 <% end %>

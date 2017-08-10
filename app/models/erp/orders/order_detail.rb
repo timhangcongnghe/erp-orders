@@ -70,7 +70,7 @@ module Erp::Orders
       product.nil? ? '' : product.product_price
     end
     
-    def product_qty_name
+    def product_category_name
 			product.nil? ? '' : product.category_name
 		end
     

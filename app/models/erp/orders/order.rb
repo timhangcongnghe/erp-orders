@@ -171,8 +171,20 @@ module Erp::Orders
 		end
     
     # get total amount
+    def total_amount
+			return order_details.sum(&:total_amount)
+		end
+    
+    def discount
+			return order_details.sum(&:get_discount)
+		end
+    
+    def shipping_fee
+			return order_details.sum(&:get_shipping_fee)
+		end
+    
+    # get total (after deducting related fees)
     def total
-			#return order_details.sum('price * quantity')
 			return order_details.sum(&:total)
 		end
     

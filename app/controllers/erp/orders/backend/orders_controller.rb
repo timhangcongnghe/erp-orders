@@ -18,6 +18,7 @@ module Erp
     
         # GET /orders/1
         def show
+          @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
         end
     
         # GET /orders/new
