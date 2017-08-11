@@ -2,7 +2,7 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :edit, :update, :destroy, :set_confirm, :set_cancel]
+        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy, :set_confirm, :set_cancel]
         before_action :set_orders, only: [:delete_all, :set_confirm_all, :set_cancel_all]
     
         # GET /orders
@@ -19,6 +19,11 @@ module Erp
         # GET /orders/1
         def show
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
+        end
+        
+        # POST /orders/list
+        def show_list
+          
         end
     
         # GET /orders/new

@@ -4,6 +4,7 @@ Erp::Orders::Engine.routes.draw do
       resources :orders do
         collection do
           post 'list'
+          post 'show_list'
 					get 'dataselect'
 					delete 'delete_all'
 					put 'set_confirm'
