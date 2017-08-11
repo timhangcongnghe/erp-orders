@@ -28,18 +28,18 @@ module Erp
         }
         actions << { divider: true }
         actions << {
-          text: '<i class="fa fa-check"></i> '+(order.cancelled? == false ? t('.set_confirm') : t('.re_opened')),
-          url: erp_orders.set_confirm_backend_orders_path(id: order),
+          text: '<i class="fa fa-check"></i> '+(order.deleted? == false ? t('.set_confirmed') : t('.re_opened')),
+          url: erp_orders.set_confirmed_backend_orders_path(id: order),
           data_method: 'PUT',
           class: 'ajax-link',
-          data_confirm: order.cancelled? == false ? t('.set_confirm_confirm') : t('.re_opened_confirm')
+          data_confirm: order.deleted? == false ? t('.set_confirmed_confirm') : t('.re_opened_confirm')
         }
         actions << {
-          text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
-          url: erp_orders.set_cancel_backend_orders_path(id: order),
+          text: '<i class="fa fa-ban"></i> '+t('.set_deleted'),
+          url: erp_orders.set_deleted_backend_orders_path(id: order),
           data_method: 'PUT',
           class: 'ajax-link',
-          data_confirm: t('.set_cancel_confirm')
+          data_confirm: t('.set_deleted_confirm')
         }
         actions << { divider: true }
         order.payment_records.each do |payment_record|

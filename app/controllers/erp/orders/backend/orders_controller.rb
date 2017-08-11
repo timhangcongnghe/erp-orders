@@ -2,8 +2,8 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy, :set_confirm, :set_cancel]
-        before_action :set_orders, only: [:delete_all, :set_confirm_all, :set_cancel_all]
+        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy, :set_confirmed, :set_deleted]
+        before_action :set_orders, only: [:delete_all, :set_confirmed_all, :set_deleted_all]
     
         # GET /orders
         def index
@@ -129,9 +129,9 @@ module Erp
           end
         end
         
-        # Confirm /orders/set_confirm?id=1
-        def set_confirm
-          @order.set_confirm
+        # Confirmed /orders/set_confirmed?id=1
+        def set_confirmed
+          @order.set_confirmed
           
           respond_to do |format|
           format.json {
@@ -143,9 +143,9 @@ module Erp
           end
         end
         
-        # Cancel /orders/set_cancel?id=1
-        def set_cancel
-          @order.set_cancel
+        # Deleted /orders/set_deleted?id=1
+        def set_deleted
+          @order.set_deleted
           
           respond_to do |format|
           format.json {
@@ -157,9 +157,9 @@ module Erp
           end
         end
         
-        # Confirm /orders/set_confirm_all?ids=1,2,3
-        def set_confirm_all
-          @orders.set_confirm_all
+        # Confirmed /orders/set_confirmed_all?ids=1,2,3
+        def set_confirmed_all
+          @orders.set_confirmed_all
           
           respond_to do |format|
           format.json {
@@ -171,9 +171,9 @@ module Erp
           end
         end
         
-        # Cancel /orders/set_cancel_all?ids=1,2,3
-        def set_cancel_all
-          @orders.set_cancel_all
+        # Deleted /orders/set_deleted_all?ids=1,2,3
+        def set_deleted_all
+          @orders.set_deleted_all
           
           respond_to do |format|
           format.json {

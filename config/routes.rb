@@ -7,10 +7,10 @@ Erp::Orders::Engine.routes.draw do
           post 'show_list'
 					get 'dataselect'
 					delete 'delete_all'
-					put 'set_confirm'
-					put 'set_cancel'
-					put 'set_confirm_all'
-					put 'set_cancel_all'
+					put 'set_confirmed'
+					put 'set_deleted'
+					put 'set_confirmed_all'
+					put 'set_deleted_all'
         end
       end
       resources :order_details do

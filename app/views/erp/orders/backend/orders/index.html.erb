@@ -43,16 +43,16 @@
             divider: true
         },
         {
-            text: '<i class="fa fa-check"></i> '+t('.set_confirm'),
-            url: erp_orders.set_confirm_all_backend_orders_path,
+            text: '<i class="fa fa-check"></i> '+t('.set_confirmed'),
+            url: erp_orders.set_confirmed_all_backend_orders_path,
             data_method: 'PUT',
-            data_confirm: t('.set_confirm_confirm')
+            data_confirm: t('.set_confirmed_confirm')
         },
         {
-            text: '<i class="fa fa-ban"></i> '+t('.set_cancel'),
-            url: erp_orders.set_cancel_all_backend_orders_path,
+            text: '<i class="fa fa-ban"></i> '+t('.set_deleted'),
+            url: erp_orders.set_deleted_all_backend_orders_path,
             data_method: 'PUT',
-            data_confirm: t('.set_cancel_confirm')
+            data_confirm: t('.set_deleted_confirm')
         },
         {
             divider: true
@@ -81,7 +81,7 @@
             text: t('.confirmed'), name: 'status', value: Erp::Orders::Order::STATUS_CONFIRMED, checked: false
         },
         {
-            text: t('.cancelled'), name: 'status', value: Erp::Orders::Order::STATUS_CANCELLED, checked: false
+            text: t('.deleted'), name: 'status', value: Erp::Orders::Order::STATUS_DELETED, checked: false
         },
         {
             divider: true

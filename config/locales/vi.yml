@@ -17,13 +17,13 @@ vi:
             success: "Xóa thông tin đơn hàng thành công."
           delete_all:
             success: "Thông tin đơn hàng vừa chọn đã được xóa."
-          set_confirm:
+          set_confirmed:
             success: "Xác nhận đơn hàng thành công."
-          set_cancel:
+          set_deleted:
             success: "Đơn hàng đã được hủy thành công."
-          set_confirm_all:
+          set_confirmed_all:
             success: "Xác nhận đơn hàng thành công."
-          set_cancel_all:
+          set_deleted_all:
             success: "Đơn hàng đã được hủy thành công."
           index:
             create: "Tạo đơn hàng"
@@ -52,16 +52,16 @@ vi:
             purchase: "Đơn hàng mua"
             draft: "Phiếu tạm"
             confirmed: "Đã xác nhận"
-            cancelled: "Đã hủy"
+            deleted: "Đã hủy"
             paid: "Đã thanh toán"
             not_paid: "Chưa thanh toán"
             debt: "Đang công nợ"
             return_back: "Cần trả lại tiền"
-            set_confirm: "Xác nhận đơn hàng"
-            set_cancel: "Hủy đơn hàng"
+            set_confirmed: "Xác nhận đơn hàng"
+            set_deleted: "Hủy đơn hàng"
             extend_debt_deadline: "Gia hạn công nợ"
-            set_confirm_confirm: "Bạn đồng ý xác nhận đơn hàng?"
-            set_cancel_confirm: "Bạn đồng ý hủy đơn hàng?"
+            set_confirmed_confirm: "Bạn đồng ý xác nhận đơn hàng?"
+            set_deleted_confirm: "Bạn đồng ý hủy đơn hàng?"
           list:
             create: "Tạo đơn hàng"
             order_number: "Mã đơn hàng"
@@ -82,7 +82,7 @@ vi:
             delete_confirm: "Không thể hoàn tác đơn hàng. Bạn có chắc chắn muốn xóa?"
             draft: "Lưu tạm"
             confirmed: "Đã xác nhận"
-            cancelled: "Đã hủy"
+            deleted: "Đã hủy"
             return_back: "Cần trả lại tiền"
             paid: "Đã thanh toán"
             overdue: "Quá hạn thanh toán"
@@ -90,10 +90,10 @@ vi:
             active: "Kích hoạt"
             extend_debt_deadline: "Gia hạn công nợ"
             re_opened: "Mở lại đơn hàng"
-            set_confirm: "Xác nhận đơn hàng"
-            set_cancel: "Hủy đơn hàng"
-            set_confirm_confirm: "Bạn đồng ý xác nhận đơn hàng?"
-            set_cancel_confirm: "Bạn đồng ý hủy đơn hàng?"
+            set_confirmed: "Xác nhận đơn hàng"
+            set_deleted: "Hủy đơn hàng"
+            set_confirmed_confirm: "Bạn đồng ý xác nhận đơn hàng?"
+            set_deleted_confirm: "Bạn đồng ý hủy đơn hàng?"
             re_opened_confirm: "Bạn đồng ý mở lại đơn hàng?"
             pay_ncc: "Trả tiền NCC"
             pay_kh: "Trả lại tiền KH"

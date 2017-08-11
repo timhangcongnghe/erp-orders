@@ -32,8 +32,8 @@
         actions:
         [
             {
-                text: '<i class="fa fa-check"></i> '+t('confirm'),
-                url: erp_orders.set_confirm_backend_orders_path(id: @order.id),
+                text: '<i class="fa fa-check"></i> '+t('confirmed'),
+                url: erp_orders.set_confirmed_backend_orders_path(id: @order.id),
                 data_method: 'PUT',
                 hide: false,
                 class: 'link-method'
@@ -56,9 +56,9 @@
             {divider: true},
             {
                 text: '<i class="glyphicon glyphicon-trash"></i> '+t('.set_deleted'),
-                href: '',
+                href: erp_orders.set_deleted_backend_orders_path(id: @order.id),
                 data_method: 'PUT',
-                data_confirm: t('delete_confirm'),
+                data_confirm: t('.deleted_confirm'),
                 class: 'link-method'
             }
         ],

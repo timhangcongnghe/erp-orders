@@ -30,8 +30,8 @@ module Erp::Orders
     
     STATUS_DRAFT = 'draft'
     STATUS_CONFIRMED = 'confirmed'
-    STATUS_CANCELLED = 'cancelled'
-    STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_CANCELLED]
+    STATUS_DELETED = 'deleted'
+    STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_DELETED]
     if Erp::Core.available?("deliveries")
 			after_save :update_cache_delivery_status
 			has_many :deliveries, class_name: "Erp::Deliveries::Delivery"
@@ -248,20 +248,20 @@ module Erp::Orders
       self.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
     
-    def set_confirm
+    def set_confirmed
       update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
     
-    def set_cancel
-      update_attributes(status: Erp::Orders::Order::STATUS_CANCELLED)
+    def set_deleted
+      update_attributes(status: Erp::Orders::Order::STATUS_DELETED)
     end
     
-    def self.set_confirm_all
+    def self.set_confirmed_all
       update_all(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
     
-    def self.set_cancel_all
-      update_all(status: Erp::Orders::Order::STATUS_CANCELLED)
+    def self.set_deleted_all
+      update_all(status: Erp::Orders::Order::STATUS_DELETED)
     end
     
     if Erp::Core.available?("payments")
@@ -293,7 +293,7 @@ module Erp::Orders
 			
 			# ordered amount
 			def ordered_amount
-				if status == Erp::Orders::Order::STATUS_CANCELLED
+				if status == Erp::Orders::Order::STATUS_DELETED
 					total = 0.0
 				else
 					total = self.total
@@ -301,9 +301,9 @@ module Erp::Orders
 				return total
 			end
 			
-			# check if order is cancelled
-			def cancelled?
-				return self.status == Erp::Orders::Order::STATUS_CANCELLED
+			# check if order is deleted
+			def deleted?
+				return self.status == Erp::Orders::Order::STATUS_DELETED
 			end
 			
 			# set payment status
@@ -321,7 +321,7 @@ module Erp::Orders
 					else
 						status = Erp::Orders::Order::PAYMENT_STATUS_OVERPAID
 					end
-				elsif self.status == Erp::Orders::Order::STATUS_CANCELLED
+				elsif self.status == Erp::Orders::Order::STATUS_DELETED
 					if remain_amount == 0
 						status = ''
 					else
