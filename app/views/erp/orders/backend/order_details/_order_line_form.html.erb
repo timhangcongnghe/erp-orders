@@ -41,9 +41,24 @@
     }) %>
 </td>
 <td>
-    <button class="btn btn-primary btn-xs">
-        Add tax
-    </button>
+    <%= erp_form_control("dataselect", {
+        name: 'order[tax_id]',
+        value: '',
+        text: '',
+        placeholder: t('.add_tax'),
+        url: erp_taxes.dataselect_backend_taxes_path(format: 'json'),
+        create: {
+            url: erp_taxes.new_backend_tax_path,
+            title: t('.create_tax'),
+            container_selector: '.new_tax',
+            input_selector: 'input[name="tax[name]"]'
+        },
+        edit: {
+            url: erp_taxes.edit_backend_tax_path(id: ':value'),
+            title: t('.edit_tax'),
+            container_selector: '.edit_tax',
+        }
+    }) %>
 </td>
 <td class="text-right">
     <span class="line_total text-semibold"></span>

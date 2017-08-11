@@ -225,6 +225,9 @@ vi:
         order_details:
           order_line_form:
             product_code: "Mã SP"
+            add_tax: "Thêm thuế"
+            create_tax: "Thêm thuế"
+            edit: "Cập nhật thuế"
         frontend_orders:
           destroy:
             success: "Đơn hàng đã xóa thành công."
