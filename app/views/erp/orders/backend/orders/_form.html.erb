@@ -95,6 +95,7 @@
                             required: true,
                             errors: order.errors.full_messages_for(:employee_id)
                         }) %>
+                        <% if Erp::Core.available?("warehouses") %>
                         <%= erp_form_control("dataselect", {
                             name: 'order[warehouse_id]',
                             value: order.warehouse_id,
@@ -116,6 +117,7 @@
                             required: true,
                             errors: order.errors.full_messages_for(:warehouse_id)
                         }) %>
+                        <% end %>
                         <%= erp_form_control('textarea', {
                             label: t('.note'),
                             name: 'order[note]',
