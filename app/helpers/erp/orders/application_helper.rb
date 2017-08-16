@@ -15,6 +15,17 @@ module Erp
         }
         actions << { divider: true }
         actions << {
+          text: '<i class="fa fa-arrow-up"></i> '+t('.export'),
+          url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_EXPORT, order_id: order.id),
+          hide: !order.sales?
+        }
+        actions << {
+          text: '<i class="fa fa-arrow-down"></i> '+t('.import'),
+          url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_IMPORT, order_id: order.id),
+          hide: !order.purchase?
+        }
+        actions << { divider: true }
+        actions << {
           text: '<i class="icon-action-undo"></i> '+(order.purchase? ? t('.pay_ncc') : t('.pay_kh')),
           url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY),
         }

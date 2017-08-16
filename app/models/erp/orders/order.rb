@@ -7,7 +7,13 @@ module Erp::Orders
 		belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id
 		end
     if Erp::Core.available?("warehouses")
-		belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse", foreign_key: :warehouse_id
+			validates :warehouse_id, presence: true
+			belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse", foreign_key: :warehouse_id
+			
+			# display warehouse name
+			def warehouse_name
+				warehouse.present? ? warehouse.name : ''
+			end
 		end
     
     has_many :order_details, dependent: :destroy
@@ -19,7 +25,7 @@ module Erp::Orders
 		end
     
     validates :code, uniqueness: true
-    validates :customer_id, :supplier_id, :order_date, :employee_id, :warehouse_id, presence: true
+    validates :customer_id, :supplier_id, :order_date, :employee_id, presence: true
     
     after_save :update_cache_payment_status
     after_save :update_cache_total
@@ -163,12 +169,7 @@ module Erp::Orders
     # display employee
     def employee_name
 			employee.present? ? employee.name : ''
-		end
-    
-    # display warehouse name
-    def warehouse_name
-			warehouse.present? ? warehouse.name : ''
-		end
+		end    
     
     # get total amount
     def total_amount
