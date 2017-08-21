@@ -5,6 +5,8 @@ contacts = Erp::Contacts::Contact.where('id != ?', owner.id)
 status = [Erp::Orders::Order::STATUS_DRAFT,
           Erp::Orders::Order::STATUS_CONFIRMED]
 keys = ['SO', 'PO']
+sale_taxes = Erp::Taxes::Tax.where(scope: Erp::Taxes::Tax::TAX_SCOPE_SALES)
+purchase_taxes = Erp::Taxes::Tax.where(scope: Erp::Taxes::Tax::TAX_SCOPE_PURCHASES)
 
 # Orders
 Erp::Orders::Order.all.destroy_all
@@ -20,7 +22,8 @@ Erp::Orders::Order.all.destroy_all
     employee_id: users.order("RANDOM()").first.id,
     warehouse_id: Erp::Warehouses::Warehouse.order("RANDOM()").first.id,
     status: status[rand(status.count)],
-    creator_id: users.order("RANDOM()").first.id
+    creator_id: users.order("RANDOM()").first.id,
+    tax_id: (key==keys[0]) ? sale_taxes.sample.id : purchase_taxes.sample.id
   )
   Erp::Products::Product.where(id: Erp::Products::Product.pluck(:id).sample(rand(20..80))).each do |product|
     order_detail = Erp::Orders::OrderDetail.create(

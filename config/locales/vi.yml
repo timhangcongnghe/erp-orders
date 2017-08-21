@@ -200,6 +200,8 @@ vi:
             purchase_employee: "Nhân viên mua hàng"
             note: "Ghi chú/Lý do"
             placeholder_note: "Nội dung ghi chú / lý do"
+            tax: "Thuế"
+            add_tax: "Chọn loại thuế"
             add: "Thêm"
             submit: "Lưu"
             cancel: "Hủy"
@@ -346,6 +348,8 @@ vi:
               blank: "không được để trống"
             warehouse_id:
               blank: "không được để trống"
+            tax_id:
+              blank: "không được để trống"
     attributes:
       erp/orders/order:
         code: "Mã đơn hàng"
@@ -354,3 +358,4 @@ vi:
         supplier_id: "Nhà cung cấp"
         employee_id: "Nhân viên"
         warehouse_id: "Kho hàng"
+        tax_id: "Thuế"

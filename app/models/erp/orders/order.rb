@@ -15,6 +15,17 @@ module Erp::Orders
 				warehouse.present? ? warehouse.name : ''
 			end
 		end
+    if Erp::Core.available?("taxes")
+			validates :tax_id, presence: true
+			belongs_to :tax, class_name: "Erp::Taxes::Tax", foreign_key: :tax_id
+			
+			# tax name
+			def tax_name
+				if tax.present?
+					tax.short_name.present? ? tax.short_name : tax.name
+				end
+			end
+		end
     
     has_many :order_details, dependent: :destroy
     accepts_nested_attributes_for :order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
@@ -29,6 +40,7 @@ module Erp::Orders
     
     after_save :update_cache_payment_status
     after_save :update_cache_total
+    after_save :update_tax_amount
     
     # class const
     TYPE_SALES_ORDER = 'sales'
@@ -189,6 +201,17 @@ module Erp::Orders
 			return order_details.sum(&:total)
 		end
     
+    # tax count
+    def taxx
+			count = 0
+			if tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_FIXED
+				count = tax.amount
+			elsif tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_PRICE
+				count = (total_amount*(tax.amount))/100
+			end
+			return count
+		end
+    
     # items count
     def items_count
 			order_details.sum(:quantity)
@@ -202,6 +225,11 @@ module Erp::Orders
     # Cache total
     def self.cache_total
 			self.sum("erp_orders_orders.cache_total")
+		end
+    
+    # update tax amount
+    def update_tax_amount
+			self.update_column(:tax_amount, self.taxx)
 		end
     
     # check if order is sales order

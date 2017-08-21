@@ -10,6 +10,13 @@ module Erp::Orders
     after_save :order_update_cache_delivery_status
     after_save :update_order_cache_total
     
+    # update order tax amount
+    def update_order_tax_amount
+			if order.present?
+				order.update_tax_amount
+			end
+		end
+    
     # update order cache total
     def update_order_cache_total
 			if order.present?
