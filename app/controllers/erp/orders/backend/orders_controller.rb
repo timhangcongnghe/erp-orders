@@ -84,8 +84,6 @@ module Erp
               redirect_to erp_orders.edit_backend_order_path(@order), notice: t('.success')
             end
           else
-            puts "=================================================================="
-          puts @order.errors.to_json
             if request.xhr?
               render '_form', layout: nil, locals: {order: @order}
             else
