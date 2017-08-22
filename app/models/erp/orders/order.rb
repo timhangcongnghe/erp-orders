@@ -57,11 +57,23 @@ module Erp::Orders
 			DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
 			DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
 			
+			def delivery_count
+				deliveries.count
+			end
+			
+			def delivery_count
+				deliveries.count
+			end
+			
+			def delivery_count
+				deliveries.count
+			end
+			
 			def delivered_deliveries
 				deliveries.where(status: Erp::Deliveries::Delivery::DELIVERY_STATUS_DELIVERED)
 			end
 			
-			def delivered_amount
+			def delivered_quantity
 				count = 0
 				delivered_deliveries.each do |d|
 					count += d.delivery_details.sum(:quantity)
@@ -69,12 +81,12 @@ module Erp::Orders
 				return count
 			end
 			
-			def not_delivered_count
-				items_count - delivered_amount
+			def not_delivered_quantity
+				items_count - delivered_quantity
 			end
 			
 			def delivery_status
-				remain = not_delivered_count
+				remain = not_delivered_quantity
 				if remain > 0
 					return Erp::Orders::Order::DELIVERY_STATUS_NOT_DELIVERY
 				elsif remain == 0

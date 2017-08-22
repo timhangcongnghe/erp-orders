@@ -2,13 +2,31 @@ module Erp::Orders
   class OrderDetail < ApplicationRecord
     validates :product_id, :quantity, :price, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
-    belongs_to :product, class_name: 'Erp::Products::Product'
-    if Erp::Core.available?("deliveries")
-			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
-		end
+    belongs_to :product, class_name: 'Erp::Products::Product'    
     after_save :order_update_cache_payment_status
     after_save :order_update_cache_delivery_status
     after_save :update_order_cache_total
+    
+    if Erp::Core.available?("deliveries")
+			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
+			
+			def delivered_delivery
+				self.delivery_details.joins(:delivery)
+													.where(erp_deliveries_deliveries: {status: Erp::Deliveries::Delivery::DELIVERY_STATUS_DELIVERED})												
+			end
+			
+			def delivered_quantity
+				delivered_delivery.sum('erp_deliveries_delivery_details.quantity')
+			end
+			
+			def not_delivered_quantity
+				quantity - delivered_quantity
+			end			
+		end
+    
+    STATUS_NOT_DELIVERY = 'not_delivery'
+    STATUS_DELIVERED = 'delivered'
+    STATUS_OVER_DELIVERED = 'over_delivered'
     
     # update order tax amount
     def update_order_tax_amount
