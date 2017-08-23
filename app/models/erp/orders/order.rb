@@ -38,9 +38,9 @@ module Erp::Orders
     validates :code, uniqueness: true
     validates :customer_id, :supplier_id, :order_date, :employee_id, presence: true
     
-    after_save :update_cache_payment_status
+    after_save :update_cache_tax_amount
     after_save :update_cache_total
-    after_save :update_tax_amount
+    after_save :update_cache_payment_status
     
     # class const
     TYPE_SALES_ORDER = 'sales'
@@ -193,40 +193,45 @@ module Erp::Orders
     # display employee
     def employee_name
 			employee.present? ? employee.name : ''
-		end    
-    
-    # get total amount
-    def total_amount
-			return order_details.sum(&:total_amount)
-		end
-    
-    def discount
-			return order_details.sum(&:get_discount)
-		end
-    
-    def shipping_fee
-			return order_details.sum(&:get_shipping_fee)
-		end
-    
-    # get total (after deducting related fees)
-    def total
-			return order_details.sum(&:total)
-		end
-    
-    # tax count
-    def taxx
-			count = 0
-			if tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_FIXED
-				count = tax.amount
-			elsif tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_PRICE
-				count = (total_amount*(tax.amount))/100
-			end
-			return count
 		end
     
     # items count
     def items_count
 			order_details.sum(:quantity)
+		end
+    
+    # get sub total amount
+    def subtotal
+			return order_details.sum(&:subtotal)
+		end
+    
+    # get discount amount
+    def discount_amount
+			return order_details.sum(&:discount_amount)
+		end
+    
+    # get shipping amount
+    def shipping_amount
+			return order_details.sum(&:shipping_amount)
+		end
+    
+    # get total without tax
+    def total_without_tax
+			return order_details.sum(&:total_without_tax)
+    end
+    # get tax amount
+    def tax_amount
+			return order_details.sum(&:tax_amount)
+		end
+    
+    # get total
+    def total
+			return order_details.sum(&:total)
+		end
+    
+    # update tax amount
+    def update_cache_tax_amount
+			self.update_column(:cache_tax_amount, self.tax_amount)
 		end
     
     # Update cache total
@@ -237,11 +242,6 @@ module Erp::Orders
     # Cache total
     def self.cache_total
 			self.sum("erp_orders_orders.cache_total")
-		end
-    
-    # update tax amount
-    def update_tax_amount
-			self.update_column(:tax_amount, self.taxx)
 		end
     
     # check if order is sales order

@@ -2,11 +2,16 @@ module Erp::Orders
   class OrderDetail < ApplicationRecord
     validates :product_id, :quantity, :price, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
-    belongs_to :product, class_name: 'Erp::Products::Product'    
-    after_save :order_update_cache_payment_status
-    after_save :order_update_cache_delivery_status
+    belongs_to :product, class_name: 'Erp::Products::Product'
+    after_save :update_order_cache_payment_status
+    after_save :update_order_cache_delivery_status
     after_save :update_order_cache_total
+    after_save :update_order_cache_tax_amount
     
+    STATUS_NOT_DELIVERY = 'not_delivery'
+    STATUS_DELIVERED = 'delivered'
+    STATUS_OVER_DELIVERED = 'over_delivered'
+
     if Erp::Core.available?("deliveries")
 			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
 			
@@ -23,15 +28,11 @@ module Erp::Orders
 				quantity - delivered_quantity
 			end			
 		end
-    
-    STATUS_NOT_DELIVERY = 'not_delivery'
-    STATUS_DELIVERED = 'delivered'
-    STATUS_OVER_DELIVERED = 'over_delivered'
-    
-    # update order tax amount
-    def update_order_tax_amount
+
+    # update order cache tax amount
+    def update_order_cache_tax_amount
 			if order.present?
-				order.update_tax_amount
+				order.update_cache_tax_amount
 			end
 		end
     
@@ -43,14 +44,14 @@ module Erp::Orders
 		end
     
     # update order cache payment status
-    def order_update_cache_payment_status
+    def update_order_cache_payment_status
 			if order.present?
 				order.update_cache_payment_status
 			end
 		end
     
     # update order cache payment status
-    def order_update_cache_delivery_status
+    def update_order_cache_delivery_status
 			if order.present?
 				order.update_cache_delivery_status
 			end
@@ -105,22 +106,41 @@ module Erp::Orders
 			end
 		end
     
-    # @todo validates
-    def total_amount
+    # @todo validates when quantity nil?
+    def subtotal
 			quantity*price
 		end
     
-    def total
-			total_amount - get_discount + get_shipping_fee
+    # get shipping amount
+    def shipping_amount
+			shipping_fee.nil? ? 0.0 : shipping_fee
 		end
     
-    def get_discount
+    # get discount amount
+    def discount_amount
 			discount.nil? ? 0.0 : discount
-    end
+		end
     
-    def get_shipping_fee
-			shipping_fee.nil? ? 0.0 : shipping_fee
-    end
+    # total before tax
+    def total_without_tax
+			subtotal + shipping_amount - discount_amount
+		end
+    
+    # tax amount
+    def tax_amount
+			count = 0
+			if order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_FIXED
+				count = order.tax.amount
+			elsif order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_PRICE
+				count = (total_without_tax*(order.tax.amount))/100
+			end
+			return count
+		end
+    
+    # total after tax
+    def total
+			total_without_tax + tax_amount
+		end
     
   end
 end

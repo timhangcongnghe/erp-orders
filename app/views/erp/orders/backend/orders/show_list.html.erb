@@ -128,10 +128,10 @@
                                         <td class="text-right sbold"><%= format_price(order_detail.total_amount) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("discount") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.get_discount) %></td>
+                                        <td class="text-right sbold"><%= format_price(order_detail.discount_amount) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("shipping_fee") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.get_shipping_fee) %></td>
+                                        <td class="text-right sbold"><%= format_price(order_detail.shipping_amount) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("total") %>
                                         <td class="text-right sbold"><%= format_price(order_detail.total) %></td>
