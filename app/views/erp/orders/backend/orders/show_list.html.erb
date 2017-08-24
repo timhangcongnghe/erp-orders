@@ -125,7 +125,7 @@
                                         <td class="text-right sbold"><%= format_price(order_detail.price) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("total_amount") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.total_amount) %></td>
+                                        <td class="text-right sbold"><%= format_price(order_detail.subtotal) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("discount") %>
                                         <td class="text-right sbold"><%= format_price(order_detail.discount_amount) %></td>

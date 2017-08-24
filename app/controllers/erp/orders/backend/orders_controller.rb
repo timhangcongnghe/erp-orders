@@ -151,6 +151,7 @@ module Erp
 
         # Confirmed /orders/set_confirmed?id=1
         def set_confirmed
+          authorize! :confirm, @order
           @order.set_confirmed
 
           respond_to do |format|
@@ -165,6 +166,7 @@ module Erp
 
         # Deleted /orders/set_deleted?id=1
         def set_deleted
+          authorize! :delete, @order
           @order.set_deleted
 
           respond_to do |format|
@@ -179,6 +181,7 @@ module Erp
 
         # Confirmed /orders/set_confirmed_all?ids=1,2,3
         def set_confirmed_all
+          authorize! :confirm, @order
           @orders.set_confirmed_all
 
           respond_to do |format|
@@ -193,6 +196,7 @@ module Erp
 
         # Deleted /orders/set_deleted_all?ids=1,2,3
         def set_deleted_all
+          authorize! :delete, @order
           @orders.set_deleted_all
 
           respond_to do |format|

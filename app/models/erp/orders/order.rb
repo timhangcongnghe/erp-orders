@@ -253,6 +253,21 @@ module Erp::Orders
     def purchase?
 			return self.customer_id == Erp::Contacts::Contact.get_main_contact.id
 		end
+			
+		# check if order is draft
+		def is_draft?
+			return self.status == Erp::Orders::Order::STATUS_DRAFT
+		end
+			
+		# check if order is deleted
+		def is_confirmed?
+			return self.status == Erp::Orders::Order::STATUS_CONFIRMED
+		end
+			
+		# check if order is deleted
+		def is_deleted?
+			return self.status == Erp::Orders::Order::STATUS_DELETED
+		end
     
     # Get all sales orders
     def self.sales_orders(from_date=nil, to_date=nil)
@@ -340,11 +355,6 @@ module Erp::Orders
 					total = self.total
 				end
 				return total
-			end
-			
-			# check if order is deleted
-			def deleted?
-				return self.status == Erp::Orders::Order::STATUS_DELETED
 			end
 			
 			# set payment status
