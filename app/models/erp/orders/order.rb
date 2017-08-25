@@ -41,6 +41,7 @@ module Erp::Orders
     after_save :update_cache_tax_amount
     after_save :update_cache_total
     after_save :update_cache_payment_status
+    after_save :generate_code
     
     # class const
     TYPE_SALES_ORDER = 'sales'
@@ -125,7 +126,7 @@ module Erp::Orders
       
       and_conds = []
       
-      #filters
+      # filters
       if params["filters"].present?
         params["filters"].each do |ft|
           or_conds = []
@@ -136,7 +137,7 @@ module Erp::Orders
         end
       end
       
-      #keywords
+      # keywords
       if params["keywords"].present?
         params["keywords"].each do |kw|
           or_conds = []
@@ -151,17 +152,60 @@ module Erp::Orders
       query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
       
       # search by a date
-      if params[:date].present?
-				date = params[:date].to_date
-				query = query.where("order_date >= ? AND order_date <= ?", date.beginning_of_day, date.end_of_day)
+      # if params[:date].present?
+			# 	date = params[:date].to_date
+			# 	query = query.where("order_date >= ? AND order_date <= ?", date.beginning_of_day, date.end_of_day)
+			# end
+      
+      # global filter
+      global_filter = params[:global_filter]
+      
+      if global_filter.present?
+				
+				# filter by order from date
+				if global_filter[:order_from_date].present?
+					query = query.where('order_date >= ?', global_filter[:order_from_date].to_date.beginning_of_day)
+				end
+				
+				# filter by order to date
+				if global_filter[:order_to_date].present?
+					query = query.where('order_date <= ?', global_filter[:order_to_date].to_date.end_of_day)
+				end
+				
+				# filter by order customer
+				if global_filter[:customer].present?
+					query = query.where(customer_id: global_filter[:customer])
+				end
+				
+				# filter by order supplier
+				if global_filter[:supplier].present?
+					query = query.where(supplier_id: global_filter[:supplier])
+				end
+				
+				# filter by order warehouse
+				if global_filter[:warehouse].present?
+					query = query.where(warehouse_id: global_filter[:warehouse])
+				end
+				
 			end
+      # end// global filter
       
       return query
     end
     
     def self.search(params)
-      query = self.order("created_at DESC")
+      query = self.all
       query = self.filter(query, params)
+      
+      # order
+      if params[:sort_by].present?
+        order = params[:sort_by]
+        order += " #{params[:sort_direction]}" if params[:sort_direction].present?
+
+        query = query.order(order)
+      else
+				query = query.order('created_at DESC')
+      end
       
       return query
     end
@@ -175,7 +219,7 @@ module Erp::Orders
         query = query.where('LOWER(id) LIKE ?', "%#{keyword}%", "%#{keyword}%")
       end
       
-      query = query.limit(8).map{|order| {value: order.id, text: order.id} }
+      query = query.limit(8).map{|order| {value: order.id, text: order.code} }
     end
     
     if Erp::Core.available?("contacts")
@@ -270,33 +314,13 @@ module Erp::Orders
 		end
     
     # Get all sales orders
-    def self.sales_orders(from_date=nil, to_date=nil)
-			query = self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
-    
-			if from_date.present?
-        query = query.where("order_date >= ?", from_date.beginning_of_day)
-      end
-      
-      if to_date.present?
-        query = query.where("order_date <= ?", to_date.end_of_day)
-      end
-      
-      return query
+    def self.sales_orders
+			self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
     
     # Get all purchase orders
-    def self.purchase_orders(from_date=nil, to_date=nil)
-			query = self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
-			
-			if from_date.present?
-        query = query.where("order_date >= ?", from_date.beginning_of_day)
-      end
-      
-      if to_date.present?
-        query = query.where("order_date <= ?", to_date.end_of_day)
-      end
-      
-      return query
+    def self.purchase_orders
+			self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
     
     # Get all active orders
@@ -319,6 +343,14 @@ module Erp::Orders
     def self.set_deleted_all
       update_all(status: Erp::Orders::Order::STATUS_DELETED)
     end
+    
+    # Generate code
+    def generate_code
+			if !code.present?
+				str = (sales? ? 'SO' : 'PO')
+				update_columns(code: str + id.to_s.rjust(5, '0'))
+			end
+		end
     
     if Erp::Core.available?("payments")
 			# get paid amount for order
@@ -412,20 +444,6 @@ module Erp::Orders
 			def self.status_active_for_orders
 				# @TODO
 				self.where(status: Erp::Orders::Order::STATUS_ACTIVE)
-			end
-		end
-    
-    # count orders by date range
-    def self.get_by_time(from_date, to_date)
-			self.where("order_date >= ? AND order_date <= ?", from_date.beginning_of_day, to_date.end_of_day)
-		end
-    
-    # Generate code
-    after_save :generate_code
-    def generate_code
-			if !code.present?
-				str = (sales? ? 'SO' : 'PO')
-				update_columns(code: str + id.to_s.rjust(5, '0'))
 			end
 		end
   end
