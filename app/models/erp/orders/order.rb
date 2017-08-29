@@ -352,6 +352,19 @@ module Erp::Orders
 			end
 		end
     
+    after_save :update_cache_search
+
+		def update_cache_search
+			str = []
+			str << code.to_s.downcase.strip
+			str << customer_name.to_s.downcase.strip if sales?
+			str << supplier_name.to_s.downcase.strip if purchase?
+			str << warehouse_name.to_s.downcase.strip
+			str << employee_name.to_s.downcase.strip
+
+			self.update_column(:cache_search, str.join(" ") + " " + str.join(" ").to_ascii)
+		end
+    
     if Erp::Core.available?("payments")
 			# get paid amount for order
 			def paid_amount
