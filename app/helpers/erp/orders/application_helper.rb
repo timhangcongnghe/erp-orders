@@ -27,18 +27,18 @@ module Erp
           class: 'ajax-link',
           data_confirm: t('.set_deleted_confirm')
         } if can? :delete, order
-        actions << { divider: true }
-        actions << {
-          text: '<i class="fa fa-arrow-up"></i> '+t('.export'),
-          url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_EXPORT, order_id: order.id),
-          hide: !order.sales?
-        }
-        actions << {
-          text: '<i class="fa fa-arrow-down"></i> '+t('.import'),
-          url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_IMPORT, order_id: order.id),
-          hide: !order.purchase?
-        }
         if Erp::Core.available?("deliveries")
+          actions << { divider: true }
+          actions << {
+            text: '<i class="fa fa-arrow-up"></i> '+t('.export'),
+            url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_EXPORT, order_id: order.id),
+            hide: !order.sales?
+          }
+          actions << {
+            text: '<i class="fa fa-arrow-down"></i> '+t('.import'),
+            url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_IMPORT, order_id: order.id),
+            hide: !order.purchase?
+          }        
           actions << { divider: true }
           actions << {
             text: '<i class="fa fa-arrow-up"></i> '+t('.export'),
