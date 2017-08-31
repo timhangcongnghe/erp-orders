@@ -51,41 +51,29 @@ module Erp::Orders
     STATUS_CONFIRMED = 'confirmed'
     STATUS_DELETED = 'deleted'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_DELETED]
-    if Erp::Core.available?("deliveries")
+    if Erp::Core.available?("qdeliveries")
 			after_save :update_cache_delivery_status
-			has_many :deliveries, class_name: "Erp::Deliveries::Delivery"
+			
 			DELIVERY_STATUS_DELIVERED = 'delivered'
 			DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
 			DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
-
-			def delivery_count
-				deliveries.count
-			end
-
-			def delivery_count
-				deliveries.count
-			end
-
-			def delivery_count
-				deliveries.count
-			end
-
-			def delivered_deliveries
-				deliveries.where(status: Erp::Deliveries::Delivery::DELIVERY_STATUS_DELIVERED)
-			end
-
-			def delivered_quantity
+			
+			def total_delivered_quantity
 				count = 0
-				delivered_deliveries.each do |d|
-					count += d.delivery_details.sum(:quantity)
+				order_details.each do |od|
+					count += od.delivered_quantity
 				end
 				return count
 			end
-
-			def not_delivered_quantity
-				items_count - delivered_quantity
+			
+			def total_ordered_quantity
+				order_details.sum(:quantity)
 			end
-
+			
+			def not_delivered_quantity
+				total_ordered_quantity - total_delivered_quantity
+			end	
+			
 			def delivery_status
 				remain = not_delivered_quantity
 				if remain > 0
@@ -100,7 +88,7 @@ module Erp::Orders
 			def update_cache_delivery_status
 				self.update_column(:cache_delivery_status, self.delivery_status)
 			end
-
+			
 		end
 
     PAYMENT_STATUS_PAID = 'paid'

@@ -11,22 +11,37 @@ module Erp::Orders
     STATUS_NOT_DELIVERY = 'not_delivery'
     STATUS_DELIVERED = 'delivered'
     STATUS_OVER_DELIVERED = 'over_delivered'
-
-    if Erp::Core.available?("deliveries")
-			has_many :delivery_details, class_name: "Erp::Deliveries::DeliveryDetail"
+    
+    if Erp::Core.available?("qdeliveries")
+			after_save :order_update_cache_delivery_status
+			
+			has_many :delivery_details, class_name: "Erp::Qdeliveries::DeliveryDetail"
+			
+			def get_delivered_deliveries
+				self.delivery_details.joins(:delivery)
+													.where(erp_qdeliveries_deliveries: {status: Erp::Qdeliveries::Delivery::STATUS_DELIVERED})												
+			end
 			
 			def delivered_delivery
 				self.delivery_details.joins(:delivery)
-													.where(erp_deliveries_deliveries: {status: Erp::Deliveries::Delivery::DELIVERY_STATUS_DELIVERED})												
+													.where(erp_qdeliveries_deliveries: {status: Erp::Qdeliveries::Delivery::STATUS_DELIVERED})												
 			end
 			
 			def delivered_quantity
-				delivered_delivery.sum('erp_deliveries_delivery_details.quantity')
+				delivered_delivery.sum('erp_qdeliveries_delivery_details.quantity')
 			end
 			
-			def not_delivered_quantity
+			def not_delivery_quantity
 				quantity - delivered_quantity
-			end			
+			end
+			
+			# order update cache payment status
+			def order_update_cache_delivery_status
+				if order.present?
+					order.update_cache_delivery_status
+				end
+			end	
+			
 		end
 
     # update order cache tax amount
