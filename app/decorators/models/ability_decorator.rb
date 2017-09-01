@@ -15,6 +15,10 @@ Erp::Ability.class_eval do
     # END: Cancan for Frontend Order
     
     # Cancan for Order
+    can :read, Erp::Orders::Order do |order|
+      order.is_draft? or order.is_confirmed?
+    end
+    
     can :confirm, Erp::Orders::Order do |order|
       order.is_draft? or order.is_deleted?
     end
@@ -24,7 +28,7 @@ Erp::Ability.class_eval do
     end
     
     can :update, Erp::Orders::Order do |order|
-      order.is_draft? or order.is_confirmed?
+      order.is_draft? or order.is_confirmed? or order.is_deleted?
     end
   end
 end

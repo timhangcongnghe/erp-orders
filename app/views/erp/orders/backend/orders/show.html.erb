@@ -16,6 +16,7 @@
     ">
     <i class="glyphicon glyphicon-shopping-cart"></i> <%= t('.orders') %>
     </a> / <%= t('.show_order') %> # <%= @order.code %>
+    <%= status_label(@order.status) %>
 <% end %>
 
 <% content_for :page_toolbar do %>
@@ -24,42 +25,43 @@
         href: erp_orders.new_backend_order_path(type: @type),
         class: 'btn-noborder'
     }) %>
-    <%= erp_component('button/edit', {
-        text: t('.edit'),
-        href: erp_orders.edit_backend_order_path(@order)
-    }) %>
+    
+        <%= erp_component('button/edit', {
+            text: t('.edit'),
+            href: erp_orders.edit_backend_order_path(@order)
+        }) if can? :update, @order %>
+    
     <%= erp_component('button/actions', {
         actions:
         [
             {
-                text: '<i class="fa fa-check"></i> '+t('confirmed'),
+                text: '<i class="fa fa-check-square-o"></i> '+t('.confirm'),
                 url: erp_orders.set_confirmed_backend_orders_path(id: @order.id),
                 data_method: 'PUT',
-                hide: false,
-                class: 'link-method'
+                data_confirm: t('.set_confirmed_confirm'),
+                hide: !(can? :confirm, @order),
+                class: 'ajax-link'
+            },
+            {
+                text: '<i class="fa fa-close"></i> '+t('.delete'),
+                href: erp_orders.set_deleted_backend_orders_path(id: @order.id),
+                data_method: 'PUT',
+                data_confirm: t('.deleted_confirm'),
+                hide: !(can? :delete, @order),
+                class: 'ajax-link'
             },
             {divider: true},
             {
                 text: '<i class="fa fa-file-excel-o"></i> '+t('.export_excel'),
                 url: '',
                 data_method: 'PUT',
-                hide: false,
-                class: 'link-method'
+                hide: false
             },
             {
                 text: '<i class="fa fa-file-pdf-o"></i> '+t('.export_pdf'),
                 url: '',
                 data_method: 'PUT',
-                hide: false,
-                class: 'link-method'
-            },
-            {divider: true},
-            {
-                text: '<i class="glyphicon glyphicon-trash"></i> '+t('.set_deleted'),
-                href: erp_orders.set_deleted_backend_orders_path(id: @order.id),
-                data_method: 'PUT',
-                data_confirm: t('.deleted_confirm'),
-                class: 'link-method'
+                hide: false
             }
         ],
         text: t('.options'),

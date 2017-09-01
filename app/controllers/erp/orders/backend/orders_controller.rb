@@ -18,6 +18,7 @@ module Erp
 
         # GET /orders/1
         def show
+          authorize! :read, @order
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
         end
 
@@ -64,6 +65,7 @@ module Erp
 
         # GET /orders/1/edit
         def edit
+          authorize! :update, @order
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
         end
 
