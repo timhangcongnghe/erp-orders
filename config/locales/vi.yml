@@ -26,7 +26,7 @@ vi:
           set_deleted_all:
             success: "Đơn hàng đã được hủy thành công."
           index:
-            create: "Tạo đơn hàng"
+            create: "Thêm đơn hàng"
             order_number: "Số hóa đơn"
             order_code: "Mã đơn hàng"
             order_date: "Ngày đặt hàng"
@@ -63,7 +63,7 @@ vi:
             set_confirmed_confirm: "Bạn đồng ý xác nhận đơn hàng?"
             set_deleted_confirm: "Bạn đồng ý hủy đơn hàng?"
           list:
-            create: "Tạo đơn hàng"
+            create: "Thêm đơn hàng"
             order_number: "Mã đơn hàng"
             order_date: "Ngày đặt hàng"
             customer: "Khách hàng"
@@ -110,14 +110,16 @@ vi:
             order_details: "Chi tiết đơn hàng"
           edit:
             orders: "Tất cả đơn hàng"
-            create: "Thêm đơn hàng"
+            create_sales_order: "Thêm đơn bán hàng"
+            create_purchases_order: "Thêm đơn nhập hàng"
             order_details: "Chi tiết đơn hàng"
             edit: "Cập nhật đơn hàng"
           show:
             orders: "Tất cả đơn hàng"
             show_order: "Chi tiết đơn hàng"
             show: "Chi tiết"
-            create: "Tạo đơn hàng"
+            create_purchases_order: "Thêm đơn nhập hàng"
+            create_sales_order: "Thêm đơn bán hàng"
             edit: "Cập nhật"
             draft: "Phiếu tạm"
             confirmed: "Đã xác nhận"

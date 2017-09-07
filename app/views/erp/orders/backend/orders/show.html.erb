@@ -5,9 +5,9 @@
 <% content_for :page_title do %>    
     <a href="
         <%=
-            if @type == Erp::Orders::Order::TYPE_SALES_ORDER
+            if @order.sales?
                 erp_sales.backend_sales_orders_path
-            elsif @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER
+            elsif @order.purchase?
                 erp_purchase.backend_purchase_orders_path
             else
                 erp_orders.backend_orders_path
@@ -21,7 +21,7 @@
 
 <% content_for :page_toolbar do %>
     <%= erp_component('button/create', {
-        text: t('.create'),
+        text: t(".#{@order.sales? ? 'create_sales_order' : 'create_purchases_order'}"),
         href: erp_orders.new_backend_order_path(type: @type),
         class: 'btn-noborder'
     }) %>
