@@ -33,4 +33,5 @@ Erp::Orders::Order.all.destroy_all
       price: product.get_price
     )
   end
+  puts '==== Order ' +num.ordinalize+ ' complete ('+order.code+') ===='
 end
