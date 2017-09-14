@@ -2,7 +2,8 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy, :set_confirmed, :set_deleted]
+        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy,
+                                         :set_stock_checking, :set_stock_checked, :set_stock_approved, :set_confirmed, :set_deleted]
         before_action :set_orders, only: [:delete_all, :set_confirmed_all, :set_deleted_all]
 
         # GET /orders
@@ -148,6 +149,51 @@ module Erp
             format.json {
               render json: Order.dataselect(params[:keyword], params)
             }
+          end
+        end
+
+        # Stock checking /orders/set_stock_checking?id=1
+        def set_stock_checking
+          #authorize! :confirm, @order
+          @order.set_stock_checking
+
+          respond_to do |format|
+          format.json {
+            render json: {
+            'message': t('.success'),
+            'type': 'success'
+            }
+          }
+          end
+        end
+
+        # Stock checked /orders/set_stock_checked?id=1
+        def set_stock_checked
+          #authorize! :confirm, @order
+          @order.set_stock_checked
+
+          respond_to do |format|
+          format.json {
+            render json: {
+            'message': t('.success'),
+            'type': 'success'
+            }
+          }
+          end
+        end
+
+        # Stock approved /orders/set_stock_approved?id=1
+        def set_stock_approved
+          #authorize! :confirm, @order
+          @order.set_stock_approved
+
+          respond_to do |format|
+          format.json {
+            render json: {
+            'message': t('.success'),
+            'type': 'success'
+            }
+          }
           end
         end
 

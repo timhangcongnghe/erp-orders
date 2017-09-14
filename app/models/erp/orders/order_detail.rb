@@ -3,6 +3,9 @@ module Erp::Orders
     validates :product_id, :quantity, :price, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
     belongs_to :product, class_name: 'Erp::Products::Product'
+    if Erp::Core.available?("order_stock_checks")
+    has_one :scheck_detail, class_name: 'Erp::OrderStockChecks::ScheckDetail', dependent: :destroy
+		end
     after_save :update_order_cache_payment_status
     after_save :update_order_cache_delivery_status
     after_save :update_order_cache_total

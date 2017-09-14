@@ -2,6 +2,9 @@ module Erp::Orders
   class Order < ApplicationRecord
     belongs_to :creator, class_name: "Erp::User"
     belongs_to :employee, class_name: "Erp::User", foreign_key: :employee_id
+    if Erp::Core.available?("order_stock_checks")
+		has_many :schecks, class_name: "Erp::OrderStockChecks::Scheck", dependent: :destroy
+		end
     if Erp::Core.available?("contacts")
 		belongs_to :customer, class_name: "Erp::Contacts::Contact", foreign_key: :customer_id
 		belongs_to :supplier, class_name: "Erp::Contacts::Contact", foreign_key: :supplier_id
@@ -48,6 +51,9 @@ module Erp::Orders
     TYPE_PURCHASE_ORDER = 'purchase'
 
     STATUS_DRAFT = 'draft'
+    STATUS_STOCK_CHECKING = 'stock_checking'
+    STATUS_STOCK_CHECKED = 'stock_checked'
+    STATUS_STOCK_APPROVED = 'stock_approved'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_DELETED = 'deleted'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_DELETED]
@@ -312,6 +318,21 @@ module Erp::Orders
 			return self.status == Erp::Orders::Order::STATUS_DRAFT
 		end
 
+		# check if order is stock_checking
+		def is_stock_checking?
+			return self.status == Erp::Orders::Order::STATUS_STOCK_CHECKING
+		end
+
+		# check if order is stock_checked
+		def is_stock_checked?
+			return self.status == Erp::Orders::Order::STATUS_STOCK_CHECKED
+		end
+
+		# check if order is stock_approved
+		def is_stock_approved?
+			return self.status == Erp::Orders::Order::STATUS_STOCK_APPROVED
+		end
+
 		# check if order is deleted
 		def is_confirmed?
 			return self.status == Erp::Orders::Order::STATUS_CONFIRMED
@@ -331,18 +352,39 @@ module Erp::Orders
     def self.purchase_orders
 			self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
+    
+    # Get stock check orders
+    def self.stock_check_orders
+			self.sales_orders
+					.where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING,
+													Erp::Orders::Order::STATUS_STOCK_CHECKED,
+													Erp::Orders::Order::STATUS_STOCK_APPROVED])
+		end
 
     # Get all active orders
     def self.all_confirmed
       self.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
 
+		# SET status for order
+		def set_stock_checking
+			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKING)
+		end
+		
+		def set_stock_checked
+			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKED)
+		end
+		
+		def set_stock_approved
+			update_columns(status: Erp::Orders::Order::STATUS_STOCK_APPROVED)
+		end
+			
     def set_confirmed
-      update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
+      update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
 
     def set_deleted
-      update_attributes(status: Erp::Orders::Order::STATUS_DELETED)
+      update_columns(status: Erp::Orders::Order::STATUS_DELETED)
     end
 
     def self.set_confirmed_all

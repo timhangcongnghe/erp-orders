@@ -14,6 +14,27 @@ module Erp
           url: erp_orders.edit_backend_order_path(order)
         } if can? :update, order
         actions << {
+          text: '<i class="fa fa-close"></i> '+t('orders.set_stock_checking'),
+          url: erp_orders.set_stock_checking_backend_orders_path(id: order),
+          data_method: 'PUT',
+          class: 'ajax-link',
+          data_confirm: t('orders.set_stock_checking_confirm')
+        } if can? :set_stock_checking, order
+        actions << {
+          text: '<i class="fa fa-close"></i> '+t('orders.set_stock_checked'),
+          url: erp_orders.set_stock_checked_backend_orders_path(id: order),
+          data_method: 'PUT',
+          class: 'ajax-link',
+          data_confirm: t('orders.set_stock_checked_confirm')
+        } if can? :set_stock_checked, order
+        actions << {
+          text: '<i class="fa fa-close"></i> '+t('orders.set_stock_approved'),
+          url: erp_orders.set_stock_approved_backend_orders_path(id: order),
+          data_method: 'PUT',
+          class: 'ajax-link',
+          data_confirm: t('orders.set_stock_approved_confirm')
+        } if can? :set_stock_approved, order
+        actions << {
           text: '<i class="fa fa-check-square-o"></i> '+(order.is_deleted? == false ? t('.set_confirmed') : t('.re_opened')),
           url: erp_orders.set_confirmed_backend_orders_path(id: order),
           data_method: 'PUT',
