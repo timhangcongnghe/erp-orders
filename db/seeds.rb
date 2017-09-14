@@ -25,7 +25,13 @@ Erp::Orders::Order.all.destroy_all
     creator_id: users.order("RANDOM()").first.id,
     tax_id: (key==keys[0]) ? sale_taxes.sample.id : purchase_taxes.sample.id
   )
-  Erp::Products::Product.where(id: Erp::Products::Product.pluck(:id).sample(rand(20..80))).each do |product|
+  
+  if key == 'SO'
+    rand_items = rand(3..8)
+  else
+    rand_items = rand(20..80)
+  end
+  Erp::Products::Product.where(id: Erp::Products::Product.pluck(:id).sample(rand_items)).each do |product|
     order_detail = Erp::Orders::OrderDetail.create(
       order_id: order.id,
       product_id: product.id,
