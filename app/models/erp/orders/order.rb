@@ -394,6 +394,11 @@ module Erp::Orders
     def self.set_deleted_all
       update_all(status: Erp::Orders::Order::STATUS_DELETED)
     end
+    
+    # Get order stock check
+    def get_order_stock_check
+			schecks.order('updated_at desc').first
+		end
 
     # Generate code
     def generate_code
