@@ -28,6 +28,8 @@ vi:
             success: "Xác nhận đơn hàng thành công."
           set_deleted:
             success: "Đơn hàng đã được hủy thành công."
+          set_stock_checking:
+            success: "Yêu cầu kiểm tra đơn hàng đã gửi thành công."
           set_confirmed_all:
             success: "Xác nhận đơn hàng thành công."
           set_deleted_all:
