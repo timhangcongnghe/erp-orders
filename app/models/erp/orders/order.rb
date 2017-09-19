@@ -367,6 +367,11 @@ module Erp::Orders
     end
 
 		# SET status for order
+		def set_draft
+			update_columns(status: Erp::Orders::Order::STATUS_DRAFT)
+		end
+
+		# SET status for order
 		def set_stock_checking
 			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKING)
 		end
@@ -385,14 +390,6 @@ module Erp::Orders
 
     def set_deleted
       update_columns(status: Erp::Orders::Order::STATUS_DELETED)
-    end
-
-    def self.set_confirmed_all
-      update_all(status: Erp::Orders::Order::STATUS_CONFIRMED)
-    end
-
-    def self.set_deleted_all
-      update_all(status: Erp::Orders::Order::STATUS_DELETED)
     end
     
     # Get order stock check

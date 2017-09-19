@@ -12,8 +12,6 @@ Erp::Orders::Engine.routes.draw do
 					put 'set_stock_approved'
 					put 'set_confirmed'
 					put 'set_deleted'
-					put 'set_confirmed_all'
-					put 'set_deleted_all'
 					get 'new/:type', :to => "orders#new", :as => 'new_type'
         end
       end

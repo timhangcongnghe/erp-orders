@@ -221,6 +221,8 @@ vi:
             add_tax: "Chọn loại thuế"
             add: "Thêm"
             submit: "Lưu"
+            save_and_draft: "Lưu tạm"
+            save_and_stock_checking: "Lưu và yêu cầu kiểm tra"
             cancel: "Hủy"
             product: "Sản phẩm"
             help_product: "Sản phẩm có thể thêm vào đơn hàng"

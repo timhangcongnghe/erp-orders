@@ -2,9 +2,8 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :show_list, :edit, :update, :destroy,
-                                         :set_stock_checking, :set_stock_checked, :set_stock_approved, :set_confirmed, :set_deleted]
-        before_action :set_orders, only: [:delete_all, :set_confirmed_all, :set_deleted_all]
+        before_action :set_order, only: [:show, :show_list, :edit, :update,
+                                         :set_draft, :set_stock_checking, :set_confirmed, :set_deleted]
 
         # GET /orders
         def index
@@ -25,7 +24,6 @@ module Erp
 
         # POST /orders/list
         def show_list
-
         end
 
         # GET /orders/new
@@ -74,17 +72,31 @@ module Erp
         def create
           @order = Order.new(order_params)
           @order.creator = current_user
-          @order.status = Erp::Orders::Order::STATUS_DRAFT
 
           if @order.save
+            
+            if @order.sales?
+              if params.to_unsafe_hash[:act_draft].present?
+                @order.set_draft
+              elsif params.to_unsafe_hash[:act_stock_checking].present?
+                @order.set_stock_checking
+              end
+            else
+              @order.set_draft
+            end
+            
             if request.xhr?
               render json: {
                 status: 'success',
-                text: @order.id,
+                text: @order.code,
                 value: @order.id
               }
             else
-              redirect_to erp_orders.edit_backend_order_path(@order), notice: t('.success')
+              if @order.sales?
+                redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+              elsif @order.purchase?
+                redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+              end
             end
           else
             if request.xhr?
@@ -93,53 +105,38 @@ module Erp
               render :new
             end
           end
-
-
         end
 
         # PATCH/PUT /orders/1
         def update
+          authorize! :update, @order
           if @order.update(order_params)
+            
+            if @order.sales?
+              if params.to_unsafe_hash[:act_draft].present?
+                @order.set_draft
+              elsif params.to_unsafe_hash[:act_stock_checking].present?
+                @order.set_stock_checking
+              end
+            else
+              @order.set_draft
+            end
+            
             if request.xhr?
               render json: {
                 status: 'success',
-                text: @order.id,
+                text: @order.code,
                 value: @order.id
               }
             else
-              redirect_to erp_orders.edit_backend_order_path(@order), notice: t('.success')
+              if @order.sales?
+                redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+              elsif @order.purchase?
+                redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+              end
             end
           else
             render :edit
-          end
-        end
-
-        # DELETE /orders/1
-        def destroy
-          @order.destroy
-
-          respond_to do |format|
-            format.html { redirect_to erp_orders.backend_orders_path, notice: t('.success') }
-            format.json {
-              render json: {
-                'message': t('.success'),
-                'type': 'success'
-              }
-            }
-          end
-        end
-
-        # DELETE /orders/delete_all?ids=1,2,3
-        def delete_all
-          @orders.destroy_all
-
-          respond_to do |format|
-            format.json {
-              render json: {
-                'message': t('.success'),
-                'type': 'success'
-              }
-            }
           end
         end
 
@@ -154,38 +151,8 @@ module Erp
 
         # Stock checking /orders/set_stock_checking?id=1
         def set_stock_checking
-          #authorize! :confirm, @order
+          authorize! :set_stock_checking, @order
           @order.set_stock_checking
-
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-
-        # Stock checked /orders/set_stock_checked?id=1
-        def set_stock_checked
-          #authorize! :confirm, @order
-          @order.set_stock_checked
-
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-
-        # Stock approved /orders/set_stock_approved?id=1
-        def set_stock_approved
-          #authorize! :confirm, @order
-          @order.set_stock_approved
 
           respond_to do |format|
           format.json {
@@ -227,44 +194,10 @@ module Erp
           end
         end
 
-        # Confirmed /orders/set_confirmed_all?ids=1,2,3
-        def set_confirmed_all
-          authorize! :confirm, @order
-          @orders.set_confirmed_all
-
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-
-        # Deleted /orders/set_deleted_all?ids=1,2,3
-        def set_deleted_all
-          authorize! :delete, @order
-          @orders.set_deleted_all
-
-          respond_to do |format|
-          format.json {
-            render json: {
-            'message': t('.success'),
-            'type': 'success'
-            }
-          }
-          end
-        end
-
         private
           # Use callbacks to share common setup or constraints between actions.
           def set_order
             @order = Order.find(params[:id])
-          end
-
-          def set_orders
-            @orders = Order.where(id: params[:ids])
           end
 
           # Only allow a trusted parameter "white list" through.
