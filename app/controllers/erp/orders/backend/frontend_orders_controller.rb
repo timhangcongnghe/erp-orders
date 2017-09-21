@@ -9,7 +9,7 @@ module Erp
         end
         
         def list
-          @orders = FrontendOrder.search(params).paginate(:page => params[:page], :per_page => 5)
+          @orders = Erp::Orders::FrontendOrder.search(params).paginate(:page => params[:page], :per_page => 5)
           
           render layout: nil
         end
