@@ -76,9 +76,9 @@ module Erp
           if @order.save
             
             if @order.sales?
-              if params.to_unsafe_hash[:act_draft].present?
+              if params.to_unsafe_hash[:act_save_with_default].present?
                 @order.set_draft
-              elsif params.to_unsafe_hash[:act_stock_checking].present?
+              elsif params.to_unsafe_hash[:act_save_with_checking].present?
                 @order.set_stock_checking
               end
             else
@@ -110,18 +110,20 @@ module Erp
         # PATCH/PUT /orders/1
         def update
           authorize! :update, @order
-          if @order.update(order_params)
-            
-            if @order.sales?
-              if params.to_unsafe_hash[:act_draft].present?
+          
+          if @order.sales?
+            if params.to_unsafe_hash[:act_save_with_default].present?
+              if @order.is_items_change?(params.to_unsafe_hash[:order]["order_details_attributes"]) == true
                 @order.set_draft
-              elsif params.to_unsafe_hash[:act_stock_checking].present?
-                @order.set_stock_checking
               end
-            else
-              @order.set_draft
+            elsif params.to_unsafe_hash[:act_save_with_checking].present?
+              @order.set_stock_checking
             end
-            
+          else
+            @order.set_draft
+          end
+          
+          if @order.update(order_params)
             if request.xhr?
               render json: {
                 status: 'success',
