@@ -1,8 +1,10 @@
 <%= form_for([erp_orders, :backend, order], html: {multipart: true}) do |f| %>
-    <% if @type == Erp::Orders::Order::TYPE_SALES_ORDER %>
+    <% if order.sales? %>
         <% employee_name = 'sales_employee' %>
-    <% elsif @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER %>
+        <% scope = Erp::Taxes::Tax::TAX_SCOPE_SALES %>
+    <% elsif order.purchase? %>
         <% employee_name = 'purchase_employee' %>
+        <% scope = Erp::Taxes::Tax::TAX_SCOPE_PURCHASES %>
     <% else %>
         <% employee_name = 'employee' %>
     <% end %>
@@ -11,24 +13,30 @@
             <div class="col-md-6">
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
-                        <%= erp_form_control('text', {
-                            label: t('.code'),
-                            name: 'order[code]',
-                            value: order.code,
-                            help: t('.help_code'),
-                            placeholder: t('.placeholder_code'),
-                            errors: order.errors.full_messages_for(:code)
-                        }) %>
-                        <%= erp_form_control('date', {
-                            label: t('.order_date'),
-                            name: 'order[order_date]',
-                            value: order.order_date,
-                            placeholder: t('.choose_order_date'),
-                            required: true,
-                            errors: order.errors.full_messages_for(:order_date)
-                        }) %>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <%= erp_form_control('text', {
+                                    label: t('.code'),
+                                    name: 'order[code]',
+                                    value: order.code,
+                                    help: t('.help_code'),
+                                    placeholder: t('.placeholder_code'),
+                                    errors: order.errors.full_messages_for(:code)
+                                }) %>
+                            </div>
+                            <div class="col-md-6">
+                                <%= erp_form_control('date', {
+                                    label: t('.order_date'),
+                                    name: 'order[order_date]',
+                                    value: order.order_date,
+                                    placeholder: t('.choose_order_date'),
+                                    required: true,
+                                    errors: order.errors.full_messages_for(:order_date)
+                                }) %>
+                            </div>
+                        </div>
                         <% if Erp::Core.available?("contacts") %>
-                            <% if @type == Erp::Orders::Order::TYPE_SALES_ORDER %>
+                            <% if order.sales? %>
                                 <input type="hidden" name="order[supplier_id]" value="<%= order.supplier_id %>" />
                                 <%= erp_form_control("dataselect", {
                                     name: 'order[customer_id]',
@@ -53,7 +61,7 @@
                                     errors: order.errors.full_messages_for(:customer_id)
                                 }) %>
                             <% end %>
-                            <% if @type == Erp::Orders::Order::TYPE_PURCHASE_ORDER %>
+                            <% if order.purchase? %>
                                 <input type="hidden" name="order[customer_id]" value="<%= order.customer_id %>" />
                                 <%= erp_form_control("dataselect", {
                                     name: 'order[supplier_id]',
@@ -79,6 +87,14 @@
                                 }) %>
                             <% end %>
                         <% end %>
+                        <%= erp_form_control('textarea', {
+                            label: t('.note'),
+                            name: 'order[note]',
+                            value: order.note,
+                            placeholder: t('.placeholder_note'),
+                            rows: 1,
+                            errors: order.errors.full_messages_for(:note)
+                        }) %>
                     </div>
                 </div>
             </div>
@@ -95,7 +111,6 @@
                             required: true,
                             errors: order.errors.full_messages_for(:employee_id)
                         }) %>
-                        <% if Erp::Core.available?("warehouses") %>
                         <%= erp_form_control("dataselect", {
                             name: 'order[warehouse_id]',
                             value: order.warehouse_id,
@@ -117,14 +132,15 @@
                             required: true,
                             errors: order.errors.full_messages_for(:warehouse_id)
                         }) %>
-                        <% end %>
-                        <%= erp_form_control('textarea', {
-                            label: t('.note'),
-                            name: 'order[note]',
-                            value: order.note,
-                            placeholder: t('.placeholder_note'),
-                            rows: 1,
-                            errors: order.errors.full_messages_for(:note)
+                        <%= erp_form_control("dataselect", {
+                            name: 'order[tax_id]',
+                            value: order.tax_id,
+                            text: order.tax_name,
+                            label: t('.tax'),
+                            placeholder: t('.add_tax'),
+                            url: erp_taxes.dataselect_backend_taxes_path(format: 'json', scope: scope),
+                            required: true,
+                            errors: order.errors.full_messages_for(:tax_id)
                         }) %>
                     </div>
                 </div>
@@ -174,18 +190,18 @@
                                         container_selector: '.edit_product',
                                     }
                                 }),
-                                thead: "<th>#{t('.product_name')}</th>                                        
+                                thead: "<th width=\"15%\">#{t('.product_name')}</th>
                                         <th class='text-right'>#{t('.quantity')}</th>
                                         <th class='text-right'>#{t('.price')}</th>
-                                        <th class='text-right'>#{t('.total_amount')}</th>
+                                        <th width=\"10%\" class='text-right'>#{t('.total_amount')}</th>
                                         <th class='text-right'>#{t('.discount')}</th>
                                         <th class='text-right'>#{t('.shopping_fee')}</th>
-                                        <th>#{t('.tax')}</th>
-                                        <th class='text-right'>#{t('.total')}</th>
-                                        <th class='text-right'>#{t('.description')}</th>
-                                        <th class='text-right'>#{t('.action')}</th>"
+                                        <th width=\"10%\" class='text-right'>#{t('.total')}</th>
+                                        <th width=\"15%\" class='text-right'>#{t('.description')}</th>
+                                        <th></th>",
+                                no_tr: true
                             }) %>
-                            
+
                             <table class="table">
                                 <tr>
                                     <td width="90%" class="text-right text-semibold">Tổng cộng:</td>
@@ -251,9 +267,15 @@
             </div>
         </div>
     </div>
-    <%= erp_component('button/save', {
-        text: t('.submit')
-    }) %>
+    <% if order.sales? %>
+        <input type='submit' class="btn green-seagreen" name="act_save_with_default" value="<%= t('.save') %>" />
+        <input type='submit' class="btn green-seagreen" name="act_save_with_checking" value="<%= t('.save_and_stock_checking') %>" />
+    <% end %>
+    <% if order.purchase? %>
+        <%= erp_component('button/save', {
+            text: t('.submit')
+        }) %>
+    <% end %>
     <%= erp_component('button/cancel', {
         text: t('.cancel'),
         href: erp_orders.backend_orders_path
