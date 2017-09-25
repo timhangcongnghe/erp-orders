@@ -57,30 +57,35 @@
         }) %>
     </td>
 </tr>
-<% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>
-<tr class="addableform-more">
-    <td colspan="9">
-        <span class="col-md-4 text-center">
-            <div class="todo-tasklist-item-title"> Tình trạng kiểm tra: </div>
-            <% if order_detail.scheck_detail.available? %>
-                <i class="available icon-check"></i>
-            <% else %>
-                <i class="not-available icon-close"></i>
-            <% end %>
-        </span>
-    	<span class="col-md-4">
-            <div class="todo-tasklist-item-title">Hàng có thể thay thế: </div>
-            <div class="todo-tasklist-item-text">
-                + <%= link_to 'D07-11.6-Toric (2)', 'javascript:;' %><br>
-                + <%= link_to 'D08-11.6-Toric (5)', 'javascript:;' %>
-            </div>
-        </span>
-    	<span class="col-md-4">
-            <div class="todo-tasklist-item-title"> Ghi chú: </div>
-            <div class="todo-tasklist-item-text">
-                Hàng này đang về tiếp
-            </div>
-        </span>
-    </td>
-</tr>
+<% if !order_detail.scheck_detail.nil? %>
+	<% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>	
+		<tr class="addableform-more">
+			<td colspan="9">
+				<span class="col-md-4 text-center">
+					<div class="todo-tasklist-item-title"> <%= t('.available') %>: </div>
+					<% if order_detail.scheck_detail.available? %>
+						<i class="available icon-check"></i>
+					<% else %>
+						<i class="not-available icon-close"></i>
+					<% end %>
+				</span>
+				<% if !order_detail.scheck_detail.get_alternative_item_names.empty? %>
+					<span class="col-md-4">
+						<div class="todo-tasklist-item-title"> <%= t('.alternative_items') %>: </div>
+						<div class="todo-tasklist-item-text">
+							<%= raw '+ ' + order_detail.scheck_detail.get_alternative_item_names.join('<br>') %>
+						</div>
+					</span>
+				<% end %>
+				<% if !order_detail.scheck_detail.note.empty? %>
+					<span class="col-md-4">
+						<div class="todo-tasklist-item-title"> <%= t('.note') %>: </div>
+						<div class="todo-tasklist-item-text">
+							<%= order_detail.scheck_detail.note %>
+						</div>
+					</span>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
 <% end %>

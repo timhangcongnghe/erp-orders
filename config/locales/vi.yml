@@ -249,6 +249,9 @@ vi:
             add_tax: "Thêm thuế"
             create_tax: "Thêm thuế"
             edit: "Cập nhật thuế"
+            available: "Có sẵn hàng để bán"
+            alternative_items: "Hàng có thể thay thế"
+            note: "Ghi chú"
         frontend_orders:
           destroy:
             success: "Đơn hàng đã xóa thành công."
