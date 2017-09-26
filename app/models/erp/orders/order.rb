@@ -543,9 +543,21 @@ module Erp::Orders
 		end
 
     if Erp::Core.available?("accounting")
-			# Accounting: Orders need to payments
+			
+			# Trường hợp đơn hàng đã hủy và (có/đã) thanh toán thì hiển thị thế nào? (Hàm get orders)
+			
+			# get sales orders need to payments
+			def self.accounting_sales_orders
+				self.sales_orders.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
+			end
+			
+			# get purchase orders need to payments
+			def self.accounting_purchase_orders
+				self.purchase_orders.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
+			end
+			
+			# @todo remove this function
 			def self.status_active_for_orders
-				# @TODO
 				self.where(status: Erp::Orders::Order::STATUS_ACTIVE)
 			end
 		end
