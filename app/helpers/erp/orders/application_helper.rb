@@ -50,11 +50,11 @@ module Erp
         actions << { divider: true }
         actions << {
           text: '<i class="icon-action-undo"></i> '+(order.purchase? ? t('.pay_ncc') : t('.pay_kh')),
-          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY),
+          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_PAY),
         }
         actions << {
           text: '<i class="icon-action-redo"></i> '+(order.purchase? ? t('.receive_ncc') : t('.receive_kh')),
-          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE),
+          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_RECEIVE),
         }
         actions << {
           text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),

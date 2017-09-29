@@ -226,11 +226,11 @@
                                         <div class="form-group">
                                             <%= erp_component('button/create', {
                                                 text: t('.receive'),
-                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_RECEIVE)
+                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_RECEIVE)
                                             }) %>
                                             <%= erp_component('button/create', {
                                                 text: t('.pay'),
-                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::PAYMENT_TYPE_PAY)
+                                                href: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_PAY)
                                             }) %>
                                         </div>
                                     </div>
