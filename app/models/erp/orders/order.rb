@@ -206,7 +206,7 @@ module Erp::Orders
 
     # data for dataselect ajax
     def self.dataselect(keyword='', params={})
-      query = self.all
+			query = self.all
 
       if keyword.present?
         keyword = keyword.strip.downcase
@@ -227,13 +227,18 @@ module Erp::Orders
 					query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 				end
 			end
+      
+      # filter by status
+      if params[:status].present?
+				query = query.where(status: params[:status])
+			end
 
       query = query.order("erp_orders_orders.order_date DESC").limit(8).map{|order| {value: order.id, text: order.get_name} }
 
       if params[:include_na].present?
 				query = [{value: '-1', text: params[:include_na]}] + query
 			end
-
+      
 			return query
     end
 
