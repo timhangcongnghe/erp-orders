@@ -12,6 +12,8 @@ vi:
     set_stock_checked_confirm: "Bạn đã hoàn tất quá trình kiểm tra kho cho đơn hàng. Xác nhận đã kiểm tra?"
     set_stock_approved: "Duyệt kiểm kho"
     set_stock_approved_confirm: "Bạn đang xác nhận trong kho đáp ứng đủ yêu cầu trong đơn hàng. Tiếp tục?"
+    payment_for_order: "Thanh toán trên đơn hàng"
+    payment_for_contact: "Ghi vào công nợ"
   erp:
     orders: 
       backend:
@@ -220,6 +222,7 @@ vi:
             tax: "Thuế"
             add_tax: "Chọn loại thuế"
             add: "Thêm"
+            payment_for: "Cách thức thanh toán"
             submit: "Lưu"
             save: "Lưu thông tin"
             save_and_stock_checking: "Lưu và yêu cầu kiểm tra"

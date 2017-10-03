@@ -461,6 +461,14 @@ module Erp::Orders
 		end
 
     if Erp::Core.available?("payments")
+			# get payment type
+			def self.get_payment_type_options()
+				[
+					{text: I18n.t('orders.payment_for_order'),value: Erp::Payments::PaymentType::TYPE_FOR_ORDER},
+					{text: I18n.t('orders.payment_for_contact'),value: Erp::Payments::PaymentType::TYPE_FOR_CONTACT}
+				]
+			end
+			
 			# get paid amount for order
 			def paid_amount
 				if self.sales?

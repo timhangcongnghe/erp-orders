@@ -111,36 +111,48 @@
                             required: true,
                             errors: order.errors.full_messages_for(:employee_id)
                         }) %>
-                        <%= erp_form_control("dataselect", {
-                            name: 'order[warehouse_id]',
-                            value: order.warehouse_id,
-                            text: order.warehouse_name,
-                            label: t('.warehouse'),
-                            placeholder: t('.select_warehouse'),
-                            url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
-                            create: {
-                                url: erp_warehouses.new_backend_warehouse_path,
-                                title: t('.create_warehouse'),
-                                container_selector: '.new_warehouse',
-                                input_selector: 'input[name="warehouse[name]"]'
-                            },
-                            edit: {
-                                url: erp_warehouses.edit_backend_warehouse_path(id: ':value'),
-                                title: t('.edit_warehouse'),
-                                container_selector: '.edit_warehouse',
-                            },
-                            required: true,
-                            errors: order.errors.full_messages_for(:warehouse_id)
-                        }) %>
-                        <%= erp_form_control("dataselect", {
-                            name: 'order[tax_id]',
-                            value: order.tax_id,
-                            text: order.tax_name,
-                            label: t('.tax'),
-                            placeholder: t('.add_tax'),
-                            url: erp_taxes.dataselect_backend_taxes_path(format: 'json', scope: scope),
-                            required: true,
-                            errors: order.errors.full_messages_for(:tax_id)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <%= erp_form_control("dataselect", {
+                                    name: 'order[warehouse_id]',
+                                    value: order.warehouse_id,
+                                    text: order.warehouse_name,
+                                    label: t('.warehouse'),
+                                    placeholder: t('.select_warehouse'),
+                                    url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+                                    create: {
+                                        url: erp_warehouses.new_backend_warehouse_path,
+                                        title: t('.create_warehouse'),
+                                        container_selector: '.new_warehouse',
+                                        input_selector: 'input[name="warehouse[name]"]'
+                                    },
+                                    edit: {
+                                        url: erp_warehouses.edit_backend_warehouse_path(id: ':value'),
+                                        title: t('.edit_warehouse'),
+                                        container_selector: '.edit_warehouse',
+                                    },
+                                    required: true,
+                                    errors: order.errors.full_messages_for(:warehouse_id)
+                                }) %>
+                            </div>
+                            <div class="col-md-6">
+                                <%= erp_form_control("dataselect", {
+                                    name: 'order[tax_id]',
+                                    value: order.tax_id,
+                                    text: order.tax_name,
+                                    label: t('.tax'),
+                                    placeholder: t('.add_tax'),
+                                    url: erp_taxes.dataselect_backend_taxes_path(format: 'json', scope: scope),
+                                    required: true,
+                                    errors: order.errors.full_messages_for(:tax_id)
+                                }) %>
+                            </div>
+                        </div>
+                        <%= erp_form_control("radio", {
+                            name: 'order[payment_for]',
+                            label: t('.payment_for'),
+                            value: @order.payment_for,
+                            options: Erp::Orders::Order.get_payment_type_options()
                         }) %>
                     </div>
                 </div>

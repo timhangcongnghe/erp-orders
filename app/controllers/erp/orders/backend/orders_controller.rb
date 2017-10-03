@@ -38,6 +38,7 @@ module Erp
           else
             @order.customer_id = @owner.id
           end
+          @order.payment_for = Erp::Payments::PaymentType::TYPE_FOR_ORDER if Erp::Core.available?("payments")
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
@@ -204,7 +205,7 @@ module Erp
 
           # Only allow a trusted parameter "white list" through.
           def order_params
-            params.fetch(:order, {}).permit(:code, :order_date, :customer_id, :supplier_id, :employee_id, :warehouse_id, :note, :tax_id,
+            params.fetch(:order, {}).permit(:code, :order_date, :customer_id, :supplier_id, :employee_id, :warehouse_id, :note, :tax_id, :payment_for,
                                             :order_details_attributes => [ :id, :product_id, :order_id, :quantity, :price, :discount, :shipping_fee, :description, :_destroy ])
           end
       end
