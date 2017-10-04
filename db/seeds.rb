@@ -23,7 +23,8 @@ Erp::Orders::Order.all.destroy_all
     warehouse_id: Erp::Warehouses::Warehouse.order("RANDOM()").first.id,
     status: status[rand(status.count)],
     creator_id: users.order("RANDOM()").first.id,
-    tax_id: (key==keys[0]) ? sale_taxes.sample.id : purchase_taxes.sample.id
+    tax_id: (key==keys[0]) ? sale_taxes.sample.id : purchase_taxes.sample.id,
+    payment_for: ['for_order', 'for_contact'][rand(2)]
   )
   
   if key == 'SO'
