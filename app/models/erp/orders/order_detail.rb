@@ -83,11 +83,11 @@ module Erp::Orders
     
     def delivered_amount
 			import_amount = self.delivery_details.joins(:delivery)
-													.where(erp_deliveries_deliveries: {delivery_type: Erp::Deliveries::Delivery::TYPE_IMPORT})
-													.sum('erp_deliveries_delivery_details.quantity')
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_IMPORT})
+													.sum('erp_qdeliveries_delivery_details.quantity')
 			export_amount = self.delivery_details.joins(:delivery)
-													.where(erp_deliveries_deliveries: {delivery_type: Erp::Deliveries::Delivery::TYPE_EXPORT})
-													.sum('erp_deliveries_delivery_details.quantity')
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_EXPORT})
+													.sum('erp_qdeliveries_delivery_details.quantity')
 													
 			if order.sales?
 				return export_amount - import_amount
