@@ -49,6 +49,9 @@ module Erp::Orders
     # class const
     TYPE_SALES_ORDER = 'sales'
     TYPE_PURCHASE_ORDER = 'purchase'
+    
+    PAYMENT_FOR_ORDER = 'for_order'
+    PAYMENT_FOR_CONTACT = 'for_contact'
 
     STATUS_DRAFT = 'draft'
     STATUS_STOCK_CHECKING = 'stock_checking'
@@ -231,6 +234,21 @@ module Erp::Orders
       # filter by status
       if params[:status].present?
 				query = query.where(status: params[:status])
+			end
+      
+      # filter by sales orders
+      if params[:supplier_id].present?
+				query = query.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+			end
+      
+      # filter by purchase orders
+      if params[:customer_id].present?
+				query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+			end
+      
+      # filter by payment_for
+      if params[:payment_for].present?
+				query = query.where(payment_for: params[:payment_for])
 			end
 
       query = query.order("erp_orders_orders.order_date DESC").limit(8).map{|order| {value: order.id, text: order.get_name} }
@@ -464,8 +482,8 @@ module Erp::Orders
 			# get payment type
 			def self.get_payment_type_options()
 				[
-					{text: I18n.t('orders.payment_for_order'),value: Erp::Payments::PaymentType::TYPE_FOR_ORDER},
-					{text: I18n.t('orders.payment_for_contact'),value: Erp::Payments::PaymentType::TYPE_FOR_CONTACT}
+					{text: I18n.t('orders.payment_for_order'),value: Erp::Orders::Order::PAYMENT_FOR_ORDER},
+					{text: I18n.t('orders.payment_for_contact'),value: Erp::Orders::Order::PAYMENT_FOR_CONTACT}
 				]
 			end
 			

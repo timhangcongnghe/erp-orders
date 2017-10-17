@@ -38,7 +38,7 @@ module Erp
           else
             @order.customer_id = @owner.id
           end
-          @order.payment_for = Erp::Payments::PaymentType::TYPE_FOR_ORDER if Erp::Core.available?("payments")
+          @order.payment_for = Erp::Orders::Order::PAYMENT_FOR_ORDER
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
