@@ -41,6 +41,9 @@ module Erp::Orders
     validates :code, uniqueness: true
     validates :customer_id, :supplier_id, :order_date, :employee_id, presence: true
 
+
+    after_save :update_cache_commission_amount
+    after_save :update_cache_customer_commission_amount
     after_save :update_cache_tax_amount
     after_save :update_cache_total
     after_save :update_cache_payment_status
@@ -147,12 +150,6 @@ module Erp::Orders
 
       # add conditions to query
       query = query.where(and_conds.join(' AND ')) if !and_conds.empty?
-
-      # search by a date
-      # if params[:date].present?
-			# 	date = params[:date].to_date
-			# 	query = query.where("order_date >= ? AND order_date <= ?", date.beginning_of_day, date.end_of_day)
-			# end
 
       # global filter
       global_filter = params[:global_filter]
@@ -293,6 +290,16 @@ module Erp::Orders
 		end
 
     # get shipping amount
+    def commission_amount
+			return order_details.sum(&:commission_amount)
+		end
+
+    # get customer commission amount
+    def customer_commission_amount
+			return order_details.sum(&:customer_commission_amount)
+		end
+
+    # get shipping amount
     def shipping_amount
 			return order_details.sum(&:shipping_amount)
 		end
@@ -309,6 +316,16 @@ module Erp::Orders
     # get total
     def total
 			return order_details.sum(&:total)
+		end
+
+    # Update cache commission
+    def update_cache_commission_amount
+			self.update_column(:cache_commission_amount, self.commission_amount)
+		end
+
+    # Update cache customer commission
+    def update_cache_customer_commission_amount
+			self.update_column(:cache_customer_commission_amount, self.customer_commission_amount)
 		end
 
     # update tax amount
@@ -374,6 +391,36 @@ module Erp::Orders
     # Get all purchase orders
     def self.purchase_orders
 			self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+		end
+    
+    # Get all orders (payment_for: 'for_order')
+    def self.payment_for_order_orders(params={})
+			query = self.where(payment_for: Erp::Orders::Order::PAYMENT_FOR_ORDER)
+			
+			if params[:from_date].present?
+				query = query.where('order_date >= ?', params[:from_date].beginning_of_day)
+			end
+			
+			if params[:to_date].present?
+				query = query.where('order_date <= ?', params[:to_date].end_of_day)
+			end
+			
+			return query
+		end
+			
+    # Get all orders (payment_for: 'for_contact')
+    def self.payment_for_contact_orders(params={})
+			query = self.where(payment_for: Erp::Orders::Order::PAYMENT_FOR_CONTACT)
+			
+			if params[:from_date].present?
+				query = query.where('order_date >= ?', params[:from_date].beginning_of_day)
+			end
+			
+			if params[:to_date].present?
+				query = query.where('order_date <= ?', params[:to_date].end_of_day)
+			end
+			
+			return query
 		end
     
     # Get stock check orders

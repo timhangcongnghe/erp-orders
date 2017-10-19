@@ -5,7 +5,7 @@
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][_destroy]" value="">
         <strong><%= order_detail.product_name %></strong>
     </td>
-    <td class="text-right">
+    <td width="5%" class="text-right">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][quantity]',
             value: order_detail.quantity,
@@ -38,6 +38,24 @@
             value: order_detail.shipping_fee,
             text: order_detail.shipping_fee,
             class: "line_shipping_amount inline"
+        }) %>
+    </td>
+	
+    <td class="text-right">
+        <%= erp_form_control("number", {
+            name: 'order[order_details_attributes][' + uid + '][commission]',
+            value: order_detail.commission,
+            text: order_detail.commission,
+            class: "line_commission_amount inline"
+        }) %>
+    </td>
+	
+    <td class="text-right">
+        <%= erp_form_control("number", {
+            name: 'order[order_details_attributes][' + uid + '][customer_commission]',
+            value: order_detail.customer_commission,
+            text: order_detail.customer_commission,
+            class: "line_customer_commission_amount inline"
         }) %>
     </td>
     <td class="text-right">

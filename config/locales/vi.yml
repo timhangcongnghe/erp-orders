@@ -237,6 +237,8 @@ vi:
             total_amount: "Thành tiền"
             discount: "Giảm giá"
             shopping_fee: "Phí v.chuyển"
+            commission_amount: "Hoa hồng"
+            customer_commission_amount: "Chiết khấu"
             tax: "Thuế"
             total: "Tổng cộng"
             action: "Hành động"

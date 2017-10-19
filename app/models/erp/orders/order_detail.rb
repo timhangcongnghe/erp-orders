@@ -10,7 +10,9 @@ module Erp::Orders
     after_save :update_order_cache_delivery_status
     after_save :update_order_cache_total
     after_save :update_order_cache_tax_amount
-
+    after_save :update_order_cache_commission_amount
+    after_save :update_order_cache_customer_commission_amount
+    
     STATUS_NOT_DELIVERY = 'not_delivery'
     STATUS_DELIVERED = 'delivered'
     STATUS_OVER_DELIVERED = 'over_delivered'
@@ -54,6 +56,20 @@ module Erp::Orders
 			end
 		end
 
+    # update order cache commission amount
+    def update_order_cache_commission_amount
+			if order.present?
+				order.update_cache_commission_amount
+			end
+		end
+
+    # update order cache customer commission amount
+    def update_order_cache_customer_commission_amount
+			if order.present?
+				order.update_cache_customer_commission_amount
+			end
+		end
+    
     # update order cache total
     def update_order_cache_total
 			if order.present?
@@ -138,7 +154,17 @@ module Erp::Orders
     def discount_amount
 			discount.nil? ? 0.0 : discount
 		end
-
+		
+    # get commission amount
+    def commission_amount
+			commission.nil? ? 0.0 : commission
+		end
+    
+    # get customer commission amount
+    def customer_commission_amount
+			customer_commission.nil? ? 0.0 : customer_commission
+		end
+		
     # total before tax
     def total_without_tax
 			subtotal + shipping_amount - discount_amount
