@@ -405,6 +405,14 @@ module Erp::Orders
 				query = query.where('order_date <= ?', params[:to_date].end_of_day)
 			end
 			
+			if Erp::Core.available?("periods")
+				if params[:period].present? # @todo review this function
+					query = query.where('order_date >= ? AND order_date <=',
+															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
+															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
+				end
+			end
+			
 			return query
 		end
 			
@@ -418,6 +426,14 @@ module Erp::Orders
 			
 			if params[:to_date].present?
 				query = query.where('order_date <= ?', params[:to_date].end_of_day)
+			end
+			
+			if Erp::Core.available?("periods")
+				if params[:period].present? # @todo review this function
+					query = query.where('order_date >= ? AND order_date <=', 
+															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
+															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
+				end
 			end
 			
 			return query
