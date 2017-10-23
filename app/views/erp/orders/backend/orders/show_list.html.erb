@@ -26,7 +26,12 @@
                     <ul class="list-unstyled">
                         <li>
                             <%= @order.sales? ? t('.customer') : t('.supplier') %>:
-                            <strong class="invoice-desc"><%= @order.sales? ? @order.customer_name : @order.supplier_name %></strong>
+                            <strong class="invoice-desc">
+                                <%= @order.sales? ? @order.customer_name : @order.supplier_name %>
+                                <% if Erp::Core.available?('ortho_k') %>
+                                    <%= @order.display_customer_info.html_safe %>
+                                <% end %>
+                            </strong>
                         </li>
                         <li><%= t('.address') %>: <strong class="invoice-desc inv-address">
                         <%= @order.sales? ? @order.customer.address : @order.supplier.address %></strong> </li>
@@ -159,6 +164,6 @@
                     <p class="invoice-desc grand-total"><%= format_price(@order.cache_total) %></p>
                 </div>
             </div>
-        </div>     
+        </div>
     </div>
 </div>

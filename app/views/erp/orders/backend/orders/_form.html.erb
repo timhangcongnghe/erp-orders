@@ -60,6 +60,13 @@
                                     required: true,
                                     errors: order.errors.full_messages_for(:customer_id)
                                 }) %>
+                                <% if Erp::Core.available?('ortho_k') %>
+                                    <div class="ajax-box"
+                                         data-url='<%= erp_orders.related_contact_form_backend_orders_path %>'
+                                         data-control='input[name="order[customer_id]"]'
+                                    >
+                                    </div>
+                                <% end %>
                             <% end %>
                             <% if order.purchase? %>
                                 <input type="hidden" name="order[customer_id]" value="<%= order.customer_id %>" />

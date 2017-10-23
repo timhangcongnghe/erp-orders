@@ -75,7 +75,7 @@ module Erp
           @order.creator = current_user
 
           if @order.save
-            
+
             if @order.sales?
               if params.to_unsafe_hash[:act_save_with_default].present?
                 @order.set_draft
@@ -85,7 +85,7 @@ module Erp
             else
               @order.set_draft
             end
-            
+
             if request.xhr?
               render json: {
                 status: 'success',
@@ -111,7 +111,7 @@ module Erp
         # PATCH/PUT /orders/1
         def update
           authorize! :update, @order
-          
+
           if @order.sales?
             if params.to_unsafe_hash[:act_save_with_default].present?
               if @order.is_items_change?(params.to_unsafe_hash[:order]["order_details_attributes"]) == true
@@ -123,7 +123,7 @@ module Erp
           else
             @order.set_draft
           end
-          
+
           if @order.update(order_params)
             if request.xhr?
               render json: {
@@ -205,7 +205,7 @@ module Erp
 
           # Only allow a trusted parameter "white list" through.
           def order_params
-            params.fetch(:order, {}).permit(:code, :order_date, :customer_id, :supplier_id, :employee_id, :warehouse_id, :note, :tax_id, :payment_for,
+            params.fetch(:order, {}).permit(:patient_id, :doctor_id, :hospital_id, :code, :order_date, :customer_id, :supplier_id, :employee_id, :warehouse_id, :note, :tax_id, :payment_for,
                                             :order_details_attributes => [ :id, :product_id, :order_id, :quantity, :price, :discount, :shipping_fee,
                                                                           :commission, :customer_commission, :description, :_destroy ])
           end
