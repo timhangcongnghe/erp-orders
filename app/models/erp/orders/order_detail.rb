@@ -12,10 +12,29 @@ module Erp::Orders
     after_save :update_order_cache_tax_amount
     after_save :update_order_cache_commission_amount
     after_save :update_order_cache_customer_commission_amount
-    
+
     STATUS_NOT_DELIVERY = 'not_delivery'
     STATUS_DELIVERED = 'delivered'
     STATUS_OVER_DELIVERED = 'over_delivered'
+
+    def price=(new_price)
+      self[:price] = new_price.to_s.gsub(/\,/, '')
+    end
+    def discount=(new_price)
+      self[:discount] = new_price.to_s.gsub(/\,/, '')
+    end
+    def shipping_fee=(new_price)
+      self[:shipping_fee] = new_price.to_s.gsub(/\,/, '')
+    end
+    def commission=(new_price)
+      self[:commission] = new_price.to_s.gsub(/\,/, '')
+    end
+    def customer_commission=(new_price)
+      self[:customer_commission] = new_price.to_s.gsub(/\,/, '')
+    end
+    def quantity=(number)
+      self[:quantity] = number.to_s.gsub(/\,/, '')
+    end
 
     if Erp::Core.available?("qdeliveries")
 			after_save :order_update_cache_delivery_status
@@ -69,7 +88,7 @@ module Erp::Orders
 				order.update_cache_customer_commission_amount
 			end
 		end
-    
+
     # update order cache total
     def update_order_cache_total
 			if order.present?
@@ -104,7 +123,7 @@ module Erp::Orders
 			export_amount = self.delivery_details.joins(:delivery)
 													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_EXPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
-													
+
 			if order.sales?
 				return export_amount - import_amount
 			elsif order.purchase?
@@ -154,17 +173,17 @@ module Erp::Orders
     def discount_amount
 			discount.nil? ? 0.0 : discount
 		end
-		
+
     # get commission amount
     def commission_amount
 			commission.nil? ? 0.0 : commission
 		end
-    
+
     # get customer commission amount
     def customer_commission_amount
 			customer_commission.nil? ? 0.0 : customer_commission
 		end
-		
+
     # total before tax
     def total_without_tax
 			subtotal + shipping_amount - discount_amount
