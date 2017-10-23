@@ -14,7 +14,9 @@ Erp::Orders::Engine.routes.draw do
 					put 'set_deleted'
 					get 'new/:type', :to => "orders#new", :as => 'new_type'
 
-					get 'related_contact_form'
+					if Erp::Core.available?('ortho_k')
+            get 'related_contact_form'
+          end
         end
       end
       resources :order_details do
