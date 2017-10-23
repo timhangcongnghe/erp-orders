@@ -72,6 +72,13 @@ module Erp
           actions
         )
       end
+      
+      # order link helper
+      def order_link(order, text=nil)
+        text = text.nil? ? order.code : text
+        raw "<a href='#{erp_orders.backend_order_path(order)}' class='modal-link'>#{text}</a>"
+      end
+      
     end
   end
 end
