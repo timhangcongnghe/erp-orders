@@ -62,7 +62,7 @@
                                 }) %>
                                 <% if Erp::Core.available?('ortho_k') %>
                                     <div class="ajax-box"
-                                         data-url='<%= erp_orders.related_contact_form_backend_orders_path %>'
+                                         data-url='<%= erp_orders.related_contact_form_backend_orders_path(order_id: order.id) %>'
                                          data-control='input[name="order[customer_id]"]'
                                     >
                                     </div>
