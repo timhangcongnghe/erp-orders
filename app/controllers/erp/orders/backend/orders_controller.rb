@@ -148,7 +148,7 @@ module Erp
         def dataselect
           respond_to do |format|
             format.json {
-              render json: Order.dataselect(params[:keyword], params)
+              render json: Order.dataselect(params[:keyword], params.to_unsafe_hash)
             }
           end
         end

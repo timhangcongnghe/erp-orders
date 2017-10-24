@@ -52,7 +52,7 @@ module Erp::Orders
     # class const
     TYPE_SALES_ORDER = 'sales'
     TYPE_PURCHASE_ORDER = 'purchase'
-    
+
     PAYMENT_FOR_ORDER = 'for_order'
     PAYMENT_FOR_CONTACT = 'for_contact'
 
@@ -65,11 +65,11 @@ module Erp::Orders
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_DELETED]
     if Erp::Core.available?("qdeliveries")
 			after_save :update_cache_delivery_status
-			
+
 			DELIVERY_STATUS_DELIVERED = 'delivered'
 			DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
 			DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
-			
+
 			def total_delivered_quantity
 				count = 0
 				order_details.each do |od|
@@ -77,15 +77,15 @@ module Erp::Orders
 				end
 				return count
 			end
-			
+
 			def total_ordered_quantity
 				order_details.sum(:quantity)
 			end
-			
+
 			def not_delivered_quantity
 				total_ordered_quantity - total_delivered_quantity
-			end	
-			
+			end
+
 			def delivery_status
 				remain = not_delivered_quantity
 				if remain > 0
@@ -100,7 +100,7 @@ module Erp::Orders
 			def update_cache_delivery_status
 				self.update_column(:cache_delivery_status, self.delivery_status)
 			end
-			
+
 		end
 
     PAYMENT_STATUS_PAID = 'paid'
@@ -227,25 +227,35 @@ module Erp::Orders
 					query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 				end
 			end
-      
+
       # filter by status
       if params[:status].present?
 				query = query.where(status: params[:status])
 			end
-      
+
       # filter by sales orders
       if params[:supplier_id].present?
 				query = query.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
 			end
-      
+
       # filter by purchase orders
       if params[:customer_id].present?
 				query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 			end
-      
+
       # filter by payment_for
       if params[:payment_for].present?
 				query = query.where(payment_for: params[:payment_for])
+			end
+
+      # customer id
+      if params[:delivery].present? and params[:delivery][:customer_id].present?
+				query = query.where(customer_id: params[:delivery][:customer_id])
+			end
+
+      # supplier id
+      if params[:delivery].present? and params[:delivery][:supplier_id].present?
+				query = query.where(supplier_id: params[:delivery][:supplier_id])
 			end
 
       query = query.order("erp_orders_orders.order_date DESC").limit(8).map{|order| {value: order.id, text: order.get_name} }
@@ -253,7 +263,7 @@ module Erp::Orders
       if params[:include_na].present?
 				query = [{value: '-1', text: params[:include_na]}] + query
 			end
-      
+
 			return query
     end
 
@@ -392,19 +402,19 @@ module Erp::Orders
     def self.purchase_orders
 			self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
 		end
-    
+
     # Get all orders (payment_for: 'for_order')
     def self.payment_for_order_orders(params={})
 			query = self.where(payment_for: Erp::Orders::Order::PAYMENT_FOR_ORDER)
-			
+
 			if params[:from_date].present?
 				query = query.where('order_date >= ?', params[:from_date].beginning_of_day)
 			end
-			
+
 			if params[:to_date].present?
 				query = query.where('order_date <= ?', params[:to_date].end_of_day)
 			end
-			
+
 			if Erp::Core.available?("periods")
 				if params[:period].present? # @todo review this function
 					query = query.where('order_date >= ? AND order_date <=',
@@ -412,33 +422,33 @@ module Erp::Orders
 															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
 			end
-			
+
 			return query
 		end
-			
+
     # Get all orders (payment_for: 'for_contact')
     def self.payment_for_contact_orders(params={})
 			query = self.where(payment_for: Erp::Orders::Order::PAYMENT_FOR_CONTACT)
-			
+
 			if params[:from_date].present?
 				query = query.where('order_date >= ?', params[:from_date].beginning_of_day)
 			end
-			
+
 			if params[:to_date].present?
 				query = query.where('order_date <= ?', params[:to_date].end_of_day)
 			end
-			
+
 			if Erp::Core.available?("periods")
 				if params[:period].present? # @todo review this function
-					query = query.where('order_date >= ? AND order_date <=', 
+					query = query.where('order_date >= ? AND order_date <=',
 															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
 															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
 			end
-			
+
 			return query
 		end
-    
+
     # Get stock check orders
     def self.stock_check_orders
 			self.sales_orders
@@ -461,15 +471,15 @@ module Erp::Orders
 		def set_stock_checking
 			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKING)
 		end
-		
+
 		def set_stock_checked
 			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKED)
 		end
-		
+
 		def set_stock_approved
 			update_columns(status: Erp::Orders::Order::STATUS_STOCK_APPROVED)
 		end
-			
+
     def set_confirmed
       update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
@@ -477,15 +487,15 @@ module Erp::Orders
     def set_deleted
       update_columns(status: Erp::Orders::Order::STATUS_DELETED)
     end
-    
+
     # Get order stock check
     def get_order_stock_check
 			schecks.order('updated_at desc').first
 		end
-    
+
     # Check if order details is change
     def is_items_change?(params)
-			
+
 			params.each do |row|
 				exist = false
 				# check if change quantity
@@ -502,7 +512,7 @@ module Erp::Orders
 					return true
 				end
 			end
-			
+
 			# check if the product is removed
 			order_details.each do |od|
 				exist = false
@@ -516,7 +526,7 @@ module Erp::Orders
 					return true
 				end
 			end
-			
+
 			return false
 		end
 
@@ -549,7 +559,7 @@ module Erp::Orders
 					{text: I18n.t('orders.payment_for_contact'),value: Erp::Orders::Order::PAYMENT_FOR_CONTACT}
 				]
 			end
-			
+
 			# get paid amount for order
 			def paid_amount
 				if self.sales?
@@ -637,19 +647,19 @@ module Erp::Orders
 		end
 
     if Erp::Core.available?("accounting")
-			
+
 			# Trường hợp đơn hàng đã hủy và (có/đã) thanh toán thì hiển thị thế nào? (Hàm get orders)
-			
+
 			# get sales orders need to payments
 			def self.accounting_sales_orders
 				self.sales_orders.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
 			end
-			
+
 			# get purchase orders need to payments
 			def self.accounting_purchase_orders
 				self.purchase_orders.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
 			end
-			
+
 			# @todo remove this function
 			def self.status_active_for_orders
 				self.where(status: Erp::Orders::Order::STATUS_ACTIVE)
