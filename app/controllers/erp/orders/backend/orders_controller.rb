@@ -39,6 +39,7 @@ module Erp
             @order.customer_id = @owner.id
           end
           @order.payment_for = Erp::Orders::Order::PAYMENT_FOR_ORDER
+          @order.tax = Erp::Taxes::Tax.first
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
