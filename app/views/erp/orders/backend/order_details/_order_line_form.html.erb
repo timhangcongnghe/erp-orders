@@ -3,6 +3,7 @@
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][id]" value="<%= order_detail.id %>">
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][_destroy]" value="">
+		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
         <strong><%= order_detail.product_name %></strong>
     </td>
     <td width="5%" class="text-right">
@@ -51,12 +52,18 @@
     </td>
 	
     <td class="text-right">
-        <%= erp_form_control("number", {
-            name: 'order[order_details_attributes][' + uid + '][customer_commission]',
-            value: order_detail.customer_commission,
-            text: order_detail.customer_commission,
-            class: "line_customer_commission_amount inline"
-        }) %>
+        <div class="ajax-box"
+			data-url="<%= erp_orders.ajax_customer_commission_field_backend_order_details_path(
+						customer_commission: order_detail.customer_commission,
+						customer_id: @order.customer_id,
+						order_detail_id: order_detail.id) %>"
+			data-control="
+				[name='order[customer_id]'],
+				[name='order[order_details_attributes][<%= uid %>][product_id]'],
+				[name='uids[<%= uid %>]']
+			">
+		</div>
+		<span class="line_customer_commission_amount font-yellow"></span>
     </td>
     <td class="text-right">
         <span class="line_total text-semibold"></span>

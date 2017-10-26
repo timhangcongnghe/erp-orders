@@ -77,6 +77,22 @@ module Erp
             uid: helpers.unique_id()
           }
         end
+        
+        def ajax_customer_commission_field
+          @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
+          @product = Erp::Products::Product.where(id: params[:datas][1]).first
+          @uid = params[:datas][2]
+          if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
+            @customer_commission = params[:customer_commission]
+          else
+             if !params[:order_detail_id].present?
+               @customer_commission = @customer.get_customer_commission_rate_by_product(@product)
+             else
+               @customer_commission = ''
+             end
+          end
+          render layout: false
+        end
 
         private
           # Use callbacks to share common setup or constraints between actions.
