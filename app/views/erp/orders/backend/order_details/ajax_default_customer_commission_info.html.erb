@@ -1,0 +1,6 @@
+<div class="font-yellow">
+    <%= raw "#{format_price(@customer_commission_amount)} (#{number_with_precision(@customer_commission_rate, strip_insignificant_zeros: true)}%)" %>
+    <span hidden class="line_customer_commission_percent">
+        <%= @customer_commission_rate %>
+    </span>
+</div>

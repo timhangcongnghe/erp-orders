@@ -23,7 +23,7 @@ Erp::Orders::Engine.routes.draw do
 				collection do
 					post 'list'
           get 'order_line_form'
-          get 'ajax_customer_commission_field'
+          get 'ajax_default_customer_commission_info'
 				end
 			end
       resources :frontend_orders do

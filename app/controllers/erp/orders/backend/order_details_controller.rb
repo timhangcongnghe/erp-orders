@@ -78,19 +78,38 @@ module Erp
           }
         end
         
-        def ajax_customer_commission_field
+        def ajax_default_customer_commission_info
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
-          @uid = params[:datas][2]
-          if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
-            @customer_commission = params[:customer_commission]
-          else
-             if !params[:order_detail_id].present?
-               @customer_commission = @customer.get_customer_commission_rate_by_product(@product)
-             else
-               @customer_commission = ''
-             end
-          end
+          @qty = params[:datas][2].to_i
+          @price = params[:datas][3].to_f
+          @discount = params[:datas][4].to_f
+          @uid = params[:datas][5]
+          #@price = params[:price].present? ? params[:price].to_f : 0.0
+          #@qty = params[:quantity].present? ? params[:quantity].to_f : 0
+          
+          @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
+          @customer_commission_amount = @customer_commission_rate.nil? ? nil? : ((@customer_commission_rate*@price*@qty)/100).to_f
+          
+          #if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
+          #  @customer_commission = params[:customer_commission]
+          #else
+          #  if !params[:order_detail_id].present?
+          #     @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
+          #   else
+          #     @customer_commission_rate = ''
+          #   end
+          #end
+          
+          #if params[:customer_commission_rate].present? and @customer.id == params[:customer_id].to_i
+          #  @customer_commission_rate = params[:customer_commission_rate]
+          #else
+          #   if !params[:order_detail_id].present?
+          #     @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
+          #   else
+          #     @customer_commission_rate = ''
+          #   end
+          #end
           render layout: false
         end
 
