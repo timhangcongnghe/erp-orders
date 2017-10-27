@@ -41,22 +41,9 @@ module Erp::Orders
 
 			has_many :delivery_details, class_name: "Erp::Qdeliveries::DeliveryDetail"
 
-			def get_delivered_deliveries
+			def delivered_delivery_details
 				self.delivery_details.joins(:delivery)
-													.where(erp_qdeliveries_deliveries: {status: Erp::Qdeliveries::Delivery::STATUS_DELIVERED})
-			end
-
-			def delivered_delivery
-				self.delivery_details.joins(:delivery)
-													.where(erp_qdeliveries_deliveries: {status: Erp::Qdeliveries::Delivery::STATUS_DELIVERED})
-			end
-
-			def delivered_quantity
-				delivered_delivery.sum('erp_qdeliveries_delivery_details.quantity')
-			end
-
-			def not_delivery_quantity
-				quantity - delivered_quantity
+					.where(erp_qdeliveries_deliveries: {status: Erp::Qdeliveries::Delivery::STATUS_DELIVERED})
 			end
 
 			# order update cache payment status
@@ -116,24 +103,30 @@ module Erp::Orders
       return query
     end
 
-    def delivered_amount
-			import_amount = self.delivery_details.joins(:delivery)
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_IMPORT})
+    def delivered_quantity
+			if order.sales?
+				import_quantity = self.delivered_delivery_details
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_CUSTOMER_IMPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
-			export_amount = self.delivery_details.joins(:delivery)
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_EXPORT})
+				export_quantity = self.delivered_delivery_details
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT})
+													.sum('erp_qdeliveries_delivery_details.quantity')
+				return export_quantity - import_quantity
+			elsif order.purchase?
+				import_quantity = self.delivered_delivery_details
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_IMPORT})
+													.sum('erp_qdeliveries_delivery_details.quantity')
+				export_quantity = self.delivered_delivery_details
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_MANUFACTURER_EXPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
 
-			if order.sales?
-				return export_amount - import_amount
-			elsif order.purchase?
-				return -export_amount + import_amount
+				return -export_quantity + import_quantity
 			else
 				return 0
 			end
 		end
 
-    def remain_quantity
+    def not_delivered_quantity
 			quantity - delivered_quantity
 		end
 

@@ -635,15 +635,6 @@ module Erp::Orders
 					self.order_date
 				end
 			end
-
-			# remain order quantity
-			def remain_order_quantity
-				total = 0
-				order_details.each do |od|
-					total += od.remain_quantity
-				end
-				return total
-			end
 		end
 
     if Erp::Core.available?("accounting")
