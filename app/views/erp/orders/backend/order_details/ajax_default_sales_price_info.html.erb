@@ -2,7 +2,7 @@
     <div class="font-yellow" style="font-size: 70%"
          title="Chuyên mục: <%= @customer_price.category_name %> / Số lượng: <%= @customer_price.display_min_max %> / Giá bán: <%= format_number(@customer_price.price) %>">
         Mặc định: <%= format_price(@customer_price.price) %>
-        <span hidden class="line_sales_price">
+        <span hidden class="line_fill_price">
             <%= @customer_price.price %>
         </span>
     </div>
