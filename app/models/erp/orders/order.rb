@@ -97,6 +97,10 @@ module Erp::Orders
 				end
 			end
 
+			def is_delivered?
+				self.delivery_status == Order::DELIVERY_STATUS_DELIVERED
+			end
+
 			def update_cache_delivery_status
 				self.update_column(:cache_delivery_status, self.delivery_status)
 			end

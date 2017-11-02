@@ -1,7 +1,7 @@
 module Erp
   module Orders
     module ApplicationHelper
-      
+
       # Order dropdown actions
       def order_dropdown_actions(order)
         actions = []
@@ -67,18 +67,18 @@ module Erp
             url: erp_payments.backend_payment_record_path(payment_record),
           }
         end
-        
+
         erp_datalist_row_actions(
           actions
         )
       end
-      
+
       # order link helper
       def order_link(order, text=nil)
         text = text.nil? ? order.code : text
         raw "<a href='#{erp_orders.backend_order_path(order)}' class='modal-link'>#{text}</a>"
       end
-      
+
     end
   end
 end

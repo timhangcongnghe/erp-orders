@@ -18,6 +18,10 @@ module Erp::Orders
     DELIVERY_STATUS_DELIVERED = 'delivered'
     DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
 
+    def is_delivered?
+			self.delivery_status == OrderDetail::DELIVERY_STATUS_DELIVERED
+		end
+
     def price=(new_price)
       self[:price] = new_price.to_s.gsub(/\,/, '')
     end
