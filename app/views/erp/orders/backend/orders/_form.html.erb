@@ -2,9 +2,29 @@
     <% if order.sales? %>
         <% employee_name = 'sales_employee' %>
         <% scope = Erp::Taxes::Tax::TAX_SCOPE_SALES %>
+        <% lines_th = "<th width=\"15%\">#{t('.product_name')}</th>
+            <th class='text-right'>#{t('.quantity')}</th>
+            <th class='text-right'>#{t('.price')}</th>
+            <th class='text-right'>#{t('.total_amount')}</th>
+            <th class='text-right'>#{t('.discount')}</th>
+            <th class='text-right'>#{t('.shopping_fee')}</th>
+            <th class='text-right'>#{t('.commission_amount')}</th>
+            <th class='text-right'>#{t('.customer_commission')}</th>
+            <th class='text-right'>#{t('.total')}</th>
+            <th width=\"10%\" class='text-right'>#{t('.description')}</th>
+            <th></th>"
+        %>
     <% elsif order.purchase? %>
         <% employee_name = 'purchase_employee' %>
         <% scope = Erp::Taxes::Tax::TAX_SCOPE_PURCHASES %>
+        <% lines_th = "<th width=\"15%\">#{t('.product_name')}</th>
+            <th class='text-right'>#{t('.quantity')}</th>
+            <th class='text-right'>#{t('.price')}</th>
+            <th class='text-right'>#{t('.total_amount')}</th>
+            <th class='text-right'>#{t('.total')}</th>
+            <th width=\"10%\" class='text-right'>#{t('.description')}</th>
+            <th></th>"
+        %>
     <% else %>
         <% employee_name = 'employee' %>
     <% end %>
@@ -172,7 +192,7 @@
                         <li class="active">
                             <a href="#tab_5_1" data-toggle="tab"> <%= t('.order_lines') %> </a>
                         </li>
-                        <% if Erp::Core.available?("payments") %>
+                        <% if Erp::Core.available?("payments") and false %>
                             <li>
                                 <a href="#tab_5_2" data-toggle="tab"> <%= t('.order_history') %> </a>
                             </li>
@@ -187,7 +207,7 @@
                                 type: 'table',
                                 add_button: t('.add'),
                                 partial: 'erp/orders/backend/order_details/order_line_form',
-                                partial_url: erp_orders.order_line_form_backend_order_details_path,
+                                partial_url: erp_orders.order_line_form_backend_order_details_path(type: params[:type]),
                                 items: @order.order_details,
                                 item: :order_detail,
                                 add_control_selector: "input[name='product_id']",
@@ -209,17 +229,7 @@
                                         container_selector: '.edit_product',
                                     }
                                 }),
-                                thead: "<th width=\"15%\">#{t('.product_name')}</th>
-                                        <th class='text-right'>#{t('.quantity')}</th>
-                                        <th class='text-right'>#{t('.price')}</th>
-                                        <th class='text-right'>#{t('.total_amount')}</th>
-                                        <th class='text-right'>#{t('.discount')}</th>
-                                        <th class='text-right'>#{t('.shopping_fee')}</th>
-                                        <th class='text-right'>#{t('.commission_amount')}</th>
-                                        <th class='text-right'>#{t('.customer_commission')}</th>
-                                        <th class='text-right'>#{t('.total')}</th>
-                                        <th width=\"10%\" class='text-right'>#{t('.description')}</th>
-                                        <th></th>",
+                                thead: lines_th,
                                 no_tr: true
                             }) %>
 
@@ -234,7 +244,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <% if Erp::Core.available?("payments") %>
+                        <% if Erp::Core.available?("payments") and false %>
                             <div class="tab-pane" id="tab_5_2">
                                 <div class="row">
                                     <div class="col-md-6">

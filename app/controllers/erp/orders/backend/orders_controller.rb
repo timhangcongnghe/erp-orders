@@ -32,6 +32,7 @@ module Erp
           @order.order_date = Time.now
           @order.employee = current_user
           @type = params[:type]
+
           @owner = Erp::Contacts::Contact::get_main_contact
           if @type == Erp::Orders::Order::TYPE_SALES_ORDER
             @order.supplier_id = @owner.id
@@ -43,19 +44,20 @@ module Erp
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
-            ids = Erp::Products::Product.pluck(:id).sample(rand(90..250))
-            @products = Erp::Products::Product.where(id: ids).order(:code)
+            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash).order(:code)
 
             @products.each do |product|
-              area_type = params[:area].present? ? params[:area] : ['area_side','area_central'].sample
+              area_type = product.is_in_central_area ? 'area_central' : 'area_side'
               total_quantity = area_type == 'area_central' ? params[:central_quantity].to_f : params[:side_quantity].to_f
 
-              @order.order_details.build(
-                product_id: product.id,
-                # product_name: product.code + ' ' + product.get_diameter + ' ' + product.category_name
-                price: product.price,
-                quantity: total_quantity
-              )
+              if !params[:area].present? or (params[:area] == area_type)
+                @order.order_details.build(
+                  product_id: product.id,
+                  # product_name: product.code + ' ' + product.get_diameter + ' ' + product.category_name
+                  price: product.price,
+                  quantity: total_quantity
+                )
+              end
             end
           end
 

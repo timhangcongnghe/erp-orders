@@ -6,12 +6,13 @@
 		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
         <strong><%= order_detail.product_name %></strong>
     </td>
-    <td width="5%" class="text-right">
+    <td width="7%" class="text-right">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][quantity]',
             value: order_detail.quantity,
             text: order_detail.quantity,
-            class: "line_quantity inline"
+            class: "line_quantity inline",
+			required: true,
         }) %>
     </td>
     <td class="text-right">
@@ -19,67 +20,68 @@
             name: 'order[order_details_attributes][' + uid + '][price]',
             value: order_detail.price,
             text: order_detail.price,
-            class: "line_unit_price inline"
+            class: "line_unit_price inline",
+			required: true,
         }) %>
     </td>
     <td class="text-right">
         <span class="line_subtotal text-semibold"></span>
     </td>
-    <td class="text-right">
-        <%= erp_form_control("number", {
-            name: 'order[order_details_attributes][' + uid + '][discount]',
-            value: order_detail.discount,
-            text: order_detail.discount,
-            class: "line_discount_amount inline"
-        }) %>
-    </td>
-    <td class="text-right">
-        <%= erp_form_control("number", {
-            name: 'order[order_details_attributes][' + uid + '][shipping_fee]',
-            value: order_detail.shipping_fee,
-            text: order_detail.shipping_fee,
-            class: "line_shipping_amount inline"
-        }) %>
-    </td>
-	
-    <td class="text-right">
-        <%= erp_form_control("number", {
-            name: 'order[order_details_attributes][' + uid + '][commission]',
-            value: order_detail.commission,
-            text: order_detail.commission,
-            class: "line_commission_amount inline"
-        }) %>
-    </td>
-	
-    <td class="text-right">
-		<%= erp_form_control("number", {
-			name: 'order[order_details_attributes][' + uid + '][customer_commission]',
-			value: order_detail.customer_commission,
-			text: order_detail.customer_commission,
-			class: "line_customer_commission_amount#{order_detail.id} inline"
-		}) %>
-        <div class="ajax-box"
-			data-url="<%= erp_orders.ajax_default_customer_commission_info_backend_order_details_path(
-						#customer_commission: order_detail.customer_commission,
-						#customer_id: @order.customer_id,#@order.present? ? @order.customer_id : '',
-						#order_detail_id: order_detail.id
-						#price: order_detail.price,
-						#quantity: order_detail.quantity
-						) %>"
-			data-control="
-				[name='order[customer_id]'],
-				[name='order[order_details_attributes][<%= uid %>][product_id]'],
-				[name='order[order_details_attributes][<%= uid %>][quantity]'],
-				[name='order[order_details_attributes][<%= uid %>][price]'],
-				[name='order[order_details_attributes][<%= uid %>][discount]'],
-				[name='uids[<%= uid %>]']
-			">
-		</div>
-    </td>
+	<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
+		<td class="text-right">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][discount]',
+				value: order_detail.discount,
+				text: order_detail.discount,
+				class: "line_discount_amount inline"
+			}) %>
+		</td>
+		<td class="text-right">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][shipping_fee]',
+				value: order_detail.shipping_fee,
+				text: order_detail.shipping_fee,
+				class: "line_shipping_amount inline"
+			}) %>
+		</td>
+		<td class="text-right">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][commission]',
+				value: order_detail.commission,
+				text: order_detail.commission,
+				class: "line_commission_amount inline"
+			}) %>
+		</td>
+		<td class="text-right">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][customer_commission]',
+				value: order_detail.customer_commission,
+				text: order_detail.customer_commission,
+				class: "line_customer_commission_amount#{order_detail.id} inline"
+			}) %>
+			<div class="ajax-box"
+				data-url="<%= erp_orders.ajax_default_customer_commission_info_backend_order_details_path(
+							#customer_commission: order_detail.customer_commission,
+							#customer_id: @order.customer_id,#@order.present? ? @order.customer_id : '',
+							#order_detail_id: order_detail.id
+							#price: order_detail.price,
+							#quantity: order_detail.quantity
+							) %>"
+				data-control="
+					[name='order[customer_id]'],
+					[name='order[order_details_attributes][<%= uid %>][product_id]'],
+					[name='order[order_details_attributes][<%= uid %>][quantity]'],
+					[name='order[order_details_attributes][<%= uid %>][price]'],
+					[name='order[order_details_attributes][<%= uid %>][discount]'],
+					[name='uids[<%= uid %>]']
+				">
+			</div>
+		</td>
+	<% end %>
     <td class="text-right">
         <span class="line_total text-semibold"></span>
     </td>
-    <td width="5%">
+    <td width="15%">
         <%= erp_form_control("textarea", {
             name: 'order[order_details_attributes][' + uid + '][description]',
             value: order_detail.description,
@@ -94,9 +96,9 @@
     </td>
 </tr>
 <% if !order_detail.scheck_detail.nil? %>
-	<% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>	
+	<% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>
 		<tr class="addableform-more">
-			<td colspan="9">
+			<td colspan="11">
 				<span class="col-md-4 text-center">
 					<div class="todo-tasklist-item-title"> <%= t('.available') %>: </div>
 					<% if order_detail.scheck_detail.available? %>

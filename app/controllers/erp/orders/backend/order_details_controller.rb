@@ -72,12 +72,20 @@ module Erp
           @order_detail.product_id = params[:add_value]
           @order_detail.price = @order_detail.product_price
 
+          @order_detail.order = Erp::Orders::Order.new
+
+          if params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER
+            @order_detail.order.supplier_id = Erp::Contacts::Contact::get_main_contact
+          else
+            @order_detail.order.supplier_id = Erp::Contacts::Contact::get_main_contact
+          end
+
           render partial: params[:partial], locals: {
             order_detail: @order_detail,
             uid: helpers.unique_id()
           }
         end
-        
+
         def ajax_default_customer_commission_info
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
@@ -87,10 +95,10 @@ module Erp
           @uid = params[:datas][5]
           #@price = params[:price].present? ? params[:price].to_f : 0.0
           #@qty = params[:quantity].present? ? params[:quantity].to_f : 0
-          
+
           @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
           @customer_commission_amount = @customer_commission_rate.nil? ? nil? : ((@customer_commission_rate*@price*@qty)/100).to_f
-          
+
           #if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
           #  @customer_commission = params[:customer_commission]
           #else
@@ -100,7 +108,7 @@ module Erp
           #     @customer_commission_rate = ''
           #   end
           #end
-          
+
           #if params[:customer_commission_rate].present? and @customer.id == params[:customer_id].to_i
           #  @customer_commission_rate = params[:customer_commission_rate]
           #else
