@@ -1,10 +1,9 @@
 <% if !@customer_price.nil? %>
-    <div class="font-yellow" title="Gia cho <%= @customer_price.category_name %> / So luong tu: <%= @customer_price.display_min_max %>">
-        <%= format_price(@customer_price.price) %>
+    <div class="font-yellow" style="font-size: 70%"
+         title="Chuyên mục: <%= @customer_price.category_name %> / Số lượng: <%= @customer_price.display_min_max %> / Giá bán: <%= format_number(@customer_price.price) %>">
+        Mặc định: <%= format_price(@customer_price.price) %>
         <span hidden class="line_sales_price">
             <%= @customer_price.price %>
         </span>
     </div>
-<% else %>
-    <div class="font-yellow">S
 <% end %>

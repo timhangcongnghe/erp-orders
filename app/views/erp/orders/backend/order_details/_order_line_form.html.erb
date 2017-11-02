@@ -23,15 +23,27 @@
             class: "line_unit_price inline",
 			required: true,
         }) %>
-		<div class="ajax-box"
-			data-url="<%= erp_orders.ajax_default_sales_price_info_backend_order_details_path %>"
-			data-control="
-				[name='order[customer_id]'],
-				[name='order[order_details_attributes][<%= uid %>][product_id]'],
-				[name='order[order_details_attributes][<%= uid %>][quantity]'],
-				[name='uids[<%= uid %>]']
-			">
-		</div>
+		<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
+			<div class="ajax-box"
+				data-url="<%= erp_orders.ajax_default_sales_price_info_backend_order_details_path %>"
+				data-control="
+					[name='order[customer_id]'],
+					[name='order[order_details_attributes][<%= uid %>][product_id]'],
+					[name='order[order_details_attributes][<%= uid %>][quantity]'],
+					[name='uids[<%= uid %>]']
+				">
+			</div>
+		<% else %>
+			<div class="ajax-box"
+				data-url="<%= erp_orders.ajax_default_purchase_price_info_backend_order_details_path %>"
+				data-control="
+					[name='order[supplier_id]'],
+					[name='order[order_details_attributes][<%= uid %>][product_id]'],
+					[name='order[order_details_attributes][<%= uid %>][quantity]'],
+					[name='uids[<%= uid %>]']
+				">
+			</div>
+		<% end %>
     </td>
     <td class="text-right">
         <span class="line_subtotal text-semibold"></span>
