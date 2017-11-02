@@ -114,14 +114,6 @@
                                 }) %>
                             <% end %>
                         <% end %>
-                        <%= erp_form_control('textarea', {
-                            label: t('.note'),
-                            name: 'order[note]',
-                            value: order.note,
-                            placeholder: t('.placeholder_note'),
-                            rows: 1,
-                            errors: order.errors.full_messages_for(:note)
-                        }) %>
                     </div>
                 </div>
             </div>
@@ -181,6 +173,14 @@
                             value: @order.payment_for,
                             options: Erp::Orders::Order.get_payment_type_options()
                         }) %>
+                        <%= erp_form_control('textarea', {
+                            label: t('.note'),
+                            name: 'order[note]',
+                            value: order.note,
+                            placeholder: t('.placeholder_note'),
+                            rows: 1,
+                            errors: order.errors.full_messages_for(:note)
+                        }) %>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
                                 type: 'table',
                                 add_button: t('.add'),
                                 partial: 'erp/orders/backend/order_details/order_line_form',
-                                partial_url: erp_orders.order_line_form_backend_order_details_path(type: params[:type]),
+                                partial_url: erp_orders.order_line_form_backend_order_details_path(type: @order.get_type),
                                 items: @order.order_details,
                                 item: :order_detail,
                                 add_control_selector: "input[name='product_id']",

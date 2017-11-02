@@ -181,6 +181,16 @@ module Erp::Orders
 					query = query.where(warehouse_id: global_filter[:warehouse])
 				end
 
+				# filter by doctor
+				if global_filter[:doctor].present?
+					query = query.where(doctor_id: global_filter[:doctor])
+				end
+
+				# filter by patient
+				if global_filter[:patient].present?
+					query = query.where(patient_id: global_filter[:patient])
+				end
+
 			end
       # end// global filter
 
@@ -220,6 +230,9 @@ module Erp::Orders
 
       # orders by delivery type
       if params[:delivery_type].present?
+				# only get confirmed order
+				query = query.where(status: Order::STATUS_CONFIRMED)
+
 				if [Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT].include?(params[:delivery_type])
 					query = query.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
 				end
@@ -661,6 +674,12 @@ module Erp::Orders
 			return '' if self.code.nil? or self.created_at.nil?
 
 			"#{self.code} (#{self.order_date.strftime('%d/%m/%Y')})".html_safe
+		end
+
+    def get_type
+			return Order::TYPE_SALES_ORDER if self.sales?
+			return Order::TYPE_PURCHASE_ORDER if self.purchase?
+			return nil
 		end
   end
 end

@@ -12,10 +12,11 @@ module Erp::Orders
     after_save :update_order_cache_tax_amount
     after_save :update_order_cache_commission_amount
     after_save :update_order_cache_customer_commission_amount
+    after_save :update_cache_delivery_status
 
-    STATUS_NOT_DELIVERY = 'not_delivery'
-    STATUS_DELIVERED = 'delivered'
-    STATUS_OVER_DELIVERED = 'over_delivered'
+    DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
+    DELIVERY_STATUS_DELIVERED = 'delivered'
+    DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
 
     def price=(new_price)
       self[:price] = new_price.to_s.gsub(/\,/, '')
@@ -196,6 +197,21 @@ module Erp::Orders
     # total after tax
     def total
 			total_without_tax + tax_amount
+		end
+
+    def delivery_status
+			remain = not_delivered_quantity
+			if remain > 0
+				return Erp::Orders::Order::DELIVERY_STATUS_NOT_DELIVERY
+			elsif remain == 0
+				return Erp::Orders::Order::DELIVERY_STATUS_DELIVERED
+			else
+				return Erp::Orders::Order::DELIVERY_STATUS_OVER_DELIVERED
+			end
+		end
+
+    def update_cache_delivery_status
+			self.update_column(:cache_delivery_status, self.delivery_status)
 		end
 
   end
