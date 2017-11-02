@@ -23,6 +23,15 @@
             class: "line_unit_price inline",
 			required: true,
         }) %>
+		<div class="ajax-box"
+			data-url="<%= erp_orders.ajax_default_sales_price_info_backend_order_details_path %>"
+			data-control="
+				[name='order[customer_id]'],
+				[name='order[order_details_attributes][<%= uid %>][product_id]'],
+				[name='order[order_details_attributes][<%= uid %>][quantity]'],
+				[name='uids[<%= uid %>]']
+			">
+		</div>
     </td>
     <td class="text-right">
         <span class="line_subtotal text-semibold"></span>

@@ -1,0 +1,10 @@
+<% if !@customer_price.nil? %>
+    <div class="font-yellow" title="Gia cho <%= @customer_price.category_name %> / So luong tu: <%= @customer_price.display_min_max %>">
+        <%= format_price(@customer_price.price) %>
+        <span hidden class="line_sales_price">
+            <%= @customer_price.price %>
+        </span>
+    </div>
+<% else %>
+    <div class="font-yellow">S
+<% end %>

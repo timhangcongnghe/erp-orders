@@ -1,0 +1,39 @@
+# Check if order details is change
+def is_items_change?(params)
+    params.each do |row|
+        exist = false
+        # check if change quantity
+        order_details.each do |od|
+            logger.info row.to_json
+            logger.info "********: #{row[1]["product_id"].to_i} --- #{od.product_id} --- #{row[1]["product_id"].to_i == od.product_id}"
+            if row[1]["product_id"].to_i == od.product_id
+                exist = true
+                
+                if row[1]["quantity"].to_i != od.quantity
+                    logger.info '----------111111111111-------Thay đổi'
+                    return true
+                end
+            end
+        end
+        # check if the product is added
+        if exist == false
+            logger.info '----------2222222222222-------Thay đổi'
+            return true
+        end
+    end
+    
+    # check if the product is removed
+    #order_details.each do |od|
+    #	exist1 = false
+    #	params.each do |row|
+    #		if od.product_id == row[1]["product_id"].to_i
+    #			exist1 = true
+    #		end
+    #	end
+    #	if exist1 == false
+    #		return true
+    #	end
+    #end
+    logger.info '----------3333333333333333-------Không thay đổi'
+    return false
+end

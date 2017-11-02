@@ -24,6 +24,8 @@ Erp::Orders::Engine.routes.draw do
 					post 'list'
           get 'order_line_form'
           get 'ajax_default_customer_commission_info'
+          get 'ajax_default_sales_price_info'
+          get 'ajax_default_purchase_price_info'
 				end
 			end
       resources :frontend_orders do

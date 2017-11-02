@@ -85,7 +85,22 @@ module Erp
             uid: helpers.unique_id()
           }
         end
-
+        
+        def ajax_default_sales_price_info
+          @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
+          @product = Erp::Products::Product.where(id: params[:datas][1]).first
+          @qty = params[:datas][2].to_i
+          @types = Erp::Prices::Price::TYPE_SALES
+          @customer_price = Erp::Prices::Price.get_by_product(contact_id: @customer.id,
+                                                              category_id: @product.category_id,
+                                                              quantity: @qty, type: @types)
+          @uid = params[:datas][4]
+        end
+        
+        def ajax_default_purchase_price_info
+          
+        end
+        
         def ajax_default_customer_commission_info
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
