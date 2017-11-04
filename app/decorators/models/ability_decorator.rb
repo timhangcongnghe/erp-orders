@@ -42,7 +42,11 @@ Erp::Ability.class_eval do
     end
 
     can :warehouse_export, Erp::Orders::Order do |order|
-      order.is_confirmed? and !order.is_delivered?
+      order.is_confirmed? and !order.is_delivered? and order.sales?
+    end
+
+    can :warehouse_import, Erp::Orders::Order do |order|
+      order.is_confirmed? and !order.is_delivered? and order.purchase?
     end
   end
 end

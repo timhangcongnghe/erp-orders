@@ -24,7 +24,7 @@
 			required: true,
         }) %>
 		<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
-			<div class="ajax-box"
+			<div class="ajax-box default_price_info"
 				data-url="<%= erp_orders.ajax_default_sales_price_info_backend_order_details_path %>"
 				data-control="
 					[name='order[customer_id]'],
@@ -34,7 +34,7 @@
 				">
 			</div>
 		<% else %>
-			<div class="ajax-box"
+			<div class="ajax-box default_price_info"
 				data-url="<%= erp_orders.ajax_default_purchase_price_info_backend_order_details_path %>"
 				data-control="
 					[name='order[supplier_id]'],
@@ -80,7 +80,7 @@
 				text: order_detail.customer_commission,
 				class: "line_customer_commission_amount#{order_detail.id} inline"
 			}) %>
-			<div class="ajax-box"
+			<div class="ajax-box default_customer_commission_info"
 				data-url="<%= erp_orders.ajax_default_customer_commission_info_backend_order_details_path(
 							#customer_commission: order_detail.customer_commission,
 							#customer_id: @order.customer_id,#@order.present? ? @order.customer_id : '',

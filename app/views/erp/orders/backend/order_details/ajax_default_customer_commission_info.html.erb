@@ -1,8 +1,12 @@
 <% if !@customer_commission_rate.nil? %>
-    <div class="font-yellow">
+    <% rand = [*5..30000000].sample %>
+    <div id="row-<%= rand %>" class="font-yellow">
         <%= raw "#{format_price(@customer_commission_amount)} (#{number_with_precision(@customer_commission_rate, strip_insignificant_zeros: true)}%)" %>
         <span hidden class="line_customer_commission_percent">
             <%= @customer_commission_rate %>
         </span>
     </div>
+    <script>
+        updateDefaultCommission($('#row-<%= rand %>').closest('tr').first());
+    </script>
 <% end %>

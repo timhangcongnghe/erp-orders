@@ -85,7 +85,7 @@ module Erp
             uid: helpers.unique_id()
           }
         end
-        
+
         def ajax_default_sales_price_info
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
@@ -96,7 +96,7 @@ module Erp
                                                               quantity: @qty, type: @types)
           @uid = params[:datas][4]
         end
-        
+
         def ajax_default_purchase_price_info
           @supplier = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
@@ -107,19 +107,19 @@ module Erp
                                                               quantity: @qty, type: @types)
           @uid = params[:datas][4]
         end
-        
+
         def ajax_default_customer_commission_info
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
-          @qty = params[:datas][2].to_i
-          @price = params[:datas][3].to_f
-          @discount = params[:datas][4].to_f
+          @qty = params[:datas][2].gsub(/\,/, '').to_i
+          @price = params[:datas][3].gsub(/\,/, '').to_f
+          @discount = params[:datas][4].gsub(/\,/, '').to_f
           @uid = params[:datas][5]
           #@price = params[:price].present? ? params[:price].to_f : 0.0
           #@qty = params[:quantity].present? ? params[:quantity].to_f : 0
 
           @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
-          @customer_commission_amount = @customer_commission_rate.nil? ? nil? : ((@customer_commission_rate*@price*@qty)/100).to_f
+          @customer_commission_amount = @customer_commission_rate.nil? ? 0 : ((@customer_commission_rate*@price*@qty)/100).to_f
 
           #if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
           #  @customer_commission = params[:customer_commission]
