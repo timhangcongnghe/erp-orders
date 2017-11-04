@@ -93,6 +93,7 @@ module Erp
           @types = Erp::Prices::Price::TYPE_SALES
           @customer_price = Erp::Prices::Price.get_by_product(contact_id: @customer.id,
                                                               category_id: @product.category_id,
+                                                              properties_value_id: @product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
                                                               quantity: @qty, type: @types)
           @uid = params[:datas][4]
         end
@@ -104,6 +105,7 @@ module Erp
           @types = Erp::Prices::Price::TYPE_PURCHASE
           @supplier_price = Erp::Prices::Price.get_by_product(contact_id: @supplier.id,
                                                               category_id: @product.category_id,
+                                                              properties_value_id: @product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
                                                               quantity: @qty, type: @types)
           @uid = params[:datas][4]
         end
