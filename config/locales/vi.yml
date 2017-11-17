@@ -122,14 +122,14 @@ vi:
           edit:
             orders: "Tất cả đơn hàng"
             create_sales_order: "Thêm đơn bán hàng"
-            create_purchases_order: "Thêm đơn nhập hàng"
+            create_purchases_order: "Thêm đơn mua hàng"
             order_details: "Chi tiết đơn hàng"
             edit: "Cập nhật đơn hàng"
           show:
             orders: "Tất cả đơn hàng"
             show_order: "Chi tiết đơn hàng"
             show: "Chi tiết"
-            create_purchases_order: "Thêm đơn nhập hàng"
+            create_purchases_order: "Thêm đơn mua hàng"
             create_sales_order: "Thêm đơn bán hàng"
             edit: "Cập nhật"
             draft: "Phiếu tạm"
