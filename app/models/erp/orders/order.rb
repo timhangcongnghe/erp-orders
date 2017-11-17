@@ -697,5 +697,22 @@ module Erp::Orders
 				.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
 				.where(cache_delivery_status: self::DELIVERY_STATUS_NOT_DELIVERY)
 		end
+    
+    # update cache total for order_detail
+    after_save :update_order_detail_cache_total
+    def update_order_detail_cache_total
+			self.order_details.each do |od|
+        od.update_cache_total
+      end
+		end
+    
+    # update cache total real for order_detail (real revenue)
+    after_save :update_order_detail_cache_real_revenue
+    def update_order_detail_cache_real_revenue
+			self.order_details.each do |od|
+        od.update_cache_real_revenue
+      end
+		end
+    
   end
 end

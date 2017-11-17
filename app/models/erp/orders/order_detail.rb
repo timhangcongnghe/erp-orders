@@ -87,6 +87,18 @@ module Erp::Orders
 				order.update_cache_total
 			end
 		end
+    
+    # Update cache total (total after tax)
+    after_save :update_cache_total
+    def update_cache_total
+			self.update_column(:cache_total, self.total)
+		end
+    
+    # Update cache total real (real revenue)
+    after_save :update_cache_real_revenue
+    def update_cache_real_revenue
+			self.update_column(:cache_real_revenue, self.real_revenue)
+		end
 
     # update order cache payment status
     def update_order_cache_payment_status
@@ -95,7 +107,7 @@ module Erp::Orders
 			end
 		end
 
-    # update order cache payment status
+    # update order cache delivery status
     def update_order_cache_delivery_status
 			if order.present?
 				order.update_cache_delivery_status
@@ -184,7 +196,7 @@ module Erp::Orders
 
     # total before tax
     def total_without_tax
-			subtotal + shipping_amount - discount_amount
+			subtotal - discount_amount
 		end
 
     # tax amount
@@ -202,6 +214,11 @@ module Erp::Orders
     def total
 			total_without_tax + tax_amount
 		end
+    
+    # total without commissions + customer_commisions, real revenue
+    def real_revenue
+      total - commission_amount - customer_commission_amount
+    end
 
     def delivery_status
 			remain = not_delivered_quantity
