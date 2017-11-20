@@ -2,7 +2,7 @@
     <%= t('.show') %> # <%= @order.code %>
 <% end %>
 
-<% content_for :page_title do %>    
+<% content_for :page_title do %>
     <a href="
         <%=
             if @order.sales?
@@ -11,7 +11,7 @@
                 erp_purchase.backend_purchase_orders_path
             else
                 erp_orders.backend_orders_path
-            end  
+            end
         %>
     ">
     <i class="glyphicon glyphicon-shopping-cart"></i> <%= t('.orders') %>
@@ -25,12 +25,12 @@
         href: erp_orders.new_backend_order_path(type: @type),
         class: 'btn-noborder'
     }) %>
-    
+
         <%= erp_component('button/edit', {
             text: t('.edit'),
             href: erp_orders.edit_backend_order_path(@order)
         }) if can? :update, @order %>
-    
+
     <%= erp_component('button/actions', {
         actions:
         [
@@ -79,7 +79,7 @@
             text: t('.items'), name: 'items', value: true, checked: true
         },
         {
-            text: t('.category'), name: 'category', value: true, checked: true
+            text: t('.category'), name: 'category', value: true, checked: false
         },
         {
             text: t('.units'), name: 'units', value: true, checked: true
@@ -95,9 +95,6 @@
         },
         {
             text: t('.discount'), name: 'discount', value: true, checked: true
-        },
-        {
-            text: t('.shipping_fee'), name: 'shipping_fee', value: true, checked: true
         },
         {
             text: t('.total'), name: 'total', value: true, checked: true

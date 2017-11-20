@@ -2,7 +2,7 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:show, :show_list, :edit, :update,
+        before_action :set_order, only: [:pdf, :show, :show_list, :edit, :update,
                                          :set_draft, :set_stock_checking, :set_confirmed, :set_deleted]
 
         # GET /orders
@@ -20,10 +20,40 @@ module Erp
         def show
           authorize! :read, @order
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
+
+          respond_to do |format|
+            format.html
+            format.pdf do
+              render pdf: "show_list",
+                layout: 'erp/backend/pdf'
+            end
+          end
         end
 
         # POST /orders/list
         def show_list
+        end
+
+        # GET /orders/1
+        def pdf
+          authorize! :read, @order
+          @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
+
+          respond_to do |format|
+            format.html
+            format.pdf do
+              if @order.order_details.count < 8
+                render pdf: "show_list",
+                  layout: 'erp/backend/pdf',
+                  page_size: 'A5',
+                  orientation: 'Landscape'
+              else
+                render pdf: "show_list",
+                  layout: 'erp/backend/pdf',
+                  page_size: 'A4'
+              end
+            end
+          end
         end
 
         # GET /orders/new

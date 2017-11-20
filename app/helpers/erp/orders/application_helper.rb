@@ -6,9 +6,9 @@ module Erp
       def order_dropdown_actions(order)
         actions = []
         actions << {
-          text: '<i class="fa fa-file-text-o"></i> '+t('.view'),
+          text: '<i class="fa fa-print"></i> '+t('.view'),
           url: erp_orders.backend_order_path(order)
-        } if can? :read, order
+        } if can? :print, order
         actions << {
           text: '<i class="fa fa-edit"></i> '+t('.edit'),
           url: erp_orders.edit_backend_order_path(order)

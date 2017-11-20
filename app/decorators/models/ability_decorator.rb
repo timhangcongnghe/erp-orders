@@ -19,6 +19,10 @@ Erp::Ability.class_eval do
       order.is_draft? or order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed?
     end
 
+    can :print, Erp::Orders::Order do |order|
+      order.is_confirmed?
+    end
+
     can :set_stock_checking, Erp::Orders::Order do |order|
       if order.sales?
         order.is_draft? or order.is_deleted?

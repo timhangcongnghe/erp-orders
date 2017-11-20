@@ -1,78 +1,58 @@
-<iframe class="pdf" src="<%= erp_orders.pdf_backend_orders_path(params.to_unsafe_hash.merge({format: 'pdf'})) %>" />
-<!--<div class="header">
-    <div class="left">
-        <div class="line-1">
-            CÔNG TY TNHH ORTHO-K VIỆT NAM
-        </div>
-        <div class="line-2">
-            535 An Dương Vương, Phường 8, Quận 5
-        </div>
-    </div>
-    <div class="right">
-        <div class="line-1">
-            Mẫu số:
-        </div>
-    </div>
-</div>
+<% content_for :title_line_1 do %>
+    <%= @order.sales? ? 'HÓA ĐƠN BÁN HÀNG' : 'HÓA ĐƠN MUA HÀNG' %>
+<% end %>
+
+<% content_for :title_line_2 do %>
+    Ngày <%= @order.order_date.strftime('%d') %>
+    tháng <%= @order.order_date.strftime('%m') %>
+    năm <%= @order.order_date.strftime('%Y') %>.
+    <div>Số: <%= @order.code %></div>
+<% end %>
+
+<% content_for :main_info_col_1 do %>
+  <p>
+    <label><%= @order.sales? ? 'Khách hàng' : 'Nhà CC' %>:</label>
+    <span><strong><%= @order.sales? ? @order.customer_name : @order.supplier_name %></strong></span>
+  </p>
+  <p>
+    <label>Địa chỉ:</label>
+    <span><%= @order.sales? ? @order.customer.address : @order.supplier.address %></span>
+  </p>
+  <p>
+    <label>Ghi chú:</label>
+    <span><%= @order.note %></span>
+  </p>
+<% end %>
+
+<% content_for :main_info_col_2 do %>
+  <% if @order.doctor.present? %>
+    <p>
+      <label>BS:</label>
+      <span><%= @order.doctor_name %></span>
+    </p>
+  <% end %>
+  <% if @order.patient.present? %>
+    <p>
+      <label>BN:</label>
+      <span><%= @order.patient_name %> (<%= @order.is_new_patient ? 'mới' : 'đổi len' %>)</span>
+    </p>
+  <% end %>
+<% end %>
+
+<% content_for :main_info_col_3 do %>
+  <p>
+    <label></label>
+    <span></span>
+  </p>
+  <p>
+    <label>Phụ trách:</label>
+    <span><%= @order.employee_name %></span>
+  </p>
+<% end %>
 
 <div class="row">
     <div class="col-md-12">
         <div class="custom-invoice invoice-content-2 bordered">
-            <div class="row invoice-head">
-                <div class="col-md-6 col-xs-6">
-                    <div class="invoice-logo inv-name">
-                        <h1 class="uppercase"><%= @order.sales? ? t('.sales_order') : t('.purchase_order') %></h1>
-                        <p class="invoice-desc inv-date">
-                            <%= t('.day') %> <%= @order.order_date.strftime('%d') %>
-                            <%= t('.month') %> <%= @order.order_date.strftime('%m') %>
-                            <%= t('.year') %> <%= @order.order_date.strftime('%Y') %>
-                        </p>
-                        <p class="invoice-desc inv-code"><%= t('.code') %>: <%= @order.code %></p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xs-6">
-                    <div class="company-address">
-                        <span class="bold uppercase"><%= Erp::Contacts::Contact.get_main_contact.name %></span>
-                        <br/> <%= Erp::Contacts::Contact.get_main_contact.address %>
-                    </div>
-                </div>
-            </div>
-            <div class="row invoice-cust-add">
-                <div class="col-xs-6">
-                    <h2 class="invoice-title uppercase"><%= @order.sales? ? t('.sales_information') : t('.purchase_information') %></h2>
-                    <ul class="list-unstyled">
-                        <li>
-                            <%= @order.sales? ? t('.customer') : t('.supplier') %>:
-                            <strong class="invoice-desc">
-                                <%= @order.sales? ? @order.customer_name : @order.supplier_name %>
-                                <% if Erp::Core.available?('ortho_k') %>
-                                    <%= @order.display_customer_info.html_safe %>
-                                <% end %>
-                            </strong>
-                        </li>
-                        <li><%= t('.address') %>: <strong class="invoice-desc inv-address">
-                        <%= @order.sales? ? @order.customer.address : @order.supplier.address %></strong> </li>
-                        <li><%= @order.sales? ? t('.reason_for_export_warehouse') : t('.reason_for_import_warehouse') %>: <strong class="invoice-desc inv-address">
-                        <%= @order.note %></strong> </li>
-                        <li><%= @order.sales? ? t('.export_warehouse') : t('.import_warehouse') %>: <strong class="invoice-desc"><%= @order.warehouse_name %></strong> </li>
-                    </ul>
-                </div>
-                <div class="col-xs-3 invoice-payment">
-                    <h2 class="invoice-title uppercase"><%= t('.payment_information') %></h2>
-                    <ul class="list-unstyled">
-                        <li><%= t('.order_date') %>: <span><%= @order.order_date.strftime('%d/%m/%Y') %></span> </li>
-                        <li><%= t('.payment_deadline') %>: <span>12/08/2017</span> </li>
-                        <li><%= t('.paid_amount') %>: <%= format_price(@order.paid_amount) %> </li>
-                        <li><%= t('.remain_amount') %>: <%= format_price(@order.remain_amount) %> </li>
-                    </ul>
-                </div>
-                <div class="col-xs-3">
-                    <h2 class="invoice-title uppercase"><%= t('.employee') %></h2>
-                    <ul class="list-unstyled">
-                        <li><strong class="invoice-desc"><%= @order.employee_name %></strong> </li>
-                    </ul>
-                </div>
-            </div>
             <div class="row invoice-body">
                 <div class="col-xs-12 table-responsive">
                     <table class="table table-hover">
@@ -108,9 +88,6 @@
                                 <% if get_columns(params).include?("discount") %>
                                     <th class="invoice-title uppercase text-right"><%= t('.discount') %></th>
                                 <% end %>
-                                <% if get_columns(params).include?("shipping_fee") %>
-                                    <th class="invoice-title uppercase text-right"><%= t('.shipping_fee') %></th>
-                                <% end %>
                                 <% if get_columns(params).include?("total") %>
                                     <th class="invoice-title uppercase text-right cursor-help"
                                         title="<%= t('.total_help') %>">
@@ -126,16 +103,15 @@
                             <% @order.order_details.each_with_index do |order_detail,index| %>
                                 <tr>
                                     <% if get_columns(params).include?("ordinal_number") %>
-                                        <td>#<%= index+1 %></td>
+                                        <td class="text-center"><%= index+1 %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("items") %>
                                         <td>
-                                            <h3><%= order_detail.product_name %></h3>
-                                            <p> <%= t('.product_code') + ': ' + order_detail.product_code %> </p>
+                                            <p><%= order_detail.product_name %></p>
                                         </td>
                                     <% end %>
                                     <% if get_columns(params).include?("category") %>
-                                        <td><%= order_detail.product_category_name %></td>
+                                        <td class="text-center"><%= order_detail.product_category_name %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("units") %>
                                         <td class="text-center"><%= order_detail.product_unit_name %></td>
@@ -152,9 +128,6 @@
                                     <% if get_columns(params).include?("discount") %>
                                         <td class="text-right sbold"><%= format_price(order_detail.discount_amount) %></td>
                                     <% end %>
-                                    <% if get_columns(params).include?("shipping_fee") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.shipping_amount) %></td>
-                                    <% end %>
                                     <% if get_columns(params).include?("total") %>
                                         <td class="text-right sbold"><%= format_price(order_detail.total) %></td>
                                     <% end %>
@@ -167,20 +140,40 @@
                     </table>
                 </div>
             </div>
-            <div class="row invoice-subtotal">
-                <div class="col-xs-4 text-left">
-                    <h2 class="invoice-title uppercase">Cộng tiền hàng</h2>
-                    <p class="invoice-desc"><%= format_price(@order.cache_total) %></p>
-                </div>
-                <div class="col-xs-4 text-center">
-                    <h2 class="invoice-title uppercase">Tiền thuế (0%)</h2>
-                    <p class="invoice-desc"><%= format_price(0) %></p>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <h2 class="invoice-title uppercase">Tổng tiền thanh toán</h2>
-                    <p class="invoice-desc grand-total"><%= format_price(@order.cache_total) %></p>
-                </div>
-            </div>
         </div>
     </div>
-</div>-->
+</div>
+<div class="table-footer">
+    <div class="line">
+        <label>Cộng tiền hàng:</label>
+        <span class="text-right"><%= format_price(@order.cache_total) %></span>
+    </div>
+    <div class="liner">
+        <label>Tiền thuế (0%):</label>
+        <span class="text-right"><%= format_price(0) %></span>
+    </div>
+    <div class="line">
+        <label>Tổng tiền thanh toán:</label>
+        <span class="text-right"><%= format_price(@order.cache_total) %></span>
+    </div>
+</div>
+<div class="mt-5 text-small">
+    Số tiền ghi bằng chữ: <%= docso(@order.cache_total) %>
+    <br>
+    Lưu ý: Cty chỉ thu hồi hàng hóa khi có HĐBH kèm theo.
+</div>
+<% content_for :footer do %>
+    <div class="col text-center" style="width: 50%">
+        <p>
+            <strong>Khách hàng</strong><br/>
+            (Họ và tên)
+        </p>
+    </div>
+    <div class="col text-center" style="width: 49%">
+        <p>
+            <strong>Nhân viên bán hàng</strong><br/>
+            (Họ và tên)
+        </p>
+        <p class="sign_name"><%= @order.employee_name %></p>
+    </div>
+<% end %>
