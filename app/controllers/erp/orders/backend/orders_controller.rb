@@ -43,14 +43,28 @@ module Erp
             format.html
             format.pdf do
               if @order.order_details.count < 8
-                render pdf: "show_list",
+                render pdf: "#{@order.code}",
+                  title: "#{@order.code}",
                   layout: 'erp/backend/pdf',
                   page_size: 'A5',
-                  orientation: 'Landscape'
+                  orientation: 'Landscape',
+                  margin: {
+                    top: 7,                     # default 10 (mm)
+                    bottom: 7,
+                    left: 7,
+                    right: 7
+                  }
               else
-                render pdf: "show_list",
+                render pdf: "#{@order.code}",
+                  title: "#{@order.code}",
                   layout: 'erp/backend/pdf',
-                  page_size: 'A4'
+                  page_size: 'A4',
+                  margin: {
+                    top: 7,                     # default 10 (mm)
+                    bottom: 7,
+                    left: 7,
+                    right: 7
+                  }
               end
             end
           end

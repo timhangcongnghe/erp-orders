@@ -685,5 +685,17 @@ module Erp::Orders
 			return Order::TYPE_PURCHASE_ORDER if self.purchase?
 			return nil
 		end
+
+    def self.get_wait_for_delivery_sales_orders
+			Erp::Orders::Order.sales_orders
+				.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
+				.where(cache_delivery_status: self::DELIVERY_STATUS_NOT_DELIVERY)
+		end
+
+    def self.get_wait_for_delivery_purchase_orders
+			Erp::Orders::Order.purchase_orders
+				.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
+				.where(cache_delivery_status: self::DELIVERY_STATUS_NOT_DELIVERY)
+		end
   end
 end
