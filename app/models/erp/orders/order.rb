@@ -714,8 +714,6 @@ module Erp::Orders
       end
 		end
     
-<<<<<<< d941978c7a0efc20ee3fb20f74baf7d1061b6790
-=======
     # --------- Report Functions - Start ---------
     # Doanh thu ban hang
     def self.sales_total_amount(params={})
@@ -755,6 +753,5 @@ module Erp::Orders
 			self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params) - self.cost_total_amount(params)
 		end
     # --------- Report Functions - End ---------
->>>>>>> update order model
   end
 end
