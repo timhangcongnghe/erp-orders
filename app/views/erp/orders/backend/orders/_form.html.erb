@@ -64,7 +64,8 @@
                                     text: order.customer_name,
                                     label: t('.customer'),
                                     placeholder: t('.select_customer'),
-                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json', is_customer: true),
+                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json', is_customer: true,
+                                        contact_id: Erp::Contacts::Contact.get_main_contact.id),
                                     create: {
                                         url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
                                         title: t('.create_contact'),
@@ -96,7 +97,8 @@
                                     text: order.supplier_name,
                                     label: t('.supplier'),
                                     placeholder: t('.select_supplier'),
-                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json', is_supplier: true),
+                                    url: erp_contacts.dataselect_backend_contacts_path(format: 'json', is_supplier: true,
+                                        contact_id: Erp::Contacts::Contact.get_main_contact.id),
                                     create: {
                                         url: erp_contacts.new_backend_contact_path(contact_type: Erp::Contacts::Contact::TYPE_PERSON),
                                         title: t('.create_contact'),

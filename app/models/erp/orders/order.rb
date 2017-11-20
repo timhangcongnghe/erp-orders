@@ -238,10 +238,10 @@ module Erp::Orders
 				query = query.where(status: Order::STATUS_CONFIRMED)
 
 				if [Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT].include?(params[:delivery_type])
-					query = query.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+					query = query.where(supplier_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 				end
 				if [Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_IMPORT].include?(params[:delivery_type])
-					query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+					query = query.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 				end
 			end
 
@@ -252,12 +252,12 @@ module Erp::Orders
 
       # filter by sales orders
       if params[:supplier_id].present?
-				query = query.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+				query = query.where(supplier_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 			end
 
       # filter by purchase orders
       if params[:customer_id].present?
-				query = query.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+				query = query.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 			end
 
       # filter by payment_for
@@ -372,12 +372,12 @@ module Erp::Orders
 
     # check if order is sales order
     def sales?
-			return self.supplier_id == Erp::Contacts::Contact.get_main_contact.id
+			return self.supplier_id == Erp::Contacts::Contact::MAIN_CONTACT_ID
 		end
 
     # check if order is purchase order
     def purchase?
-			return self.customer_id == Erp::Contacts::Contact.get_main_contact.id
+			return self.customer_id == Erp::Contacts::Contact::MAIN_CONTACT_ID
 		end
 
 		# check if order is draft
@@ -412,12 +412,12 @@ module Erp::Orders
 
     # Get all sales orders
     def self.sales_orders
-			self.where(supplier_id: Erp::Contacts::Contact.get_main_contact.id)
+			self.where(supplier_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 		end
 
     # Get all purchase orders
     def self.purchase_orders
-			self.where(customer_id: Erp::Contacts::Contact.get_main_contact.id)
+			self.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 		end
 
     # Get all orders (payment_for: 'for_order')
@@ -434,7 +434,7 @@ module Erp::Orders
 
 			if Erp::Core.available?("periods")
 				if params[:period].present? # @todo review this function
-					query = query.where('order_date >= ? AND order_date <=',
+					query = query.where('order_date >= ? AND order_date <= ?',
 															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
 															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
@@ -457,7 +457,7 @@ module Erp::Orders
 
 			if Erp::Core.available?("periods")
 				if params[:period].present? # @todo review this function
-					query = query.where('order_date >= ? AND order_date <=',
+					query = query.where('order_date >= ? AND order_date <= ?',
 															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
 															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
@@ -714,5 +714,47 @@ module Erp::Orders
       end
 		end
     
+<<<<<<< d941978c7a0efc20ee3fb20f74baf7d1061b6790
+=======
+    # --------- Report Functions - Start ---------
+    # Doanh thu ban hang
+    def self.sales_total_amount(params={})
+			query = sales_orders.all_confirmed
+			
+			if params[:from_date].present?
+				query = query.where('order_date >= ?', params[:from_date].to_date.beginning_of_day)
+			end
+
+			if params[:to_date].present?
+				query = query.where('order_date <= ?', params[:to_date].to_date.end_of_day)
+			end
+			
+			if Erp::Core.available?("periods")
+				if params[:period].present?
+					query = query.where('order_date >= ? AND order_date <= ?',
+															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
+															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
+				end
+			end
+			
+			# @todo tinh doanh thu ban hang SUM tren cot cache_total hay cache_total_without_customer_commission (co tinh customer-commission khong???)
+			return query.sum(:cache_total)
+		end
+    
+    def self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params={})
+			self.sales_total_amount(params) - Erp::Qdeliveries::DeliveryDetail.total_amount_by_delivery_type(params.merge({delivery_type: Erp::Qdeliveries::Delivery::TYPE_CUSTOMER_IMPORT}))
+		end
+    
+    # Giá vốn hàng bán
+    def self.cost_total_amount(params={})
+			return 10000
+		end
+    
+    # Lợi nhuận gộp về bán hàng
+    def self.loi_nhuan_gop_ve_ban_hang(params={})
+			self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params) - self.cost_total_amount(params)
+		end
+    # --------- Report Functions - End ---------
+>>>>>>> update order model
   end
 end
