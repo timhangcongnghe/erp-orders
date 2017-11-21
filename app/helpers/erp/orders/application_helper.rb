@@ -7,7 +7,8 @@ module Erp
         actions = []
         actions << {
           text: '<i class="fa fa-print"></i> '+t('.view'),
-          url: erp_orders.backend_order_path(order)
+          url: erp_orders.backend_order_path(order),
+          target: '_blank'
         } if can? :print, order
         actions << {
           text: '<i class="fa fa-edit"></i> '+t('.edit'),
@@ -45,26 +46,6 @@ module Erp
             text: '<i class="fa fa-arrow-down"></i> '+t('.import'),
             url: erp_deliveries.new_backend_delivery_path(type: Erp::Deliveries::Delivery::TYPE_IMPORT, order_id: order.id),
             hide: !order.purchase?
-          }
-        end
-        actions << { divider: true }
-        actions << {
-          text: '<i class="icon-action-undo"></i> '+(order.purchase? ? t('.pay_ncc') : t('.pay_kh')),
-          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_PAY),
-        }
-        actions << {
-          text: '<i class="icon-action-redo"></i> '+(order.purchase? ? t('.receive_ncc') : t('.receive_kh')),
-          url: erp_payments.new_backend_payment_record_path(order_id: order.id, payment_type: Erp::Payments::PaymentRecord::TYPE_RECEIVE),
-        }
-        actions << {
-          text: '<i class="icon-refresh"></i> '+t('.extend_debt_deadline'),
-          url: erp_payments.new_backend_debt_path(order_id: order.id),
-        }
-        actions << { divider: true } if !order.payment_records.empty?
-        order.payment_records.each do |payment_record|
-          actions << {
-            text: '<i class="fa fa-print"></i> '+t('.payment_record')+' ('+payment_record.code+')',
-            url: erp_payments.backend_payment_record_path(payment_record),
           }
         end
 

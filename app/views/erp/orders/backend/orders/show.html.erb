@@ -50,19 +50,6 @@
                 hide: !(can? :delete, @order),
                 class: 'ajax-link'
             },
-            {divider: true},
-            {
-                text: '<i class="fa fa-file-excel-o"></i> '+t('.export_excel'),
-                url: '',
-                data_method: 'PUT',
-                hide: false
-            },
-            {
-                text: '<i class="fa fa-file-pdf-o"></i> '+t('.export_pdf'),
-                url: '',
-                data_method: 'PUT',
-                hide: false
-            }
         ],
         text: t('.options'),
         class: 'btn-noborder'

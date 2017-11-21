@@ -469,9 +469,7 @@ module Erp::Orders
     # Get stock check orders
     def self.stock_check_orders
 			self.sales_orders
-					.where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING,
-													Erp::Orders::Order::STATUS_STOCK_CHECKED,
-													Erp::Orders::Order::STATUS_STOCK_APPROVED])
+					.where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING])
 		end
 
     # Get all active orders
@@ -697,7 +695,12 @@ module Erp::Orders
 				.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
 				.where(cache_delivery_status: self::DELIVERY_STATUS_NOT_DELIVERY)
 		end
-    
+
+    def self.get_waiting_sales_orders
+			Erp::Orders::Order.sales_orders
+				.where(status: [self::STATUS_STOCK_CHECKED, self::STATUS_STOCK_APPROVED])
+		end
+
     # update cache total for order_detail
     after_save :update_order_detail_cache_total
     def update_order_detail_cache_total
@@ -705,7 +708,7 @@ module Erp::Orders
         od.update_cache_total
       end
 		end
-    
+
     # update cache total real for order_detail (real revenue)
     after_save :update_order_detail_cache_real_revenue
     def update_order_detail_cache_real_revenue
@@ -713,12 +716,12 @@ module Erp::Orders
         od.update_cache_real_revenue
       end
 		end
-    
+
     # --------- Report Functions - Start ---------
     # Doanh thu ban hang
     def self.sales_total_amount(params={})
 			query = sales_orders.all_confirmed
-			
+
 			if params[:from_date].present?
 				query = query.where('order_date >= ?', params[:from_date].to_date.beginning_of_day)
 			end
@@ -726,7 +729,7 @@ module Erp::Orders
 			if params[:to_date].present?
 				query = query.where('order_date <= ?', params[:to_date].to_date.end_of_day)
 			end
-			
+
 			if Erp::Core.available?("periods")
 				if params[:period].present?
 					query = query.where('order_date >= ? AND order_date <= ?',
@@ -734,20 +737,20 @@ module Erp::Orders
 															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
 			end
-			
+
 			# @todo tinh doanh thu ban hang SUM tren cot cache_total hay cache_total_without_customer_commission (co tinh customer-commission khong???)
 			return query.sum(:cache_total)
 		end
-    
+
     def self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params={})
 			self.sales_total_amount(params) - Erp::Qdeliveries::DeliveryDetail.total_amount_by_delivery_type(params.merge({delivery_type: Erp::Qdeliveries::Delivery::TYPE_CUSTOMER_IMPORT}))
 		end
-    
+
     # Giá vốn hàng bán
     def self.cost_total_amount(params={})
 			return 10000
 		end
-    
+
     # Lợi nhuận gộp về bán hàng
     def self.loi_nhuan_gop_ve_ban_hang(params={})
 			self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params) - self.cost_total_amount(params)

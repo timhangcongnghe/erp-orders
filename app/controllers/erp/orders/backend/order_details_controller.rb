@@ -121,7 +121,7 @@ module Erp
           #@qty = params[:quantity].present? ? params[:quantity].to_f : 0
 
           @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
-          @customer_commission_amount = @customer_commission_rate.nil? ? 0 : ((@customer_commission_rate*@price*@qty)/100).to_f
+          @customer_commission_amount = @customer_commission_rate.nil? ? 0 : ((@customer_commission_rate*(@price*@qty-@discount))/100).to_f
 
           #if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
           #  @customer_commission = params[:customer_commission]

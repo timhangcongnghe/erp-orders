@@ -3,15 +3,14 @@
         <% employee_name = 'sales_employee' %>
         <% scope = Erp::Taxes::Tax::TAX_SCOPE_SALES %>
         <% lines_th = "<th width=\"15%\">#{t('.product_name')}</th>
-            <th class='text-right'>#{t('.quantity')}</th>
-            <th class='text-right'>#{t('.price')}</th>
-            <th class='text-right'>#{t('.total_amount')}</th>
-            <th class='text-right'>#{t('.discount')}</th>
-            <th class='text-right'>#{t('.shopping_fee')}</th>
-            <th class='text-right'>#{t('.commission_amount')}</th>
-            <th class='text-right'>#{t('.customer_commission')}</th>
-            <th class='text-right'>#{t('.total')}</th>
-            <th width=\"10%\" class='text-right'>#{t('.description')}</th>
+            <th class='text-right text-nowrap'>#{t('.quantity')}</th>
+            <th class='text-right text-nowrap'>#{t('.price')}</th>
+            <th class='text-right text-nowrap'>#{t('.total_amount')}</th>
+            <th class='text-right text-nowrap'>#{t('.discount')}</th>
+            <th class='text-right text-nowrap'>#{t('.total')}</th>
+            <th class='text-right text-nowrap'>#{t('.commission_amount')}</th>
+            <th class='text-right text-nowrap'>#{t('.customer_commission')}</th>
+            <th width=\"10%\" class='text-right text-nowrap'>#{t('.description')}</th>
             <th></th>"
         %>
     <% elsif order.purchase? %>
@@ -45,7 +44,7 @@
                                 }) %>
                             </div>
                             <div class="col-md-6">
-                                <%= erp_form_control('date', {
+                                <%= erp_form_control('datetime', {
                                     label: t('.order_date'),
                                     name: 'order[order_date]',
                                     value: order.order_date,
@@ -234,13 +233,13 @@
                                 thead: lines_th,
                                 no_tr: true
                             }) %>
-
+                            <hr />
                             <table class="table">
                                 <tr>
                                     <td width="90%" class="text-right text-semibold">Tổng cộng:</td>
                                     <td class="text-right">
                                         <h4>
-                                            <span class="order_total text-bold"></span>
+                                            <span class="order_total text-bold text-primary"></span>
                                         </h4>
                                     </td>
                                 </tr>

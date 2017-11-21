@@ -20,7 +20,7 @@
             name: 'order[order_details_attributes][' + uid + '][price]',
             value: order_detail.price,
             text: order_detail.price,
-            class: "line_unit_price#{order_detail.id} inline",
+            class: "line_unit_price inline",
 			required: true,
         }) %>
 		<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
@@ -57,22 +57,11 @@
 				class: "line_discount_amount inline"
 			}) %>
 		</td>
-		<td class="text-right">
-			<%= erp_form_control("number", {
-				name: 'order[order_details_attributes][' + uid + '][shipping_fee]',
-				value: order_detail.shipping_fee,
-				text: order_detail.shipping_fee,
-				class: "line_shipping_amount inline"
-			}) %>
-		</td>
-		<td class="text-right">
-			<%= erp_form_control("number", {
-				name: 'order[order_details_attributes][' + uid + '][commission]',
-				value: order_detail.commission,
-				text: order_detail.commission,
-				class: "line_commission_amount inline"
-			}) %>
-		</td>
+	<% end %>
+    <td class="text-right">
+        <span class="line_total text-bold text-primary"></span>
+    </td>
+    <% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
 		<td class="text-right">
 			<%= erp_form_control("number", {
 				name: 'order[order_details_attributes][' + uid + '][customer_commission]',
@@ -98,10 +87,15 @@
 				">
 			</div>
 		</td>
+        <td class="text-right">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][commission]',
+				value: order_detail.commission,
+				text: order_detail.commission,
+				class: "line_commission_amount inline"
+			}) %>
+		</td>
 	<% end %>
-    <td class="text-right">
-        <span class="line_total text-semibold"></span>
-    </td>
     <td width="15%">
         <%= erp_form_control("textarea", {
             name: 'order[order_details_attributes][' + uid + '][description]',

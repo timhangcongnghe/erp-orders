@@ -30,7 +30,7 @@
                 </th>
             <% end %>
             <% if get_columns(params).include?("total") %>
-                <th>
+                <th class="text-right">
                     <%= t('.total') %>
                 </th>
             <% end %>
@@ -123,5 +123,5 @@
 <% if @orders.empty? %>
     <div class="datalist-empty-line"><%= t('.no_matching_records_found') %></div>
 <% end %>
-    
+
 <%= erp_datalist_pagination(@orders) %>
