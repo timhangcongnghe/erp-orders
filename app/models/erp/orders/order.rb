@@ -47,7 +47,6 @@ module Erp::Orders
     after_save :update_cache_tax_amount
     after_save :update_cache_total
     after_save :update_cache_payment_status
-    after_save :generate_code
 
     # class const
     TYPE_SALES_ORDER = 'sales'
@@ -544,17 +543,25 @@ module Erp::Orders
 
 			return false
 		end
-
+    
     # Generate code
+    before_validation :generate_code
     def generate_code
 			if !code.present?
-				str = (sales? ? 'SO' : 'PO')
-				update_columns(code: str + id.to_s.rjust(5, '0'))
+				if sales?
+					query = Erp::Orders::Order.where(supplier_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
+				elsif purchase?
+					query = Erp::Orders::Order.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
+				end
+				
+				str = (sales? ? 'BH' : 'MH')
+				num = query.where('order_date >= ? AND order_date <= ?', self.order_date.beginning_of_month, self.order_date.end_of_month).count + 1
+				
+				self.code = str + order_date.strftime("%m") + order_date.strftime("%Y").last(2) + "-" + num.to_s.rjust(3, '0')
 			end
 		end
 
     after_save :update_cache_search
-
 		def update_cache_search
 			str = []
 			str << code.to_s.downcase.strip
