@@ -159,6 +159,23 @@ module Erp::Orders
 
       if global_filter.present?
 
+        # if has period
+        if global_filter[:period].present?
+          period = Erp::Periods::Period.find(global_filter[:period])
+          global_filter[:from_date] = period.from_date
+          global_filter[:to_date] = period.to_date
+        end
+
+				# filter by order from date
+				if global_filter[:from_date].present?
+					query = query.where('order_date >= ?', global_filter[:from_date].to_date.beginning_of_day)
+				end
+
+				# filter by order to date
+				if global_filter[:to_date].present?
+					query = query.where('order_date <= ?', global_filter[:to_date].to_date.end_of_day)
+				end
+
 				# filter by order from date
 				if global_filter[:order_from_date].present?
 					query = query.where('order_date >= ?', global_filter[:order_from_date].to_date.beginning_of_day)
@@ -543,7 +560,7 @@ module Erp::Orders
 
 			return false
 		end
-    
+
     # Generate code
     before_validation :generate_code
     def generate_code
@@ -553,10 +570,10 @@ module Erp::Orders
 				elsif purchase?
 					query = Erp::Orders::Order.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 				end
-				
+
 				str = (sales? ? 'BH' : 'MH')
 				num = query.where('order_date >= ? AND order_date <= ?', self.order_date.beginning_of_month, self.order_date.end_of_month).count + 1
-				
+
 				self.code = str + order_date.strftime("%m") + order_date.strftime("%Y").last(2) + "-" + num.to_s.rjust(3, '0')
 			end
 		end

@@ -103,7 +103,7 @@ module Erp
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
           @qty = params[:datas][2].to_i
           @types = Erp::Prices::Price::TYPE_PURCHASE
-          @supplier_price = Erp::Prices::Price.get_by_product(contact_id: @supplier.id,
+          @supplier_price = Erp::Prices::Price.get_by_product(contact_id: (@supplier.present? ? @supplier.id : nil),
                                                               category_id: @product.category_id,
                                                               properties_value_id: @product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
                                                               quantity: @qty, type: @types)

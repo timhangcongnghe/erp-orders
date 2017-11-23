@@ -2,7 +2,7 @@
     <%= t('.create') %>
 <% end %>
 
-<% content_for :page_title do %>    
+<% content_for :page_title do %>
     <a href="
         <%=
             if @type == Erp::Orders::Order::TYPE_SALES_ORDER
@@ -11,7 +11,7 @@
                 erp_purchase.backend_purchase_orders_path
             else
                 erp_orders.backend_orders_path
-            end  
+            end
         %>
     ">
     <i class="fa fa-users"></i> <%= t('.orders') %>
@@ -19,10 +19,14 @@
 <% end %>
 
 <% content_for :page_toolbar do %>
-    <div class="btn-group">
-        <div class="clearfix">
-        </div>
-    </div>
+    <%= erp_component('button/create', {
+        text: 'Bảng giá mua',
+        href: erp_prices.general_backend_supplier_prices_path
+    }) %>
+    <%= erp_component('button/create', {
+        text: 'Bảng giá bán',
+        href: erp_prices.backend_customer_prices_path
+    }) %>
 <% end %>
 
 <div class="row">
@@ -30,7 +34,7 @@
         <% if @order.errors.any? %>
             <%= erp_form_control("form_error_message") %>
         <% end %>
-        
+
         <!-- BEGIN SAMPLE FORM PORTLET-->
         <%= render 'form', order: @order %>
         <!-- END SAMPLE FORM PORTLET-->

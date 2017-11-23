@@ -1,5 +1,5 @@
 <% if !@customer_commission_rate.nil? %>
-    <% rand = [*5..30000000].sample %>
+    <% rand = [*5..3000].sample*[*5..30].sample %>
     <div id="row-<%= rand %>" class="font-yellow text-small text-semibold" style="font-size: 70%">
         Mặc định:<br> <%= raw "#{format_price(@customer_commission_amount)} (#{number_with_precision(@customer_commission_rate, strip_insignificant_zeros: true)}%)" %>
         <span hidden class="line_customer_commission_percent">

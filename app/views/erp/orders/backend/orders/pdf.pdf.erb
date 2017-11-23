@@ -165,13 +165,13 @@
 <% content_for :footer do %>
     <div class="col text-center" style="width: 50%">
         <p>
-            <strong>Khách hàng</strong><br/>
+            <strong><%= @order.sales? ? 'Khách hàng' : 'Nhà cung cấp' %></strong><br/>
             (Họ và tên)
         </p>
     </div>
     <div class="col text-center" style="width: 49%">
         <p>
-            <strong>Nhân viên bán hàng</strong><br/>
+            <strong>Nhân viên <%= @order.sales? ? 'bán hàng' : 'mua hàng' %></strong><br/>
             (Họ và tên)
         </p>
         <p class="sign_name"><%= @order.employee_name %></p>
