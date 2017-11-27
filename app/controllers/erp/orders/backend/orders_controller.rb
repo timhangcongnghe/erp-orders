@@ -84,11 +84,12 @@ module Erp
             @order.customer_id = @owner.id
           end
           @order.payment_for = Erp::Orders::Order::PAYMENT_FOR_ORDER
-          @order.tax = Erp::Taxes::Tax.first
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
-            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash).order(:code)
+            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash)
+              .joins(:category)
+              .order("erp_products_categories.name, cache_diameter, code")
 
             @products.each do |product|
               area_type = product.is_in_central_area ? 'area_central' : 'area_side'

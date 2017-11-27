@@ -163,8 +163,7 @@
                                     label: t('.tax'),
                                     placeholder: t('.add_tax'),
                                     url: erp_taxes.dataselect_backend_taxes_path(format: 'json', scope: scope),
-                                    required: true,
-                                    errors: order.errors.full_messages_for(:tax_id)
+                                    errors: order.errors.full_messages_for(:tax_id),
                                 }) %>
                             </div>
                         </div>

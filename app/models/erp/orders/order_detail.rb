@@ -87,13 +87,13 @@ module Erp::Orders
 				order.update_cache_total
 			end
 		end
-    
+
     # Update cache total (total after tax)
     after_save :update_cache_total
     def update_cache_total
 			self.update_column(:cache_total, self.total)
 		end
-    
+
     # Update cache total real (real revenue)
     after_save :update_cache_real_revenue
     def update_cache_real_revenue
@@ -202,11 +202,13 @@ module Erp::Orders
     # tax amount
     def tax_amount
 			count = 0
-			if order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_FIXED
-				count = order.tax.amount
-			elsif order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_PRICE
-				count = (total_without_tax*(order.tax.amount))/100
-			end
+			if order.tax.present?
+        if order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_FIXED
+          count = order.tax.amount
+        elsif order.tax.computation == Erp::Taxes::Tax::TAX_COMPUTATION_PRICE
+          count = (total_without_tax*(order.tax.amount))/100
+        end
+      end
 			return count
 		end
 
@@ -214,7 +216,7 @@ module Erp::Orders
     def total
 			total_without_tax + tax_amount
 		end
-    
+
     # total without commissions + customer_commisions, real revenue
     def real_revenue
       total - commission_amount - customer_commission_amount

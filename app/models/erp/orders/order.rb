@@ -19,8 +19,7 @@ module Erp::Orders
 			end
 		end
     if Erp::Core.available?("taxes")
-			validates :tax_id, presence: true
-			belongs_to :tax, class_name: "Erp::Taxes::Tax", foreign_key: :tax_id
+			belongs_to :tax, class_name: "Erp::Taxes::Tax", foreign_key: :tax_id, optional: true
 
 			# tax name
 			def tax_name
