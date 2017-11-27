@@ -299,13 +299,22 @@ module Erp::Orders
 			return query
     end
 
-    if Erp::Core.available?("contacts")
+    if Erp::Core.available?("contacts")# display customer
+			
 			# display customer
+			def customer_code
+				customer.present? ? customer.code : ''
+			end
+			
 			def customer_name
 				customer.present? ? customer.name : ''
 			end
 
 			# display supplier
+			def supplier_code
+				supplier.present? ? supplier.code : ''
+			end
+			
 			def supplier_name
 				supplier.present? ? supplier.name : ''
 			end
