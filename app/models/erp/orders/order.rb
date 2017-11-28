@@ -252,10 +252,10 @@ module Erp::Orders
 				# only get confirmed order
 				query = query.where(status: Order::STATUS_CONFIRMED)
 
-				if [Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT].include?(params[:delivery_type])
+				if [Erp::Qdeliveries::Delivery::TYPE_SALES_EXPORT].include?(params[:delivery_type])
 					query = query.where(supplier_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 				end
-				if [Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_IMPORT].include?(params[:delivery_type])
+				if [Erp::Qdeliveries::Delivery::TYPE_PURCHASE_IMPORT].include?(params[:delivery_type])
 					query = query.where(customer_id: Erp::Contacts::Contact::MAIN_CONTACT_ID)
 				end
 			end
@@ -775,7 +775,7 @@ module Erp::Orders
 		end
 
     def self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params={})
-			self.sales_total_amount(params) - Erp::Qdeliveries::DeliveryDetail.total_amount_by_delivery_type(params.merge({delivery_type: Erp::Qdeliveries::Delivery::TYPE_CUSTOMER_IMPORT}))
+			self.sales_total_amount(params) - Erp::Qdeliveries::DeliveryDetail.total_amount_by_delivery_type(params.merge({delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_IMPORT}))
 		end
 
     # Giá vốn hàng bán

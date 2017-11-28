@@ -30,11 +30,11 @@ module Erp
         } if can? :confirm, order
         actions << {
           text: '<i class="icon-action-redo"></i> Xuất kho',
-          url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT, order_id: order.id),
+          url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_EXPORT, order_id: order.id),
         } if can? :warehouse_export, order
         actions << {
           text: '<i class="icon-action-redo"></i> Nhập kho',
-          url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_IMPORT, order_id: order.id),
+          url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_IMPORT, order_id: order.id),
         } if can? :warehouse_import, order
         actions << {
           text: '<i class="fa fa-close"></i> '+t('.set_deleted'),

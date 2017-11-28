@@ -123,18 +123,18 @@ module Erp::Orders
     def delivered_quantity
 			if order.sales?
 				import_quantity = self.delivered_delivery_details
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_CUSTOMER_IMPORT})
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_IMPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
 				export_quantity = self.delivered_delivery_details
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_EXPORT})
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_EXPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
 				return export_quantity - import_quantity
 			elsif order.purchase?
 				import_quantity = self.delivered_delivery_details
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_WAREHOUSE_IMPORT})
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_IMPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
 				export_quantity = self.delivered_delivery_details
-													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_MANUFACTURER_EXPORT})
+													.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_EXPORT})
 													.sum('erp_qdeliveries_delivery_details.quantity')
 
 				return -export_quantity + import_quantity
