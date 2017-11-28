@@ -31,11 +31,11 @@ module Erp
         actions << {
           text: '<i class="icon-action-redo"></i> Xuất kho',
           url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_EXPORT, order_id: order.id),
-        } if can? :warehouse_export, order
+        } if can? :sales_export, order
         actions << {
           text: '<i class="icon-action-redo"></i> Nhập kho',
           url: erp_qdeliveries.new_backend_delivery_path(delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_IMPORT, order_id: order.id),
-        } if can? :warehouse_import, order
+        } if can? :purchase_import, order
         actions << {
           text: '<i class="fa fa-close"></i> '+t('.set_deleted'),
           url: erp_orders.set_deleted_backend_orders_path(id: order),

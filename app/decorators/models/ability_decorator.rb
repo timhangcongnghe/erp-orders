@@ -45,11 +45,11 @@ Erp::Ability.class_eval do
       order.is_draft? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed? or order.is_deleted?
     end
 
-    can :warehouse_export, Erp::Orders::Order do |order|
+    can :sales_export, Erp::Orders::Order do |order|
       order.is_confirmed? and !order.is_delivered? and order.sales?
     end
 
-    can :warehouse_import, Erp::Orders::Order do |order|
+    can :purchase_import, Erp::Orders::Order do |order|
       order.is_confirmed? and !order.is_delivered? and order.purchase?
     end
   end
