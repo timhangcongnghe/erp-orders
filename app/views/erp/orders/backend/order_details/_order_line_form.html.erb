@@ -96,6 +96,13 @@
 		</td>
 	<% end %>
 	<% if Erp::Core.available?('ortho_k') %>
+        <td width="5%">
+            <%= erp_form_control('select', {
+                name: 'order[order_details_attributes][' + uid + '][eye_position]',
+                value: order_detail.eye_position,
+                options: Erp::Orders::Order.get_eye_positions()
+            }) %>
+        </td>
         <td width="10%">
             <%= erp_form_control("textarea", {
                 name: 'order[order_details_attributes][' + uid + '][serials]',
