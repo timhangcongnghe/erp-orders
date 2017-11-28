@@ -277,6 +277,7 @@ vi:
             commission_amount: "Hoa hồng NV"
             customer_commission: "Hoa hồng KH"
             tax: "Thuế"
+            serials: "Số Lô/Sê-ri"
             total: "Tổng cộng"
             action: "Hành động"
             paid_amount: "Đã thanh toán"
