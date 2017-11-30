@@ -100,7 +100,8 @@
             <%= erp_form_control('select', {
                 name: 'order[order_details_attributes][' + uid + '][eye_position]',
                 value: order_detail.eye_position,
-                options: Erp::Orders::Order.get_eye_positions()
+                options: Erp::Orders::Order.get_eye_positions(),
+                include_blank: 'Chọn',
             }) %>
         </td>
         <td width="10%">

@@ -300,12 +300,12 @@ module Erp::Orders
     end
 
     if Erp::Core.available?("contacts")# display customer
-			
+
 			# display customer
 			def customer_code
 				customer.present? ? customer.code : ''
 			end
-			
+
 			def customer_name
 				customer.present? ? customer.name : ''
 			end
@@ -314,7 +314,7 @@ module Erp::Orders
 			def supplier_code
 				supplier.present? ? supplier.code : ''
 			end
-			
+
 			def supplier_name
 				supplier.present? ? supplier.name : ''
 			end
@@ -501,30 +501,35 @@ module Erp::Orders
       self.where(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
 
+    # Get all overdue orders
+    def self.all_overdue
+      self.where(cache_payment_status: Erp::Orders::Order::PAYMENT_STATUS_OVERDUE)
+    end
+
 		# SET status for order
 		def set_draft
-			update_columns(status: Erp::Orders::Order::STATUS_DRAFT)
+			update_attributes(status: Erp::Orders::Order::STATUS_DRAFT)
 		end
 
 		# SET status for order
 		def set_stock_checking
-			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKING)
+			update_attributes(status: Erp::Orders::Order::STATUS_STOCK_CHECKING)
 		end
 
 		def set_stock_checked
-			update_columns(status: Erp::Orders::Order::STATUS_STOCK_CHECKED)
+			update_attributes(status: Erp::Orders::Order::STATUS_STOCK_CHECKED)
 		end
 
 		def set_stock_approved
-			update_columns(status: Erp::Orders::Order::STATUS_STOCK_APPROVED)
+			update_attributes(status: Erp::Orders::Order::STATUS_STOCK_APPROVED)
 		end
 
     def set_confirmed
-      update_columns(status: Erp::Orders::Order::STATUS_CONFIRMED)
+      update_attributes(status: Erp::Orders::Order::STATUS_CONFIRMED)
     end
 
     def set_deleted
-      update_columns(status: Erp::Orders::Order::STATUS_DELETED)
+      update_attributes(status: Erp::Orders::Order::STATUS_DELETED)
     end
 
     # Get order stock check
@@ -650,7 +655,7 @@ module Erp::Orders
 					if remain_amount == 0
 						status = Erp::Orders::Order::PAYMENT_STATUS_PAID
 					elsif remain_amount > 0
-						if Time.current < get_payment_deadline.end_of_day
+						if self.payment_for == Order::PAYMENT_FOR_CONTACT
 							status = Erp::Orders::Order::PAYMENT_STATUS_DEBT
 						else
 							status = Erp::Orders::Order::PAYMENT_STATUS_OVERDUE
