@@ -3,9 +3,9 @@
 <% end %>
 
 <% content_for :title_line_2 do %>
-    Ngày <%= @order.order_date.strftime('%d') %>
-    tháng <%= @order.order_date.strftime('%m') %>
-    năm <%= @order.order_date.strftime('%Y') %>.
+    <i>Ngày <%= @order.order_date.strftime('%d') %>
+      tháng <%= @order.order_date.strftime('%m') %>
+      năm <%= @order.order_date.strftime('%Y') %></i>
     <div>Số: <%= @order.code %></div>
 <% end %>
 
