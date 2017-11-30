@@ -1,0 +1,149 @@
+wb = xlsx_package.workbook
+xlsx_package.use_autowidth = true
+
+wb.styles do |s|
+  wb.add_worksheet(name: "Đơn mua hàng") do |sheet|
+    # style
+    bg_info = {:bg_color => "305496", :fg_color => "FF"}
+    text_center = {alignment: { horizontal: :center }}
+    text_left = {alignment: { horizontal: :left }}
+    text_right = {alignment: { horizontal: :right }}
+
+    # Title
+    sheet.add_row ["ĐƠN MUA HÀNG - #{@order.code}"], sz: 16
+
+    # header
+    header = {columns: [], styles: []}
+    footer = {columns: [], styles: []}
+    header[:columns] = []
+    if get_columns(params).include?("ordinal_number") or get_columns(params).empty?
+      header[:columns] << t('.ordinal_number')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_center))
+      sheet.column_info.first.width = 5
+
+      footer[:columns] << ""
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("items") or get_columns(params).empty?
+      header[:columns] << t('.items')
+      header[:styles] << (s.add_style bg_info)
+
+      footer[:columns] << ""
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("category")
+      header[:columns] << t('.category')
+      header[:styles] << (s.add_style bg_info)
+
+      footer[:columns] << ""
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("units") or get_columns(params).empty?
+      header[:columns] << t('.units')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_center))
+
+      footer[:columns] << ""
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("quantity") or get_columns(params).empty?
+      header[:columns] << t('.quantity')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_center))
+
+      footer[:columns] << @order.items_count
+      footer[:styles] << (s.add_style text_center)
+    end
+    if get_columns(params).include?("price")
+      header[:columns] << t('.price')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_right))
+
+      footer[:columns] << ""
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("total_amount")
+      header[:columns] << t('.total_amount')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_right))
+
+      footer[:columns] << @order.order_details.sum("price*quantity")
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("discount")
+      header[:columns] << t('.discount')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_right))
+
+      footer[:columns] << @order.order_details.sum(:discount)
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("total")
+      header[:columns] << t('.total')
+      header[:styles] << (s.add_style bg_info.deep_merge(text_right))
+
+      footer[:columns] << @order.total
+      footer[:styles] << (s.add_style {})
+    end
+    if get_columns(params).include?("note")
+      header[:columns] << t('.note')
+      header[:styles] << (s.add_style bg_info)
+
+      footer[:columns] << ''
+      footer[:styles] << (s.add_style text_right)
+    end
+
+    sheet.add_row header[:columns], style: header[:styles]
+
+
+
+    # rows
+    @order.order_details.each_with_index do |order_detail, index|
+      row = {columns: [], styles: []}
+      row[:columns] = []
+      if get_columns(params).include?("ordinal_number") or get_columns(params).empty?
+        row[:columns] << index+1
+        row[:styles] << (s.add_style text_center)
+      end
+      if get_columns(params).include?("items") or get_columns(params).empty?
+        row[:columns] << order_detail.product_name
+        row[:styles] << (s.add_style {})
+      end
+      if get_columns(params).include?("category")
+        row[:columns] << order_detail.product_category_name
+        row[:styles] << (s.add_style {})
+      end
+      if get_columns(params).include?("units") or get_columns(params).empty?
+        row[:columns] << order_detail.product_unit_name
+        row[:styles] << (s.add_style text_center)
+      end
+      if get_columns(params).include?("quantity") or get_columns(params).empty?
+        row[:columns] << order_detail.quantity
+        row[:styles] << (s.add_style text_center)
+      end
+      if get_columns(params).include?("price")
+        row[:columns] << order_detail.price
+        row[:styles] << (s.add_style text_right)
+      end
+      if get_columns(params).include?("total_amount")
+        row[:columns] << order_detail.subtotal
+        row[:styles] << (s.add_style text_right)
+      end
+      if get_columns(params).include?("discount")
+        row[:columns] << order_detail.discount_amount
+        row[:styles] << (s.add_style text_right)
+      end
+      if get_columns(params).include?("total")
+        row[:columns] << order_detail.total
+        row[:styles] << (s.add_style text_right)
+      end
+      if get_columns(params).include?("note")
+        row[:columns] << order_detail.description
+        row[:styles] << (s.add_style {})
+      end
+
+      sheet.add_row row[:columns], style: row[:styles]
+    end
+
+    # footer
+    sheet.add_row footer[:columns], style: footer[:styles]
+
+    # Setup
+    # sheet.merge_cells("A1:D1")
+  end
+end

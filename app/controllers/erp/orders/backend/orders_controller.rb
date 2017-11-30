@@ -2,7 +2,7 @@ module Erp
   module Orders
     module Backend
       class OrdersController < Erp::Backend::BackendController
-        before_action :set_order, only: [:pdf, :show, :show_list, :edit, :update,
+        before_action :set_order, only: [:xlsx, :pdf, :show, :show_list, :edit, :update,
                                          :set_draft, :set_stock_checking, :set_confirmed, :set_deleted]
 
         # GET /orders
@@ -242,6 +242,12 @@ module Erp
             'type': 'success'
             }
           }
+          end
+        end
+
+        def xlsx
+          respond_to do |format|
+            format.xlsx
           end
         end
 

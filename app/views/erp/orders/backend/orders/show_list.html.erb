@@ -1,3 +1,10 @@
+<div class="text-right mb-10">
+  <a target="_blank"
+    href="<%= erp_orders.xlsx_backend_orders_path(params.to_unsafe_hash.merge({format: 'xlsx'})) %>"
+    target="_blank"
+    class="btn btn-primary"
+  >Xuất excel</a>
+</div>
 <iframe class="pdf" src="<%= erp_orders.pdf_backend_orders_path(params.to_unsafe_hash.merge({format: 'pdf'})) %>" />
 <!--<div class="header">
     <div class="left">

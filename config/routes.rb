@@ -16,6 +16,8 @@ Erp::Orders::Engine.routes.draw do
 
 					get 'pdf'
 
+					get 'xlsx'
+
 					if Erp::Core.available?('ortho_k')
             get 'related_contact_form'
           end
