@@ -56,7 +56,7 @@
             <div class="row invoice-body">
                 <div class="col-xs-12 table-responsive">
                     <table class="table table-hover">
-                        <thead>
+                        <tbody>
                             <tr>
                                 <% if get_columns(params).include?("ordinal_number") %>
                                     <th class="invoice-title uppercase"><%= t('.ordinal_number') %></th>
@@ -98,8 +98,6 @@
                                     <th class="invoice-title uppercase text-right"><%= t('.note') %></th>
                                 <% end %>
                             </tr>
-                        </thead>
-                        <tbody>
                             <% @order.order_details.each_with_index do |order_detail,index| %>
                                 <tr>
                                     <% if get_columns(params).include?("ordinal_number") %>
