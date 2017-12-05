@@ -23,8 +23,8 @@
             <th class='text-right'>#{t('.price')}</th>
             <th class='text-right'>#{t('.total_amount')}</th>
             <th class='text-right'>#{t('.total')}</th>
-            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
             #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
+            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
             <th width=\"10%\" class='text-right'>#{t('.description')}</th>
             <th></th>"
         %>

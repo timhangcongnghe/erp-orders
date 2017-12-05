@@ -110,6 +110,10 @@ module Erp::Orders
     PAYMENT_STATUS_DEBT = 'debt'
     PAYMENT_STATUS_OVERPAID = 'overpaid'
 
+    def is_debt?
+      self.payment_status == Order::PAYMENT_STATUS_DEBT
+    end
+
     # Filters
     def self.filter(query, params)
       params = params.to_unsafe_hash
