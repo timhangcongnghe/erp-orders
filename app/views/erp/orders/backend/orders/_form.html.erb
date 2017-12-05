@@ -9,9 +9,9 @@
             <th class='text-right text-nowrap'>#{t('.discount')}</th>
             <th class='text-right text-nowrap'>#{t('.total')}</th>
             <th class='text-right text-nowrap'>#{t('.customer_commission')}</th>
-            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
-            #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
             <th class='text-right text-nowrap'>#{t('.commission_amount')}</th>
+            #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
+            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
             <th width=\"10%\" class='text-right text-nowrap'>#{t('.description')}</th>
             <th></th>"
         %>
