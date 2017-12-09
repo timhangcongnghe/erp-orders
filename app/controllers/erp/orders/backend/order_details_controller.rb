@@ -91,10 +91,12 @@ module Erp
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
           @qty = params[:datas][2].to_i
           @types = Erp::Prices::Price::TYPE_SALES
-          @customer_price = Erp::Prices::Price.get_by_product(contact_id: @customer.id,
+          if @customer.present?
+            @customer_price = Erp::Prices::Price.get_by_product(contact_id: @customer.id,
                                                               category_id: @product.category_id,
                                                               properties_value_id: @product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
                                                               quantity: @qty, type: @types)
+          end
           @uid = params[:datas][4]
         end
 
@@ -120,28 +122,19 @@ module Erp
           #@price = params[:price].present? ? params[:price].to_f : 0.0
           #@qty = params[:quantity].present? ? params[:quantity].to_f : 0
 
-          @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
-          @customer_commission_amount = @customer_commission_rate.nil? ? 0 : ((@customer_commission_rate*(@price*@qty-@discount))/100).to_f
+          @customer_commission_amount = 0
 
-          #if params[:customer_commission].present? and @customer.id == params[:customer_id].to_i
-          #  @customer_commission = params[:customer_commission]
-          #else
-          #  if !params[:order_detail_id].present?
-          #     @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
-          #   else
-          #     @customer_commission_rate = ''
-          #   end
-          #end
+          if @customer.present?
+            @customer_commission = @customer.get_customer_commission_rate_by_product(@product)
+            if @customer_commission.present?
+              if @customer_commission.price.to_f > 0
+                  @customer_commission_amount = @customer_commission.price
+              elsif @customer_commission.rate.to_f > 0
+                  @customer_commission_amount = ((@customer_commission.rate*(@price*@qty-@discount))/100).to_f
+              end
+            end
+          end
 
-          #if params[:customer_commission_rate].present? and @customer.id == params[:customer_id].to_i
-          #  @customer_commission_rate = params[:customer_commission_rate]
-          #else
-          #   if !params[:order_detail_id].present?
-          #     @customer_commission_rate = @customer.get_customer_commission_rate_by_product(@product)
-          #   else
-          #     @customer_commission_rate = ''
-          #   end
-          #end
           render layout: false
         end
 

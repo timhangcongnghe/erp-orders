@@ -373,6 +373,11 @@ module Erp::Orders
 			return order_details.sum(&:total)
 		end
 
+    # get total without commission amount
+    def total_without_customer_commission
+      total - commission_amount
+    end
+
     # Update cache commission
     def update_cache_commission_amount
 			self.update_column(:cache_commission_amount, self.commission_amount)
@@ -637,6 +642,11 @@ module Erp::Orders
 				self.payment_records.all_done.all_received
 			end
 
+			# get done pay payment records for order
+			def done_payment_records
+				self.payment_records.all_done
+			end
+
 			# get remain amount
 			def remain_amount
 				return self.ordered_amount - self.paid_amount
@@ -797,5 +807,7 @@ module Erp::Orders
 			self.doanh_thu_sau_khi_da_tru_hang_bi_tra_lai(params) - self.cost_total_amount(params)
 		end
     # --------- Report Functions - End ---------
+
+
   end
 end
