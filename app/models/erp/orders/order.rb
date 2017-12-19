@@ -808,6 +808,17 @@ module Erp::Orders
 		end
     # --------- Report Functions - End ---------
 
+    # get sub total amount
+    def cost_total
+			return order_details.sum(&:cost_total)
+		end
 
+    after_save :update_default_cost_price
+    # Update purchase price
+    def update_default_cost_price
+      self.order_details.each do |od|
+        od.update_default_cost_price
+      end
+    end
   end
 end

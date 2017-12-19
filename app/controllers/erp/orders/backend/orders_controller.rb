@@ -114,6 +114,9 @@ module Erp
         # GET /orders/1/edit
         def edit
           authorize! :update, @order
+
+          session[:return_to] ||= request.referer
+
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
         end
 
@@ -142,9 +145,11 @@ module Erp
               }
             else
               if @order.sales?
-                redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+                redirect_to session.delete(:return_to)
+                # redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
               elsif @order.purchase?
-                redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+                redirect_to session.delete(:return_to)
+                # redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
               end
             end
           else
@@ -181,9 +186,11 @@ module Erp
               }
             else
               if @order.sales?
-                redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+                redirect_to session.delete(:return_to)
+                # redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
               elsif @order.purchase?
-                redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+                redirect_to session.delete(:return_to)
+                # redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
               end
             end
           else

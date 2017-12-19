@@ -40,6 +40,9 @@ module Erp::Orders
     def quantity=(number)
       self[:quantity] = number.to_s.gsub(/\,/, '')
     end
+    def cost_price=(new_price)
+      self[:cost_price] = new_price.to_s.gsub(/\,/, '')
+    end
 
     if Erp::Core.available?("qdeliveries")
 			after_save :order_update_cache_delivery_status
@@ -237,5 +240,39 @@ module Erp::Orders
 			self.update_column(:cache_delivery_status, self.delivery_status)
 		end
 
+    # total cost
+    def cost_total
+			quantity.to_f*cost_price.to_f
+		end
+
+    if Erp::Core.available?("ortho_k")
+      # Get default price
+      def get_default_price
+        Erp::Prices::Price.get_by_product(contact_id: self.order.customer.id,
+          category_id: self.product.category_id,
+          properties_value_id: self.product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
+          quantity: self.quantity, type: Erp::Prices::Price::TYPE_SALES
+        )
+      end
+
+      def get_default_purchase_price
+        Erp::Prices::Price.get_by_product(contact_id: self.order.customer.id,
+          category_id: self.product.category_id,
+          properties_value_id: self.product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
+          quantity: self.quantity, type: Erp::Prices::Price::TYPE_PURCHASE
+        )
+      end
+		end
+
+    after_save :update_default_cost_price
+    # Update purchase price
+    def update_default_cost_price
+      if cost_price.to_f == 0.0
+        p_price = get_default_purchase_price
+        if p_price.present?
+          update_column(:cost_price, p_price.price)
+        end
+      end
+    end
   end
 end
