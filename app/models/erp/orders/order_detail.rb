@@ -9,6 +9,7 @@ module Erp::Orders
     after_save :update_order_cache_payment_status
     after_save :update_order_cache_delivery_status
     after_save :update_order_cache_total
+    after_save :update_order_cache_cost_total
     after_save :update_order_cache_tax_amount
     after_save :update_order_cache_commission_amount
     after_save :update_order_cache_customer_commission_amount
@@ -88,6 +89,13 @@ module Erp::Orders
     def update_order_cache_total
 			if order.present?
 				order.update_cache_total
+			end
+		end
+
+    # update order cache cost total
+    def update_order_cache_cost_total
+			if order.present?
+				order.update_cache_cost_total
 			end
 		end
 

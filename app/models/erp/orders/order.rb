@@ -799,7 +799,26 @@ module Erp::Orders
 
     # Giá vốn hàng bán
     def self.cost_total_amount(params={})
-			return 10000
+			query = sales_orders.all_confirmed
+
+			if params[:from_date].present?
+				query = query.where('order_date >= ?', params[:from_date].to_date.beginning_of_day)
+			end
+
+			if params[:to_date].present?
+				query = query.where('order_date <= ?', params[:to_date].to_date.end_of_day)
+			end
+
+			if Erp::Core.available?("periods")
+				if params[:period].present?
+					query = query.where('order_date >= ? AND order_date <= ?',
+															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
+															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
+				end
+			end
+
+			# @todo tinh doanh thu ban hang SUM tren cot cache_total hay cache_total_without_customer_commission (co tinh customer-commission khong???)
+			return query.sum(:cache_cost_total)
 		end
 
     # Lợi nhuận gộp về bán hàng
@@ -808,9 +827,15 @@ module Erp::Orders
 		end
     # --------- Report Functions - End ---------
 
+    # =========================== COST =======================
+    after_save :update_cache_cost_total
     # get sub total amount
     def cost_total
 			return order_details.sum(&:cost_total)
+		end
+    # Update cache total
+    def update_cache_cost_total
+			self.update_column(:cache_cost_total, self.cost_total)
 		end
 
     after_save :update_default_cost_price

@@ -72,6 +72,8 @@ module Erp
 
         # GET /orders/new
         def new
+          session[:return_to] ||= request.referer
+
           @order = Order.new
           @order.order_date = Time.now
           @order.employee = current_user
