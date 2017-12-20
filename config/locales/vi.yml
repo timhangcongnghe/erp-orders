@@ -312,7 +312,7 @@ vi:
             discount: "Giảm giá"
             shopping_fee: "Phí v.chuyển"
             commission_amount: "Hoa hồng NV"
-            customer_commission: "Hoa hồng KH"
+            customer_commission: "Chiết khấu KH"
             tax: "Thuế"
             serials: "Số Lô/Sê-ri"
             total: "Tổng cộng"

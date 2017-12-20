@@ -61,7 +61,7 @@
         <span class="line_total text-bold text-primary"></span>
     </td>
     <% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
-		<td class="text-right">
+		<td class="text-right payment-for-contact">
 			<%= erp_form_control("number", {
 				name: 'order[order_details_attributes][' + uid + '][customer_commission]',
 				value: order_detail.customer_commission,
@@ -86,7 +86,7 @@
 				">
 			</div>
 		</td>
-        <td class="text-right">
+        <td class="text-right payment-for-order">
 			<%= erp_form_control("number", {
 				name: 'order[order_details_attributes][' + uid + '][commission]',
 				value: order_detail.commission,
@@ -159,3 +159,10 @@
 		</tr>
 	<% end %>
 <% end %>
+
+<script>
+    if (typeof orderFormPaymentForChange !== "undefined")
+    {
+        orderFormPaymentForChange($('.edit_order, .new_order'));
+    }
+</script>
