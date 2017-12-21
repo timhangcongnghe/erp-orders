@@ -278,7 +278,7 @@ module Erp::Orders
       if cost_price.to_f == 0.0
         p_price = get_default_purchase_price
         if p_price.present?
-          update_column(:cost_price, p_price.price)
+          update_attribute(:cost_price, p_price.price)
         end
       end
     end
