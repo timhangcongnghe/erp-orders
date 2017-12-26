@@ -141,20 +141,22 @@
         </div>
     </div>
 </div>
-<div class="table-footer">
-    <div class="line">
-        <label>Cộng tiền hàng:</label>
-        <span class="text-right"><%= format_price(@order.cache_total) %></span>
-    </div>
-    <div class="liner">
-        <label>Tiền thuế (0%):</label>
-        <span class="text-right"><%= format_price(0) %></span>
-    </div>
-    <div class="line">
-        <label>Tổng tiền thanh toán:</label>
-        <span class="text-right"><%= format_price(@order.cache_total) %></span>
-    </div>
-</div>
+<% if get_columns(params).include?("total") or get_columns(params).include?("discount") or get_columns(params).include?("total_amount") or get_columns(params).include?("price") %>
+  <div class="table-footer">
+      <div class="line">
+          <label>Cộng tiền hàng:</label>
+          <span class="text-right"><%= format_price(@order.cache_total) %></span>
+      </div>
+      <div class="liner">
+          <label>Tiền thuế (0%):</label>
+          <span class="text-right"><%= format_price(0) %></span>
+      </div>
+      <div class="line">
+          <label>Tổng tiền thanh toán:</label>
+          <span class="text-right"><%= format_price(@order.cache_total) %></span>
+      </div>
+  </div>
+<% end %>
 <div class="mt-5 text-small">
     Số tiền ghi bằng chữ: <%= docso(@order.cache_total) %>
     <br>

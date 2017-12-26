@@ -1,6 +1,6 @@
 module Erp::Orders
   class OrderDetail < ApplicationRecord
-    validates :product_id, :quantity, :price, :presence => true
+    validates :product_id, :quantity, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
     belongs_to :product, class_name: 'Erp::Products::Product'
     if Erp::Core.available?("order_stock_checks")
@@ -18,6 +18,12 @@ module Erp::Orders
     DELIVERY_STATUS_NOT_DELIVERY = 'not_delivery'
     DELIVERY_STATUS_DELIVERED = 'delivered'
     DELIVERY_STATUS_OVER_DELIVERED = 'over_delivered'
+
+    before_validation :check_price
+
+    def check_price
+      self.price = 0 if self.price.nil?
+    end
 
     def is_delivered?
 			self.delivery_status == OrderDetail::DELIVERY_STATUS_DELIVERED
