@@ -491,8 +491,8 @@ module Erp::Orders
 			if Erp::Core.available?("periods")
 				if params[:period].present? # @todo review this function
 					query = query.where('order_date >= ? AND order_date <= ?',
-															Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
-															Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
+            Erp::Periods::Period.find(params[:period]).from_date.beginning_of_day,
+            Erp::Periods::Period.find(params[:period]).to_date.end_of_day)
 				end
 			end
 
@@ -502,7 +502,8 @@ module Erp::Orders
     # Get stock check orders
     def self.stock_check_orders
 			self.sales_orders
-					.where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING])
+        .where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING])
+        .order('erp_orders_orders.checking_order IS NULL, erp_orders_orders.checking_order')
 		end
 
     # Get all active orders
@@ -548,7 +549,6 @@ module Erp::Orders
 
     # Check if order details is change
     def is_items_change?(params)
-
 			params.each do |row|
 				exist = false
 				# check if change quantity
