@@ -77,6 +77,7 @@ module Erp
           @order = Order.new
           @order.order_date = Time.now
           @order.employee = current_user
+          @order.warehouse_id = params.to_unsafe_hash[:warehouse] if params.to_unsafe_hash[:warehouse].present?
           @type = params[:type]
 
           @owner = Erp::Contacts::Contact::get_main_contact
@@ -89,7 +90,7 @@ module Erp
 
           # Import details list from stocking importing page
           if params[:side_quantity].present?
-            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash)
+            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash, warehouse: params.to_unsafe_hash[:warehouse])
               .joins(:category)
               .order("erp_products_categories.name, cache_diameter, code")
 
