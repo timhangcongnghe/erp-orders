@@ -216,6 +216,15 @@ module Erp::Orders
 
 			end
       # end// global filter
+      
+      # single keyword
+      if params[:keyword].present?
+				keyword = params[:keyword].strip.downcase
+				keyword.split(' ').each do |q|
+					q = q.strip
+					query = query.where('LOWER(erp_orders_orders.cache_search) LIKE ?', '%'+q+'%')
+				end
+			end
 
       return query
     end
@@ -610,6 +619,9 @@ module Erp::Orders
 			str << supplier_name.to_s.downcase.strip if purchase?
 			str << warehouse_name.to_s.downcase.strip
 			str << employee_name.to_s.downcase.strip
+			order_details.each do |od|
+        str << od.product_name.to_s.downcase.strip
+			end
 
 			self.update_column(:cache_search, str.join(" ") + " " + str.join(" ").to_ascii)
 		end
