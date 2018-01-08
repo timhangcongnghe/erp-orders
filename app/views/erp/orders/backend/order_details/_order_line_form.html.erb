@@ -4,7 +4,7 @@
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
         <input type="hidden" name="order[order_details_attributes][<%= uid %>][_destroy]" value="">
 		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
-        <strong><%= order_detail.product_name %></strong>
+        <strong class="product-name"><%= order_detail.product_name %></strong>
     </td>
     <td width="7%" class="text-right">
         <%= erp_form_control("number", {
@@ -138,12 +138,27 @@
 					<% else %>
 						<i class="not-available icon-close"></i>
 					<% end %>
+					<% if Erp::Core.available?("ortho_k") %>
+                        <% if order_detail.request_product.present? %>
+                            <div class="todo-tasklist-item-text"><%= t('.request_product') %>:
+                                <%= backend_product_link(order_detail.request_product) %>
+                            </div>
+                        <% end %>
+                    <% end %>
 				</span>
 				<% if !order_detail.scheck_detail.get_alternative_item_names.empty? %>
 					<span class="col-md-4">
 						<div class="todo-tasklist-item-title"> <%= t('.alternative_items') %>: </div>
 						<div class="todo-tasklist-item-text">
-							<%= raw '+ ' + order_detail.scheck_detail.get_alternative_item_names.join('<br>') %>
+                            <% order_detail.scheck_detail.get_alternative_items.each do |item| %>
+                                <div>
+                                    + <%= backend_product_link(item) %>
+                                    <span class="btn btn-default btn-xs blue alternative_item"
+                                        data-id="<%= item.id %>"
+                                        data-name="<%= item.name %>"
+                                    ><%= t('.change') %></span>
+                                </div>
+                            <% end %>
 						</div>
 					</span>
 				<% end %>

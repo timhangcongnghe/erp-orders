@@ -331,6 +331,8 @@ vi:
             edit: "Cập nhật thuế"
             available: "Có sẵn hàng để bán"
             alternative_items: "Hàng có thể thay thế"
+            request_product: "SP nhu cầu"
+            change: "Thay thế"
             note: "Ghi chú"
         frontend_orders:
           destroy:

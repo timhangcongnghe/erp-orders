@@ -260,6 +260,13 @@ module Erp::Orders
 		end
 
     if Erp::Core.available?("ortho_k")
+      belongs_to :request_product, class_name: 'Erp::Products::Product'
+      
+      before_validation :update_request_product
+      def update_request_product
+        self.request_product_id = self.product_id
+      end
+      
       # Get default price
       def get_default_price
         Erp::Prices::Price.get_by_product(contact_id: self.order.customer.id,
