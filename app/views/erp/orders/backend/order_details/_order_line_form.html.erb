@@ -127,52 +127,76 @@
         }) %>
     </td>
 </tr>
-<% if !order_detail.scheck_detail.nil? %>
-	<% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>
-		<tr class="addableform-more">
-			<td colspan="11">
-				<span class="col-md-4 text-center">
-					<div class="todo-tasklist-item-title"> <%= t('.available') %>: </div>
-					<% if order_detail.scheck_detail.available? %>
-						<i class="available icon-check"></i>
-					<% else %>
-						<i class="not-available icon-close"></i>
-					<% end %>
-					<% if Erp::Core.available?("ortho_k") %>
-                        <% if order_detail.request_product.present? %>
-                            <div class="todo-tasklist-item-text"><%= t('.request_product') %>:
-                                <%= backend_product_link(order_detail.request_product) %>
-                            </div>
+
+<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
+    <tr class="addableform-more">
+        <td colspan="11">
+            <% if Erp::Core.available?("ortho_k") %>
+                <span class="col-md-3">
+                    <div class="todo-tasklist-item-title"> <%= 'Yêu cầu tư vấn hàng thay thế' %>: </div>
+                    <div class="todo-tasklist-item-text">
+                        <%= erp_form_control('checkbox', {
+                            name: 'order[order_details_attributes][' + uid + '][must_same_code]',
+                            id: 'order_detail_must_same_code',
+                            value: order_detail.must_same_code,
+                            not_selected_value: 'false',
+                            options: [{value: 'true', text: 'Phải cùng mã hàng'}]
+                        }) %>
+                        <%= erp_form_control('checkbox', {
+                            name: 'order[order_details_attributes][' + uid + '][must_same_diameter]',
+                            id: 'order_detail_must_same_diameter',
+                            value: order_detail.must_same_diameter,
+                            not_selected_value: 'false',
+                            options: [{value: 'true', text: 'Phải cùng đường kính'}]
+                        }) %>
+                    </div>
+                </span>
+            <% end %>
+            <% if !order_detail.scheck_detail.nil? %>
+                <% if @order.get_order_stock_check.present? and @order.get_order_stock_check.is_done? %>
+                    <span class="col-md-3 text-center">
+                        <div class="todo-tasklist-item-title"> <%= t('.available') %>: </div>
+                        <% if order_detail.scheck_detail.available? %>
+                            <i class="available icon-check"></i>
+                        <% else %>
+                            <i class="not-available icon-close"></i>
                         <% end %>
-                    <% end %>
-				</span>
-				<% if !order_detail.scheck_detail.get_alternative_item_names.empty? %>
-					<span class="col-md-4">
-						<div class="todo-tasklist-item-title"> <%= t('.alternative_items') %>: </div>
-						<div class="todo-tasklist-item-text">
-                            <% order_detail.scheck_detail.get_alternative_items.each do |item| %>
-                                <div>
-                                    + <%= backend_product_link(item) %>
-                                    <span class="btn btn-default btn-xs blue alternative_item"
-                                        data-id="<%= item.id %>"
-                                        data-name="<%= item.name %>"
-                                    ><%= t('.change') %></span>
+                        <% if Erp::Core.available?("ortho_k") %>
+                            <% if order_detail.request_product.present? %>
+                                <div class="todo-tasklist-item-text"><%= t('.request_product') %>:
+                                    <%= backend_product_link(order_detail.request_product) %>
                                 </div>
                             <% end %>
-						</div>
-					</span>
-				<% end %>
-				<% if !order_detail.scheck_detail.note.empty? %>
-					<span class="col-md-4">
-						<div class="todo-tasklist-item-title"> <%= t('.note') %>: </div>
-						<div class="todo-tasklist-item-text">
-							<%= order_detail.scheck_detail.note %>
-						</div>
-					</span>
-				<% end %>
-			</td>
-		</tr>
-	<% end %>
+                        <% end %>
+                    </span>
+                    <% if !order_detail.scheck_detail.get_alternative_item_names.empty? %>
+                        <span class="col-md-3">
+                            <div class="todo-tasklist-item-title"> <%= t('.alternative_items') %>: </div>
+                            <div class="todo-tasklist-item-text">
+                                <% order_detail.scheck_detail.get_alternative_items.each do |item| %>
+                                    <div>
+                                        + <%= backend_product_link(item) %>
+                                        <span class="btn btn-default btn-xs blue alternative_item"
+                                            data-id="<%= item.id %>"
+                                            data-name="<%= item.name %>"
+                                        ><%= t('.change') %></span>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </span>
+                    <% end %>
+                    <% if !order_detail.scheck_detail.note.empty? %>
+                        <span class="col-md-3">
+                            <div class="todo-tasklist-item-title"> <%= t('.note') %>: </div>
+                            <div class="todo-tasklist-item-text">
+                                <%= order_detail.scheck_detail.note %>
+                            </div>
+                        </span>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </td>
+    </tr>
 <% end %>
 
 <script>

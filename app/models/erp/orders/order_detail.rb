@@ -264,7 +264,7 @@ module Erp::Orders
       
       before_validation :update_request_product
       def update_request_product
-        self.request_product_id = self.product_id
+        self.request_product_id = self.product_id if self.request_product_id.nil?
       end
       
       # Get default price
