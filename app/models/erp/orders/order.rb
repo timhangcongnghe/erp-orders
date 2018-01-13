@@ -216,7 +216,7 @@ module Erp::Orders
 
 			end
       # end// global filter
-      
+
       # single keyword
       if params[:keyword].present?
 				keyword = params[:keyword].strip.downcase
@@ -514,6 +514,13 @@ module Erp::Orders
         .where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING,
                         Erp::Orders::Order::STATUS_STOCK_CHECKED,
                         Erp::Orders::Order::STATUS_STOCK_APPROVED])
+        .order('erp_orders_orders.checking_order IS NULL, erp_orders_orders.checking_order')
+		end
+
+    # get need to stock check orders
+    def self.stock_checking_orders
+			self.sales_orders
+        .where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING])
         .order('erp_orders_orders.checking_order IS NULL, erp_orders_orders.checking_order')
 		end
 
