@@ -31,7 +31,7 @@ Erp::Ability.class_eval do
 
     can :confirm, Erp::Orders::Order do |order|
       if order.sales?
-        order.is_stock_approved?
+        order.is_draft? or order.is_stock_checked? or order.is_stock_approved?
       else
         order.is_draft? or order.is_deleted?
       end

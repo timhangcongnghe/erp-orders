@@ -171,13 +171,13 @@ module Erp
           if @order.sales?
             if params.to_unsafe_hash[:act_save_with_default].present?
               if @order.is_items_change?(params.to_unsafe_hash[:order]["order_details_attributes"]) == true
-                @order.set_draft
+                #@order.set_draft
               end
             elsif params.to_unsafe_hash[:act_save_with_checking].present?
               @order.set_stock_checking
             end
           else
-            @order.set_draft
+            #@order.set_draft
           end
 
           if @order.update(order_params)
