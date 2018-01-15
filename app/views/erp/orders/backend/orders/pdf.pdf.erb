@@ -25,6 +25,10 @@
 <% end %>
 
 <% content_for :main_info_col_2 do %>
+  
+<% end %>
+
+<% content_for :main_info_col_3 do %>
   <% if @order.doctor.present? %>
     <p>
       <label>BS:</label>
@@ -37,17 +41,6 @@
       <span><%= @order.patient_name %> (<%= @order.is_new_patient ? 'mới' : 'đổi len' %>)</span>
     </p>
   <% end %>
-<% end %>
-
-<% content_for :main_info_col_3 do %>
-  <p>
-    <label></label>
-    <span></span>
-  </p>
-  <p>
-    <label>Phụ trách:</label>
-    <span><%= @order.employee_name %></span>
-  </p>
 <% end %>
 
 <div class="row">
@@ -118,16 +111,16 @@
                                         <td class="text-center sbold"><%= order_detail.quantity %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("price") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.price) %></td>
+                                        <td class="text-right sbold"><%= format_number(order_detail.price) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("total_amount") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.subtotal) %></td>
+                                        <td class="text-right sbold"><%= format_number(order_detail.subtotal) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("discount") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.discount_amount) %></td>
+                                        <td class="text-right sbold"><%= format_number(order_detail.discount_amount) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("total") %>
-                                        <td class="text-right sbold"><%= format_price(order_detail.total) %></td>
+                                        <td class="text-right sbold"><%= format_number(order_detail.total) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("note") %>
                                         <td class="cursor-help" title="<%= order_detail.description %>"><%= truncate(order_detail.description, length: 15) %></td>
@@ -145,35 +138,47 @@
   <div class="table-footer">
       <div class="line">
           <label>Cộng tiền hàng:</label>
-          <span class="text-right"><%= format_price(@order.cache_total) %></span>
+          <span class="text-right"><%= format_number(@order.cache_total) %></span>
       </div>
       <div class="liner">
           <label>Tiền thuế (0%):</label>
-          <span class="text-right"><%= format_price(0) %></span>
+          <span class="text-right"><%= format_number(0) %></span>
       </div>
       <div class="line">
           <label>Tổng tiền thanh toán:</label>
-          <span class="text-right"><%= format_price(@order.cache_total) %></span>
+          <span class="text-right"><%= format_number(@order.cache_total) %></span>
       </div>
   </div>
 <% end %>
 <div class="mt-5 text-small">
-    Số tiền ghi bằng chữ: <%= docso(@order.cache_total) %>
+    Tổng số tiền (bằng chữ): <strong><%= docso(@order.cache_total) %></strong>
     <br>
     Lưu ý: Cty chỉ thu hồi hàng hóa khi có HĐBH kèm theo.
 </div>
 <% content_for :footer do %>
-    <div class="col text-center" style="width: 50%">
+    <div class="col text-center" style="width: 25%">
         <p>
-            <strong><%= @order.sales? ? 'Khách hàng' : 'Nhà cung cấp' %></strong><br/>
-            (Họ và tên)
+            <strong>Người giao hàng</strong><br/>
+            <i>(Ký, họ tên)</i>
         </p>
     </div>
-    <div class="col text-center" style="width: 49%">
+    <div class="col text-center" style="width: 25%">
+        <p>
+            <strong>Người nhận hàng</strong><br/>
+            <i>(Ký, họ tên)</i>
+        </p>
+    </div>
+    <div class="col text-center" style="width: 25%">
         <p>
             <strong>Nhân viên <%= @order.sales? ? 'bán hàng' : 'mua hàng' %></strong><br/>
             (Họ và tên)
         </p>
         <p class="sign_name"><%= @order.employee_name %></p>
     </div>
+    <div class="col text-center" style="width: 25%">
+        <p>
+            <strong>Thủ kho</strong><br/>
+            <i>(Ký, họ tên)</i>
+        </p>
+    </div>    
 <% end %>

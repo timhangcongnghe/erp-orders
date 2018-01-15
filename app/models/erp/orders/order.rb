@@ -314,6 +314,11 @@ module Erp::Orders
 
     if Erp::Core.available?("contacts")# display customer
 
+			# display creator
+			def creator_name
+				creator.present? ? creator.name : ''
+			end
+			
 			# display customer
 			def customer_code
 				customer.present? ? customer.code : ''
