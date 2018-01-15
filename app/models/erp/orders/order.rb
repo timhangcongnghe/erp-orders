@@ -600,6 +600,19 @@ module Erp::Orders
 
 			return false
 		end
+    
+    # Check is details replaced
+    def is_details_replaced?
+      valid = true
+      order_details.each do |od|
+        if !od.scheck_detail.present? or
+          (!od.scheck_detail.get_alternative_items.include?(od.product) and !od.scheck_detail.available?)
+          valid = false
+        end
+      end
+      return valid
+      # Thiếu check số lượng
+    end
 
     # Generate code
     before_validation :generate_code
