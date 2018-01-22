@@ -13,6 +13,7 @@ Erp::Orders::Engine.routes.draw do
 					put 'set_confirmed'
 					put 'set_deleted'
 					get 'new/:type', :to => "orders#new", :as => 'new_type'
+					post 'new/:type', :to => "orders#new"
 
 					get 'pdf'
 

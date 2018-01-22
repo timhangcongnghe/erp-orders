@@ -89,23 +89,15 @@ module Erp
           @order.payment_for = Erp::Orders::Order::PAYMENT_FOR_ORDER
 
           # Import details list from stocking importing page
-          if params[:side_quantity].present?
-            @products = Erp::Products::Product.get_stock_importing_product(filters: params.to_unsafe_hash, warehouse: params.to_unsafe_hash[:warehouse])
-              .joins(:category)
-              .order("erp_products_categories.name, cache_diameter, code")
+          if params[:products].present?
+            params.to_unsafe_hash[:products].each do |row|
+              product = Erp::Products::Product.find(row[0])
 
-            @products.each do |product|
-              area_type = product.is_in_central_area ? 'area_central' : 'area_side'
-              total_quantity = area_type == 'area_central' ? params[:central_quantity].to_f : params[:side_quantity].to_f
-
-              if !params[:area].present? or (params[:area] == area_type)
-                @order.order_details.build(
-                  product_id: product.id,
-                  # product_name: product.code + ' ' + product.get_diameter + ' ' + product.category_name
-                  price: product.price,
-                  quantity: total_quantity
-                )
-              end
+              @order.order_details.build(
+                product_id: product.id,
+                price: product.price,
+                quantity: row[1]
+              )
             end
           end
 
