@@ -11,7 +11,7 @@
             <th class='text-right text-nowrap payment-for-contact'>#{t('.customer_commission')}</th>
             <th class='text-right text-nowrap payment-for-order'>#{t('.commission_amount')}</th>
             #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
-            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
+            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k') and false}
             <th width=\"10%\" class='text-right text-nowrap'>#{t('.description')}</th>
             <th></th>"
         %>
@@ -24,7 +24,7 @@
             <th class='text-right'>#{t('.total_amount')}</th>
             <th class='text-right'>#{t('.total')}</th>
             #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
-            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
+            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k') and false}
             <th width=\"10%\" class='text-right'>#{t('.description')}</th>
             <th></th>"
         %>
@@ -207,6 +207,24 @@
                     </ul>
                     <div class="tab-content order-details">
                         <div class="tab-pane addableform-table active" id="tab_5_1">
+
+                            <% if Erp::Core.available?("ortho_k") %>
+                                <div class="row">
+                                    <div class="col-md-4" style="border-left: solid 1px #ddd; padding-left: 20px">
+                                        <%= erp_form_control("file", {
+                                            name: 'import_file',
+                                            value: '',
+                                            text: '',
+                                            label: ('Nhập từ file (<a href="'+url_for('/backend/file/order_import.xlsx')+'" target="_blank">Tải mẫu</a>)').html_safe,
+                                        }) %>
+                                    </div>
+                                    <div class="col-md-1 mt-25 text-right" style="margin-top: 26px;">
+                                        <button class="btn btn-primary custom-form-submit" data-action="<%= erp_orders.import_file_backend_orders_path(id: order.id) %>">Tải file</button>
+                                    </div>
+                                </div>
+                                <hr>
+                            <% end %>
+
                             <%= erp_form_control("addableform", {
                                 type: 'table',
                                 add_button: t('.add'),
