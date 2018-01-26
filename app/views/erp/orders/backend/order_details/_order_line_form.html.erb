@@ -169,16 +169,16 @@
                             <% end %>
                         <% end %>
                     </span>
-                    <% if !order_detail.scheck_detail.get_alternative_item_names.empty? %>
+                    <% if !order_detail.scheck_detail.get_alternative_items.empty? %>
                         <span class="col-md-3">
                             <div class="todo-tasklist-item-title"> <%= t('.alternative_items') %>: </div>
                             <div class="todo-tasklist-item-text">
                                 <% order_detail.scheck_detail.get_alternative_items.each do |item| %>
                                     <div>
-                                        + <%= backend_product_link(item) %>
+                                        + <%= backend_product_link(item[:product]) %>
                                         <span class="btn btn-default btn-xs blue alternative_item"
-                                            data-id="<%= item.id %>"
-                                            data-name="<%= item.name %>"
+                                            data-id="<%= item[:product].id %>"
+                                            data-name="<%= item[:product].name %>"
                                         ><%= t('.change') %></span>
                                     </div>
                                 <% end %>
