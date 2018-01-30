@@ -4,7 +4,7 @@ module Erp::Orders
     belongs_to :order, class_name: 'Erp::Orders::Order'
     belongs_to :product, class_name: 'Erp::Products::Product'
     if Erp::Core.available?("order_stock_checks")
-    has_one :scheck_detail, class_name: 'Erp::OrderStockChecks::ScheckDetail', dependent: :destroy
+    has_one :scheck_detail, -> { order created_at: :desc }, class_name: 'Erp::OrderStockChecks::ScheckDetail', dependent: :destroy
 		end
     after_save :update_order_cache_payment_status
     after_save :update_order_cache_delivery_status
@@ -261,12 +261,12 @@ module Erp::Orders
 
     if Erp::Core.available?("ortho_k")
       belongs_to :request_product, class_name: 'Erp::Products::Product'
-      
+
       before_validation :update_request_product
       def update_request_product
         self.request_product_id = self.product_id if self.request_product_id.nil?
       end
-      
+
       # Get default price
       def get_default_price
         Erp::Prices::Price.get_by_product(contact_id: self.order.customer.id,
