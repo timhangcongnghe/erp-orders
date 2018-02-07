@@ -1,0 +1,32 @@
+<tr class="addableform-line">
+    <td>
+        <input type="hidden" name="order[order_details_attributes][<%= uid %>][id]" value="<%= order_detail.id %>">
+        <input type="hidden" name="order[order_details_attributes][<%= uid %>][product_id]" value="<%= order_detail.product_id %>" class="product-id">
+        <input type="hidden" name="order[order_details_attributes][<%= uid %>][_destroy]" value="">
+		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
+        <strong class="product-name"><%= order_detail.product_name %></strong>
+    </td>
+    <td width="7%" class="text-right">
+        <input class="line_quantity" type="hidden" name="order[order_details_attributes][<%= uid %>][quantity]" value="<%= order_detail.quantity %>" />
+        <Strong><%= order_detail.quantity %></Strong>
+    </td>
+    <td class="text-right">
+        <input class="line_unit_price" type="hidden" name="order[order_details_attributes][<%= uid %>][price]" value="<%= order_detail.price %>" />
+        <Strong><%= format_price(order_detail.price) %></Strong>
+    </td>
+    <td class="text-right">
+        <span class="line_subtotal text-semibold"><Strong><%= format_price(order_detail.subtotal) %></Strong></span>
+    </td>
+    <td class="text-right">
+        <span class="line_total text-bold text-primary"><%= format_price(order_detail.total) %></span>
+    </td>
+    <td width="1%">
+    </td>
+    <td width="1%">
+    </td>
+    <td class="text-right">
+        <%= erp_form_control("addableform_remove_button", {
+            is_nested_form: true
+        }) %>
+    </td>
+</tr>

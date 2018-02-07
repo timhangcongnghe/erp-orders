@@ -1,5 +1,5 @@
 <% if !@supplier_price.nil? %>
-    <% rand = [*5..3000].sample*[*5..30].sample %>
+    <% rand = SecureRandom.hex %>
     <div id="row-<%= rand %>" class="font-yellow text-small text-semibold" style="font-size: 70%"
          title="Chuyên mục: <%= @product.category_name %> / Số lượng: <%= @supplier_price.display_min_max %> / Giá nhập: <%= format_number(@supplier_price.price) %>">
         Mặc định: <%= format_price(@supplier_price.price) %>

@@ -1,5 +1,5 @@
 <% if !@customer_commission.nil? %>
-    <% rand = [*5..3000].sample*[*5..30].sample %>
+    <% rand = SecureRandom.hex %>
     <div id="row-<%= rand %>" class="font-yellow text-small text-semibold" style="font-size: 70%">
         Mặc định:<br> <%= raw "#{format_price(@customer_commission_amount)}" %>
         <% if @customer_commission.rate.to_f > 0 %>

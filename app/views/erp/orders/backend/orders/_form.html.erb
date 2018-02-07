@@ -228,7 +228,7 @@
                             <%= erp_form_control("addableform", {
                                 type: 'table',
                                 add_button: t('.add'),
-                                partial: 'erp/orders/backend/order_details/order_line_form',
+                                partial: ((params[:products].present? or @order.order_details.count > 150) ? 'erp/orders/backend/order_details/order_line_form_lite' : 'erp/orders/backend/order_details/order_line_form'),
                                 partial_url: erp_orders.order_line_form_backend_order_details_path(type: @order.get_type),
                                 items: @order.order_details,
                                 item: :order_detail,

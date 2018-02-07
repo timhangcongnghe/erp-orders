@@ -7,7 +7,7 @@ module Erp::Orders
     has_one :scheck_detail, -> { order created_at: :desc }, class_name: 'Erp::OrderStockChecks::ScheckDetail', dependent: :destroy
 		end
     after_save :update_order_cache_payment_status
-    after_save :update_order_cache_delivery_status
+    # after_save :update_order_cache_delivery_status
     after_save :update_order_cache_total
     after_save :update_order_cache_cost_total
     after_save :update_order_cache_tax_amount
@@ -52,7 +52,7 @@ module Erp::Orders
     end
 
     if Erp::Core.available?("qdeliveries")
-			after_save :order_update_cache_delivery_status
+			# after_save :order_update_cache_delivery_status
 
 			has_many :delivery_details, class_name: "Erp::Qdeliveries::DeliveryDetail"
 

@@ -96,6 +96,7 @@ module Erp
               @order.order_details.build(
                 product_id: product.id,
                 price: product.price,
+                price: product.get_purchase_price(quantity: row[1]).price,
                 quantity: row[1]
               )
             end
@@ -121,6 +122,8 @@ module Erp
           @order.creator = current_user
 
           if @order.save
+            # update cache
+            @order.update_cache_delivery_status
 
             if @order.sales?
               if params.to_unsafe_hash[:act_save_with_default].present?
@@ -173,6 +176,9 @@ module Erp
           end
 
           if @order.update(order_params)
+            # update cache
+            @order.update_cache_delivery_status
+
             if request.xhr?
               render json: {
                 status: 'success',
