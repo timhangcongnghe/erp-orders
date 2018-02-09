@@ -188,7 +188,7 @@ module Erp::Orders
 
     # @todo validates when quantity nil?
     def subtotal
-			quantity*price
+			quantity.to_f*price.to_f
 		end
 
     # get shipping amount

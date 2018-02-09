@@ -7,12 +7,21 @@
         <strong class="product-name"><%= order_detail.product_name %></strong>
     </td>
     <td width="7%" class="text-right">
-        <input class="line_quantity" type="hidden" name="order[order_details_attributes][<%= uid %>][quantity]" value="<%= order_detail.quantity %>" />
-        <Strong><%= order_detail.quantity %></Strong>
+        <%= erp_form_control("number", {
+            name: 'order[order_details_attributes][' + uid + '][quantity]',
+            value: order_detail.quantity,
+            text: order_detail.quantity,
+            class: "line_quantity inline",
+			required: true,
+        }) %>
     </td>
     <td class="text-right">
-        <input class="line_unit_price" type="hidden" name="order[order_details_attributes][<%= uid %>][price]" value="<%= order_detail.price %>" />
-        <Strong><%= format_price(order_detail.price) %></Strong>
+        <%= erp_form_control("number", {
+            name: 'order[order_details_attributes][' + uid + '][price]',
+            value: order_detail.price,
+            text: order_detail.price,
+            class: "line_unit_price inline #{(order_detail.id.present? ? 'edit' : '')}",
+        }) %>
     </td>
     <td class="text-right">
         <span class="line_subtotal text-semibold"><Strong><%= format_price(order_detail.subtotal) %></Strong></span>

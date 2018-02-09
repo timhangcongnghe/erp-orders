@@ -93,10 +93,11 @@ module Erp
             params.to_unsafe_hash[:products].each do |row|
               product = Erp::Products::Product.find(row[0])
 
+              purchase_price = product.get_purchase_price(quantity: row[1])
+
               @order.order_details.build(
                 product_id: product.id,
-                price: product.price,
-                price: product.get_purchase_price(quantity: row[1]).price,
+                price: purchase_price.present? ? purchase_price.price : 0.0,
                 quantity: row[1]
               )
             end
