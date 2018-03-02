@@ -11,7 +11,7 @@ module Erp
 
         # POST /orders/list
         def list
-          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 10)
+          @orders = Order.search(params).paginate(:page => params[:page], :per_page => 20)
 
           render layout: nil
         end
