@@ -29,7 +29,7 @@ module Erp::Orders
 			end
 		end
 
-    has_many :order_details, dependent: :destroy
+    has_many :order_details, -> { order(created_at: :asc) }, dependent: :destroy
     accepts_nested_attributes_for :order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
 
     if Erp::Core.available?("payments")
@@ -318,7 +318,7 @@ module Erp::Orders
 			def creator_name
 				creator.present? ? creator.name : ''
 			end
-			
+
 			# display customer
 			def customer_code
 				customer.present? ? customer.code : ''
@@ -605,7 +605,7 @@ module Erp::Orders
 
 			return false
 		end
-    
+
     # Check is details replaced
     def is_details_replaced?
       valid = true
