@@ -29,7 +29,7 @@ module Erp::Orders
 			end
 		end
 
-    has_many :order_details, -> { order(created_at: :asc) }, dependent: :destroy
+    has_many :order_details, dependent: :destroy
     accepts_nested_attributes_for :order_details, :reject_if => lambda { |a| a[:product_id].blank? }, :allow_destroy => true
 
     if Erp::Core.available?("payments")
