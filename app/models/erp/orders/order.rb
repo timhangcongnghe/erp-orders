@@ -303,7 +303,7 @@ module Erp::Orders
 				query = query.where(supplier_id: params[:delivery][:supplier_id])
 			end
 
-      query = query.order("erp_orders_orders.order_date DESC").limit(8).map{|order| {value: order.id, text: order.get_name} }
+      query = query.order("erp_orders_orders.order_date DESC").limit(8).map{|order| {value: order.id, text: order.code} }
 
       if params[:include_na].present?
 				query = [{value: '-1', text: params[:include_na]}] + query
