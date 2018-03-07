@@ -11,7 +11,7 @@
             <th class='text-right text-nowrap payment-for-contact'>#{t('.customer_commission')}</th>
             <th class='text-right text-nowrap payment-for-order'>#{t('.commission_amount')}</th>
             #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
-            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k') and false}
+            #{'<th width=\"10%\" class=\'text-right text-nowrap\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
             <th width=\"10%\" class='text-right text-nowrap'>#{t('.description')}</th>
             <th></th>"
         %>
@@ -24,7 +24,7 @@
             <th class='text-right'>#{t('.total_amount')}</th>
             <th class='text-right'>#{t('.total')}</th>
             #{'<th width=\"5%\" class=\'text-right text-nowrap\'>' + t('.eye_position') + '</th>' if Erp::Core.available?('ortho_k')}
-            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k') and false}
+            #{'<th width=\"10%\" class=\'text-right\'>' + t('.serials') + '</th>' if Erp::Core.available?('ortho_k')}
             <th width=\"10%\" class='text-right'>#{t('.description')}</th>
             <th></th>"
         %>
