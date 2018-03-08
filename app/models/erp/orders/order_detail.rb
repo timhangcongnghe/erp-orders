@@ -276,11 +276,10 @@ module Erp::Orders
         )
       end
 
-      def get_default_purchase_price
-        Erp::Prices::Price.get_by_product(contact_id: self.order.customer.id,
-          category_id: self.product.category_id,
-          properties_value_id: self.product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
-          quantity: self.quantity, type: Erp::Prices::Price::TYPE_PURCHASE
+      def get_default_purchase_price        
+        self.product.get_default_purchase_price(
+          contact_id: (self.order.supplier.present? ? self.order.supplier.id : nil),
+          quantity: self.quantity
         )
       end
 		end
