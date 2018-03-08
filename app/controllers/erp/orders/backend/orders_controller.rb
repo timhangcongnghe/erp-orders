@@ -36,7 +36,8 @@ module Erp
 
         # GET /orders/1
         def pdf
-          authorize! :read, @order
+          authorize! :print, @order
+          
           @type = @order.sales? ? Erp::Orders::Order::TYPE_SALES_ORDER : Erp::Orders::Order::TYPE_PURCHASE_ORDER
 
           respond_to do |format|

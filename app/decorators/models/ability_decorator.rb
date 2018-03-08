@@ -20,7 +20,7 @@ Erp::Ability.class_eval do
     end
 
     can :print, Erp::Orders::Order do |order|
-      order.is_confirmed?
+      order.is_confirmed? and order.is_delivered?
     end
 
     can :set_stock_checking, Erp::Orders::Order do |order|
