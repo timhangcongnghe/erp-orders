@@ -90,13 +90,13 @@ module Erp
           @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
           @product = Erp::Products::Product.where(id: params[:datas][1]).first
           @qty = params[:datas][2].to_i
-          @types = Erp::Prices::Price::TYPE_SALES
-          if @customer.present?
-            @customer_price = Erp::Prices::Price.get_by_product(contact_id: @customer.id,
-                                                              category_id: @product.category_id,
-                                                              properties_value_id: @product.get_properties_value(Erp::Products::Property.getByName(Erp::Products::Property::NAME_DUONG_KINH)),
-                                                              quantity: @qty, type: @types)
-          end
+          
+          # get product default price
+          @customer_price = @product.get_default_sales_price(
+            contact_id: (@customer.present? ? @customer.id : nil),
+            quantity: @qty
+          )
+          
           @uid = params[:datas][4]
         end
 
