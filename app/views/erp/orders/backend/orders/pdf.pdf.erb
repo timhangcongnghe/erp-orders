@@ -25,7 +25,7 @@
 <% end %>
 
 <% content_for :main_info_col_2 do %>
-  
+
 <% end %>
 
 <% content_for :main_info_col_3 do %>
@@ -38,7 +38,7 @@
   <% if @order.patient.present? %>
     <p>
       <label>BN:</label>
-      <span><%= @order.patient_name %> (<%= @order.is_new_patient ? 'mới' : 'đổi len' %>)</span>
+      <span><%= @order.patient_name %></span>
     </p>
   <% end %>
 <% end %>
@@ -158,6 +158,13 @@
 <% content_for :footer do %>
     <div class="col text-center" style="width: 25%">
         <p>
+            <strong>Người lập phiếu</strong><br/>
+            (Họ và tên)
+        </p>
+        <p class="sign_name"><%= @order.employee_name %></p>
+    </div>
+    <div class="col text-center" style="width: 25%">
+        <p>
             <strong>Người giao hàng</strong><br/>
             <i>(Ký, họ tên)</i>
         </p>
@@ -170,15 +177,8 @@
     </div>
     <div class="col text-center" style="width: 25%">
         <p>
-            <strong>Nhân viên <%= @order.sales? ? 'bán hàng' : 'mua hàng' %></strong><br/>
-            (Họ và tên)
-        </p>
-        <p class="sign_name"><%= @order.employee_name %></p>
-    </div>
-    <div class="col text-center" style="width: 25%">
-        <p>
             <strong>Thủ kho</strong><br/>
             <i>(Ký, họ tên)</i>
         </p>
-    </div>    
+    </div>
 <% end %>
