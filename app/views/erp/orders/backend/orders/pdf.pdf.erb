@@ -60,6 +60,12 @@
                                         <%= t('.items') %>
                                     </th>
                                 <% end %>
+                                <% if get_columns(params).include?("serials") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.serials') %></th>
+                                <% end %>
+                                <% if get_columns(params).include?("eye_position") %>
+                                    <th class="invoice-title uppercase text-center"><%= t('.eye_position') %></th>
+                                <% end %>
                                 <% if get_columns(params).include?("category") %>
                                     <th class="invoice-title uppercase text-center"><%= t('.category') %></th>
                                 <% end %>
@@ -100,6 +106,12 @@
                                         <td>
                                             <p><%= order_detail.product_name %></p>
                                         </td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("serials") %>
+                                        <td class="text-center"><%= order_detail.serials %></td>
+                                    <% end %>
+                                    <% if get_columns(params).include?("eye_position") %>
+                                        <td class="text-center"><%= order_detail.display_eye_position %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("category") %>
                                         <td class="text-center"><%= order_detail.product_category_name %></td>

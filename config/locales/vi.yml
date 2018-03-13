@@ -217,6 +217,8 @@ vi:
             item_help: "Tên,nhãn hiệu,quy cách phẩm chất vật tư,dụng cụ sản phẩm,hàng hóa"
             category: "Loại"
             units: "ĐVT"
+            serials: "Số lô"
+            eye_position: "MT/MP"
             quantity: "Số lượng"
             price: "Đơn giá"
             total_amount: "Thành tiền"
