@@ -472,11 +472,11 @@ module Erp::Orders
 			query = self.where(payment_for: Erp::Orders::Order::PAYMENT_FOR_ORDER)
 
 			if params[:from_date].present?
-				query = query.where('order_date >= ?', params[:from_date].beginning_of_day)
+				query = query.where('order_date >= ?', params[:from_date].to_date.beginning_of_day)
 			end
 
 			if params[:to_date].present?
-				query = query.where('order_date <= ?', params[:to_date].end_of_day)
+				query = query.where('order_date <= ?', params[:to_date].to_date.end_of_day)
 			end
 
 			if Erp::Core.available?("periods")
