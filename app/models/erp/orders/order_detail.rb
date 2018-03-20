@@ -188,7 +188,7 @@ module Erp::Orders
 
     # @todo validates when quantity nil?
     def subtotal
-			quantity.to_f*price.to_f - discount_amount*quantity.to_f
+			quantity.to_f*price.to_f
 		end
 
     # get shipping amount
@@ -213,7 +213,7 @@ module Erp::Orders
 
     # total before tax
     def total_without_tax
-			subtotal - tax_amount
+			subtotal - discount_amount
 		end
 
     # tax amount
