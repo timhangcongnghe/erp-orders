@@ -188,7 +188,7 @@ module Erp::Orders
 
     # @todo validates when quantity nil?
     def subtotal
-			quantity.to_f*price.to_f
+			quantity.to_f*price.to_f - discount_amount*quantity.to_f
 		end
 
     # get shipping amount
@@ -213,7 +213,7 @@ module Erp::Orders
 
     # total before tax
     def total_without_tax
-			subtotal - discount_amount
+			subtotal - tax_amount
 		end
 
     # tax amount
@@ -276,7 +276,7 @@ module Erp::Orders
         )
       end
 
-      def get_default_purchase_price        
+      def get_default_purchase_price
         self.product.get_default_purchase_price(
           contact_id: (self.order.supplier.present? ? self.order.supplier.id : nil),
           quantity: self.quantity
