@@ -214,6 +214,11 @@ module Erp::Orders
 					query = query.where(patient_id: global_filter[:patient])
 				end
 
+				# filter by patient state
+				if global_filter[:patient_state].present?
+					query = query.where(patient_state_id: global_filter[:patient_state])
+				end
+
 			end
       # end// global filter
 
