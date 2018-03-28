@@ -523,7 +523,8 @@ module Erp::Orders
 			self.sales_orders
         .where(status: [Erp::Orders::Order::STATUS_STOCK_CHECKING,
                         Erp::Orders::Order::STATUS_STOCK_CHECKED,
-                        Erp::Orders::Order::STATUS_STOCK_APPROVED])
+                        Erp::Orders::Order::STATUS_STOCK_APPROVED,
+                        Erp::Orders::Order::STATUS_CONFIRMED])
         .order('erp_orders_orders.checking_order IS NULL, erp_orders_orders.checking_order')
 		end
 
