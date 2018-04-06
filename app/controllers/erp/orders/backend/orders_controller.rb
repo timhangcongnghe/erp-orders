@@ -77,7 +77,6 @@ module Erp
 
           @order = Order.new
           @order.order_date = Time.now
-          @order.employee = current_user
           @order.warehouse_id = params.to_unsafe_hash[:warehouse] if params.to_unsafe_hash[:warehouse].present?
           @type = params[:type]
 
@@ -259,6 +258,26 @@ module Erp
           respond_to do |format|
             format.xlsx
           end
+        end
+        
+        def ajax_employee_field
+          @customer = Erp::Contacts::Contact.where(id: params[:datas][0]).first
+          @supplier = Erp::Contacts::Contact.where(id: params[:datas][1]).first
+          
+          @employee = Erp::User.new
+          if params[:employee_id].present?
+            @employee = Erp::User.find(params[:employee_id])
+          end
+          
+          if @customer.present? and @customer.salesperson_id.present?
+            @employee = Erp::User.find(@customer.salesperson_id)
+          end
+          
+          if @supplier.present? and @supplier.salesperson_id.present?
+            @employee = Erp::User.find(@supplier.salesperson_id)
+          end
+          
+          render layout: false
         end
 
         private

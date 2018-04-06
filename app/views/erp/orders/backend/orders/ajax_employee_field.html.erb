@@ -1,0 +1,9 @@
+<%= erp_form_control("dataselect", {
+    name: 'order[employee_id]',
+    value: @employee.id,
+    text: @employee.name,
+    placeholder: t(".choose_#{params[:employee_name]}"),
+    label: t(".#{params[:employee_name]}"),
+    url: erp.dataselect_backend_users_path(format: 'json'),
+    required: true,
+}) %>

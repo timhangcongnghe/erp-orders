@@ -125,16 +125,16 @@
             <div class="col-md-6">
                 <div class="portlet light bordered">
                     <div class="portlet-body form">
-                        <%= erp_form_control("dataselect", {
-                            name: 'order[employee_id]',
-                            value: order.employee_id,
-                            text: order.employee_name,
-                            placeholder: t('.choose_employee'),
-                            label: t(".#{employee_name}"),
-                            url: erp.dataselect_backend_users_path(format: 'json'),
-                            required: true,
-                            errors: order.errors.full_messages_for(:employee_id)
-                        }) %>
+                        <div class="ajax-box mb-25"
+                            data-url="<%= erp_orders.ajax_employee_field_backend_orders_path(
+                                employee_id: order.employee_id,
+                                employee_name: employee_name
+                            ) %>"
+                            data-control="
+                                [name='order[customer_id]'],
+                                [name='order[supplier_id]']
+                            ">
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <%= erp_form_control("dataselect", {

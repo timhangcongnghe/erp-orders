@@ -12,6 +12,7 @@ Erp::Orders::Engine.routes.draw do
 					put 'set_stock_approved'
 					put 'set_confirmed'
 					put 'set_deleted'
+					get 'ajax_employee_field'
 					get 'new/:type', :to => "orders#new", :as => 'new_type'
 					post 'new/:type', :to => "orders#new"
 

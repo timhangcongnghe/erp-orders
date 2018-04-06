@@ -325,6 +325,13 @@ vi:
             pay: "Trả tiền"
             create_contact: "Thêm liên hệ"
             edit_contact: "Cập nhật liên hệ"
+          ajax_employee_field:
+            employee: "Nhân viên phụ trách"
+            sales_employee: "Nhân viên bán hàng"
+            purchase_employee: "Nhân viên mua hàng"
+            choose_employee: "Chọn nhân viên phụ trách"
+            choose_sales_employee: "Chọn nhân viên bán hàng"
+            choose_purchase_employee: "Chọn nhân viên mua hàng"
         order_details:
           order_line_form:
             product_code: "Mã SP"
