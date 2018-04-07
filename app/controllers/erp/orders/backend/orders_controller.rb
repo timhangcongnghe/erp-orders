@@ -265,16 +265,17 @@ module Erp
           @supplier = Erp::Contacts::Contact.where(id: params[:datas][1]).first
           
           @employee = Erp::User.new
+          
           if params[:employee_id].present?
             @employee = Erp::User.find(params[:employee_id])
-          end
-          
-          if @customer.present? and @customer.salesperson_id.present?
-            @employee = Erp::User.find(@customer.salesperson_id)
-          end
-          
-          if @supplier.present? and @supplier.salesperson_id.present?
-            @employee = Erp::User.find(@supplier.salesperson_id)
+          else
+            if @customer.present? and @customer.salesperson_id.present?
+              @employee = Erp::User.find(@customer.salesperson_id)
+            end
+            
+            if @supplier.present? and @supplier.salesperson_id.present?
+              @employee = Erp::User.find(@supplier.salesperson_id)
+            end
           end
           
           render layout: false
