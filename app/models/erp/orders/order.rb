@@ -657,6 +657,21 @@ module Erp::Orders
 
 			self.update_column(:cache_search, str.join(" ") + " " + str.join(" ").to_ascii)
 		end
+		
+		def update_employee_for_order
+      nvkd_id = nil
+      if self.sales?
+        nvkd_id = self.customer.salesperson_id if !self.customer.salesperson.nil?
+      elsif self.purchase?
+        nvkd_id = self.supplier.salesperson_id if !self.supplier.salesperson.nil?
+      end
+      if !nvkd_id.nil?
+        self.update_attributes(employee_id: nvkd_id)
+        puts 'Updated'
+      else
+        puts 'Not update'
+      end
+    end
 
     if Erp::Core.available?("payments")
 			# get payment type
