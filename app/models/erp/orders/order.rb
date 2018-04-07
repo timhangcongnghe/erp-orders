@@ -199,6 +199,11 @@ module Erp::Orders
 					query = query.where(supplier_id: global_filter[:supplier])
 				end
 
+				# filter by employee
+				if global_filter[:employee].present?
+					query = query.where(employee_id: global_filter[:employee])
+				end
+
 				# filter by order warehouse
 				if global_filter[:warehouse].present?
 					query = query.where(warehouse_id: global_filter[:warehouse])
