@@ -10,11 +10,11 @@ module Erp
           url: erp_orders.backend_order_path(order),
           target: '_blank'
         } if can? :print, order
-        actions << {
-          text: '<i class="fa fa-file-excel-o"></i> Xuất excel',
-          url: erp_orders.xlsx_backend_orders_path(id: order.id, format: 'xlsx'),
-          target: '_blank'
-        } if can? :read, order
+        #actions << {
+        #  text: '<i class="fa fa-file-excel-o"></i> Xuất excel',
+        #  url: erp_orders.xlsx_backend_orders_path(id: order.id, format: 'xlsx'),
+        #  target: '_blank'
+        #} if can? :read, order
         actions << {
           text: '<i class="fa fa-edit"></i> ' + t('.edit'),
           url: erp_orders.edit_backend_order_path(order)

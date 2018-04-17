@@ -16,7 +16,7 @@
   </p>
   <p>
     <label>Địa chỉ:</label>
-    <span><%= @order.sales? ? @order.customer.address : @order.supplier.address %></span>
+    <span><%= @order.sales? ? display_contact_address(@order.customer) : display_contact_address(@order.supplier) %></span>
   </p>
   <p>
     <label>Ghi chú:</label>
