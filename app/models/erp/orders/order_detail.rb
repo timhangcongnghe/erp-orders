@@ -294,5 +294,34 @@ module Erp::Orders
         end
       end
     end
+    
+    # get all active order details
+    def self.get_sales_confirmed_order_details(options={})
+      query = Erp::Orders::OrderDetail.joins(:order)
+        .where(erp_orders_orders: {status: Erp::Orders::Order::STATUS_CONFIRMED})
+        .where(erp_orders_orders: {supplier_id: Erp::Contacts::Contact.get_main_contact.id})
+
+      if options[:from_date].present?
+				query = query.where('erp_orders_orders.order_date >= ?', options[:from_date].to_date.beginning_of_day)
+			end
+
+			if options[:to_date].present?
+				query = query.where('erp_orders_orders.order_date <= ?', options[:to_date].to_date.end_of_day)
+			end
+			
+			if options[:patient_state_id].present?
+				query = query.where('erp_orders_orders.patient_state_id = ?', options[:patient_state_id])
+			end
+
+			if Erp::Core.available?("periods")
+				if options[:period].present?
+					query = query.where('erp_orders_orders.order_date >= ? AND erp_orders_orders.order_date <= ?',
+            Erp::Periods::Period.find(options[:period]).from_date.beginning_of_day,
+            Erp::Periods::Period.find(options[:period]).to_date.end_of_day)
+				end
+			end
+			
+			query
+    end
   end
 end
