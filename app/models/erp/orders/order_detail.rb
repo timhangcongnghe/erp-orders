@@ -309,10 +309,14 @@ module Erp::Orders
 				query = query.where('erp_orders_orders.order_date <= ?', options[:to_date].to_date.end_of_day)
 			end
 			
+			if options[:patient_state_id] == -1
+        query = query.where(erp_orders_orders: {patient_state_id: nil})
+      end
+			
 			if Erp::Core.available?("ortho_k")
-        if options[:patient_state_id].present?
-          if options[:patient_state_id] == -1
-            query = query.where('erp_orders_orders.patient_state_id = ?', nil)
+        if options[:patient_state_id].present? and options[:patient_state_id] != -1
+          if options[:patient_state_id] == -2
+            query = query.where(erp_orders_orders: {patient_state_id: nil})
           else
             query = query.where('erp_orders_orders.patient_state_id = ?', options[:patient_state_id])
           end
