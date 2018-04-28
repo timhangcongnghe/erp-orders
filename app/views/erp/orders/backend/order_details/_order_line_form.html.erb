@@ -109,6 +109,7 @@
                 name: 'order[order_details_attributes][' + uid + '][serials]',
                 value: order_detail.serials,
                 text: order_detail.serials,
+                class: 'product-serials',
                 rows: 1
             }) %>
         </td>
@@ -176,9 +177,13 @@
                                 <% order_detail.scheck_detail.get_alternative_items.each do |item| %>
                                     <div>
                                         + <%= backend_product_link(item[:product]) %>
+                                        <% if item[:serials].present? %>
+                                            (<%= item[:serials] %>)
+                                        <% end %>
                                         <span class="btn btn-default btn-xs blue alternative_item"
                                             data-id="<%= item[:product].id %>"
                                             data-name="<%= item[:product].name %>"
+                                            data-serials="<%= item[:serials] %>"
                                         ><%= t('.change') %></span>
                                     </div>
                                 <% end %>

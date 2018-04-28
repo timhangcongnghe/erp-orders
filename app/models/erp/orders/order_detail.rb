@@ -333,5 +333,12 @@ module Erp::Orders
 			
 			query
     end
+    
+    # find serials from scheck details
+    def serials
+      return self[:serials] if self[:serials].present?
+      se = (scheck_detail.present? and scheck_detail.serials.present?) ? scheck_detail.serials : nil
+      return se
+    end
   end
 end
