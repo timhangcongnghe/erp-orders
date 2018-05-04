@@ -16,7 +16,7 @@
   </p>
   <p>
     <label>Địa chỉ:</label>
-    <span><%= @order.sales? ? display_contact_address(@order.customer) : display_contact_address(@order.supplier) %></span>
+    <span><%= @order.sales? ? display_contact_address(@order.customer) : display_contact_address(@order.supplier) %></span>    
   </p>
   <p>
     <label>Ghi chú:</label>
@@ -39,6 +39,12 @@
     <p>
       <label>BN:</label>
       <span><%= @order.patient_name %></span>
+    </p>
+  <% end %>
+  <% if @order.customer.present? and @order.customer.phone.present? %>
+    <p>
+      <label>ĐT:</label>
+      <span><%= @order.customer.phone %></span>
     </p>
   <% end %>
 <% end %>
