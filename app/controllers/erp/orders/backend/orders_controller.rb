@@ -51,7 +51,7 @@ module Erp
                   orientation: 'Landscape',
                   margin: {
                     top: 7,                     # default 10 (mm)
-                    bottom: 7,
+                    bottom: 2,
                     left: 7,
                     right: 7
                   }
@@ -62,7 +62,7 @@ module Erp
                   page_size: 'A4',
                   margin: {
                     top: 7,                     # default 10 (mm)
-                    bottom: 7,
+                    bottom: 2,
                     left: 7,
                     right: 7
                   }
