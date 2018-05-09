@@ -250,7 +250,7 @@ module Erp::Orders
 
         query = query.order(order)
       else
-				query = query.order('created_at DESC')
+				query = query.order('erp_orders_orders.created_at DESC')
       end
 
       return query
