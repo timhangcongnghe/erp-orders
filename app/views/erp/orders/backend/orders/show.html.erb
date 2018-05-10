@@ -56,6 +56,23 @@
     }) %>
 <% end %>
 
+<% content_for :global_filter do %>
+    <div class="row top-datalist">        
+        <div class="col-md-3">
+            <%= erp_form_control("select", {
+                name: 'print_size',
+                label: 'Khổ giấy',
+                placeholder: 'Khổ in',
+                options: [
+                    {text: "Mặc định", value: 'auto'},
+                    {text: "A4", value: 'A4'},
+                    {text: "A5", value: 'A5'},
+                ],
+            }) %>
+        </div>
+    </div>
+<% end %>
+
 <%= erp_datalist(
     url: erp_orders.show_list_backend_orders_path(id: @order.id),
     columns: [

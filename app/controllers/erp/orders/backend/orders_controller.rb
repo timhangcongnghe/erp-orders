@@ -43,7 +43,7 @@ module Erp
           respond_to do |format|
             format.html
             format.pdf do
-              if @order.order_details.count < 8
+              if (@order.order_details.count < 8 and params[:global_filter][:print_size] == 'auto') or params[:global_filter][:print_size] == 'A5'
                 render pdf: "#{@order.code}",
                   title: "#{@order.code}",
                   layout: 'erp/backend/pdf',
