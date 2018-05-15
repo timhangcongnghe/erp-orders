@@ -93,7 +93,7 @@ wb.styles do |s|
 
 
     # rows
-    @order.order_details.each_with_index do |order_detail, index|
+    @order.order_details.includes(:product).order('erp_products_products.ordered_code').each_with_index do |order_detail, index|
       row = {columns: [], styles: []}
       row[:columns] = []
       if get_columns(params).include?("ordinal_number") or get_columns(params).empty?

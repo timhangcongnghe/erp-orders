@@ -103,7 +103,7 @@
                                     <th class="invoice-title uppercase text-right"><%= t('.note') %></th>
                                 <% end %>
                             </tr>
-                            <% @order.order_details.each_with_index do |order_detail,index| %>
+                            <% @order.order_details.includes(:product).order('erp_products_products.ordered_code').each_with_index do |order_detail,index| %>
                                 <tr>
                                     <% if get_columns(params).include?("ordinal_number") %>
                                         <td class="text-center"><%= index+1 %></td>
