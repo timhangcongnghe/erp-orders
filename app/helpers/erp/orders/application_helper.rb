@@ -8,7 +8,7 @@ module Erp
         actions << {
           text: '<i class="fa fa-print"></i> Xem & In HĐ',
           url: erp_orders.backend_order_path(order),
-          target: '_blank'
+          class: 'modal-link'
         } if can? :print, order
         actions << {
           text: '<i class="fa fa-file-excel-o"></i> Xuất excel',
