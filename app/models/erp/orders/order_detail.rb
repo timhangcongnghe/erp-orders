@@ -3,6 +3,15 @@ module Erp::Orders
     validates :product_id, :quantity, :presence => true
     belongs_to :order, class_name: 'Erp::Orders::Order'
     belongs_to :product, class_name: 'Erp::Products::Product'
+    
+    if Erp::Core.available?("warehouses")
+      belongs_to :warehouse, class_name: "Erp::Warehouses::Warehouse"
+      
+      def warehouse_name
+        self.warehouse.present? ? self.warehouse.name : ''
+      end
+    end
+    
     if Erp::Core.available?("order_stock_checks")
     has_one :scheck_detail, -> { order created_at: :desc }, class_name: 'Erp::OrderStockChecks::ScheckDetail', dependent: :destroy
 		end

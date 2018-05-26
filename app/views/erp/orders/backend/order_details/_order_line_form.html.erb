@@ -6,6 +6,16 @@
 		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
         <strong class="product-name"><%= order_detail.product_name %></strong>
     </td>
+    <td>
+        <%= erp_form_control("dataselect", {
+            name: 'order[order_details_attributes][' + uid + '][warehouse_id]',
+            value: order_detail.warehouse_id,
+            text: order_detail.warehouse_name,
+            placeholder: 'Chọn Kho',
+            url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+            required: true
+        }) %>
+    </td>
     <td width="7%" class="text-right">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][quantity]',
@@ -103,23 +113,25 @@
                 options: Erp::Orders::Order.get_eye_positions(),
                 include_blank: 'Chọn',
             }) %>
-        </td>
-        <td width="10%">
-            <%= erp_form_control("textarea", {
+        </td>        
+    <% end %>
+    <td width="10%">
+        <% if Erp::Core.available?('ortho_k') %>
+            <%= erp_form_control("text", {
                 name: 'order[order_details_attributes][' + uid + '][serials]',
                 value: order_detail.serials,
                 text: order_detail.serials,
                 class: 'product-serials',
-                rows: 1
+                rows: 1,
+                placeholder: 'Số Lô/Serials'
             }) %>
-        </td>
-    <% end %>
-    <td width="10%">
-        <%= erp_form_control("textarea", {
+        <% end %>
+        <%= erp_form_control("text", {
             name: 'order[order_details_attributes][' + uid + '][description]',
             value: order_detail.description,
             text: order_detail.description,
-            rows: 1
+            rows: 1,
+            placeholder: 'Ghi chú'
         }) %>
     </td>
     <td class="text-right">

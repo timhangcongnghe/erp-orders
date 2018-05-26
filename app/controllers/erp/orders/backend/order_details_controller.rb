@@ -79,6 +79,11 @@ module Erp
           else
             @order_detail.order.supplier_id = Erp::Contacts::Contact::get_main_contact
           end
+          
+          # warehouse
+          if params[:form].present? and params[:form][:order].present? and params[:form][:order][:warehouse_id].present?
+            @order_detail.warehouse_id = params[:form][:order][:warehouse_id]
+          end
 
           render partial: params[:partial], locals: {
             order_detail: @order_detail,
