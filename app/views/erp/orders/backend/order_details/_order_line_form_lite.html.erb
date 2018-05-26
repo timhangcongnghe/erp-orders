@@ -6,6 +6,16 @@
 		<input type="hidden" name="uids[<%= uid %>]" value="<%= uid %>" />
         <strong class="product-name"><%= order_detail.product_name %></strong>
     </td>
+    <td>
+        <%= erp_form_control("dataselect", {
+            name: 'order[order_details_attributes][' + uid + '][warehouse_id]',
+            value: order_detail.warehouse_id,
+            text: order_detail.warehouse_name,
+            placeholder: 'Chọn Kho',
+            url: erp_warehouses.dataselect_backend_warehouses_path(format: 'json'),
+            required: true
+        }) %>
+    </td>
     <td width="7%" class="text-right">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][quantity]',
@@ -15,7 +25,7 @@
 			required: true,
         }) %>
     </td>
-    <td class="text-right">
+    <td class="text-left">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][price]',
             value: order_detail.price,
@@ -23,10 +33,10 @@
             class: "line_unit_price inline #{(order_detail.id.present? ? 'edit' : '')}",
         }) %>
     </td>
-    <td class="text-right">
+    <td class="text-left">
         <span class="line_subtotal text-semibold"><Strong><%= format_price(order_detail.subtotal) %></Strong></span>
     </td>
-    <td class="text-right">
+    <td class="text-left">
         <span class="line_total text-bold text-primary"><%= format_price(order_detail.total) %></span>
     </td>
     <td width="1%">

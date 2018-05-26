@@ -25,7 +25,7 @@
 			required: true,
         }) %>
     </td>
-    <td class="text-right">
+    <td class="text-left">
         <%= erp_form_control("number", {
             name: 'order[order_details_attributes][' + uid + '][price]',
             value: order_detail.price,
@@ -54,11 +54,11 @@
 			</div>
 		<% end %>
     </td>
-    <td class="text-right">
+    <td class="text-left">
         <span class="line_subtotal text-semibold"></span>
     </td>
 	<% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
-		<td class="text-right">
+		<td class="text-left">
 			<%= erp_form_control("number", {
 				name: 'order[order_details_attributes][' + uid + '][discount]',
 				value: order_detail.discount,
@@ -67,7 +67,7 @@
 			}) %>
 		</td>
 	<% end %>
-    <td class="text-right">
+    <td class="text-left">
         <span class="line_total text-bold text-primary"></span>
     </td>
     <% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
@@ -106,7 +106,7 @@
 		</td>
 	<% end %>
 	<% if Erp::Core.available?('ortho_k') %>
-        <td width="5%">
+        <td width="5%" class="select-sm">
             <%= erp_form_control('select', {
                 name: 'order[order_details_attributes][' + uid + '][eye_position]',
                 value: order_detail.eye_position,
