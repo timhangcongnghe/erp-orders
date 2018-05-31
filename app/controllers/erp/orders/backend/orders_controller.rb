@@ -77,7 +77,7 @@ module Erp
 
           @order = Order.new
           @order.order_date = Time.now
-          @order.warehouse_id = params.to_unsafe_hash[:warehouse] if params.to_unsafe_hash[:warehouse].present?
+          @order.warehouse_id = params.to_unsafe_hash[:warehouse_id] if params.to_unsafe_hash[:warehouse_id].present?
           @type = params[:type]
 
           @owner = Erp::Contacts::Contact::get_main_contact
@@ -98,7 +98,8 @@ module Erp
               @order.order_details.build(
                 product_id: product.id,
                 price: purchase_price.present? ? purchase_price.price : 0.0,
-                quantity: row[1]
+                quantity: row[1],
+                warehouse_id: @order.warehouse_id
               )
             end
           end
