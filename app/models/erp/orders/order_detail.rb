@@ -224,6 +224,11 @@ module Erp::Orders
     def total_without_tax
 			subtotal - discount_amount
 		end
+    
+    # unit price
+    def unit_price
+      total_without_tax/quantity
+    end
 
     # tax amount
     def tax_amount
