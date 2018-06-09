@@ -159,7 +159,7 @@
           <span class="text-right"><%= format_number(@order.total_without_tax) %></span>
       </div>
       <div class="liner">
-          <label>Tiền thuế (<%= @order.tax.amount %>%):</label>
+          <label>Tiền thuế (<%= @order.tax_amount %>%):</label>
           <span class="text-right"><%= format_number(@order.tax_amount) %></span>
       </div>
       <div class="line">
