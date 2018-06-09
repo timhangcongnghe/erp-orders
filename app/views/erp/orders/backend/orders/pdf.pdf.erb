@@ -138,7 +138,7 @@
                                         <td class="text-right sbold"><%= format_number(order_detail.discount_amount) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("total") %>
-                                        <td class="text-right sbold"><%= format_number(order_detail.total) %></td>
+                                        <td class="text-right sbold"><%= format_number(order_detail.total_without_tax) %></td>
                                     <% end %>
                                     <% if get_columns(params).include?("note") %>
                                         <td class="cursor-help" title="<%= order_detail.description %>"><%= truncate(order_detail.description, length: 15) %></td>
@@ -156,11 +156,11 @@
   <div class="table-footer">
       <div class="line">
           <label>Cộng tiền hàng:</label>
-          <span class="text-right"><%= format_number(@order.cache_total) %></span>
+          <span class="text-right"><%= format_number(@order.total_without_tax) %></span>
       </div>
       <div class="liner">
-          <label>Tiền thuế (0%):</label>
-          <span class="text-right"><%= format_number(0) %></span>
+          <label>Tiền thuế (<%= @order.tax.amount %>%):</label>
+          <span class="text-right"><%= format_number(@order.tax_amount) %></span>
       </div>
       <div class="line">
           <label>Tổng tiền thanh toán:</label>
