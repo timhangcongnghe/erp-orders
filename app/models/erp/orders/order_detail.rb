@@ -76,6 +76,32 @@ module Erp::Orders
 					order.update_cache_delivery_status
 				end
 			end
+			
+			def get_delivery_warehouse_export
+        query = self.delivered_delivery_details
+        if order.sales?
+          query = query.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_EXPORT})
+          query = query.map{ |dd| dd.warehouse_name }.uniq.join(', ')
+        elsif order.purchase?
+          query = query.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_EXPORT})
+          query = query.map{ |dd| dd.warehouse_name }.uniq.join(', ')
+        else
+          return '--'
+        end
+      end
+			
+			def get_delivery_warehouse_import
+        query = self.delivered_delivery_details
+        if order.sales?
+          query = query.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_SALES_IMPORT})
+          query = query.map{ |dd| dd.warehouse_name }.uniq.join(', ')
+        elsif order.purchase?
+          query = query.where(erp_qdeliveries_deliveries: {delivery_type: Erp::Qdeliveries::Delivery::TYPE_PURCHASE_IMPORT})
+          query = query.map{ |dd| dd.warehouse_name }.uniq.join(', ')
+        else
+          return '--'
+        end
+      end
 
 		end
 
