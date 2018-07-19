@@ -155,6 +155,10 @@
 <% if get_columns(params).include?("total") or get_columns(params).include?("discount") or get_columns(params).include?("total_amount") or get_columns(params).include?("price") %>
   <div class="table-footer">
       <div class="line">
+          <label>Tổng số lượng:</label>
+          <span class="text-right"><%= @order.items_count %></span>
+      </div>
+      <div class="line">
           <label>Cộng tiền hàng:</label>
           <span class="text-right"><%= format_number(@order.total_without_tax) %></span>
       </div>
