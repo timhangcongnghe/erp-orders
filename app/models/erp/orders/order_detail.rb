@@ -348,6 +348,10 @@ module Erp::Orders
 			if options[:to_date].present?
 				query = query.where('erp_orders_orders.order_date <= ?', options[:to_date].to_date.end_of_day)
 			end
+
+			if options[:customer_id].present?
+				query = query.where(erp_orders_orders: {customer_id: options[:customer_id]})
+			end
 			
 			if options[:patient_state_id] == -1
         query = query.where(erp_orders_orders: {patient_state_id: nil})
