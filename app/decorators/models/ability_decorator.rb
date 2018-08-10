@@ -23,6 +23,10 @@ Erp::Ability.class_eval do
       order.is_confirmed? and order.is_delivered?
     end
 
+    can :xlsx_export, Erp::Orders::Order do |order|
+      true
+    end
+
     can :set_stock_checking, Erp::Orders::Order do |order|
       if order.sales?
         order.is_draft? or order.is_deleted?

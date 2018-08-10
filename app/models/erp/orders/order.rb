@@ -61,6 +61,11 @@ module Erp::Orders
     STATUS_CONFIRMED = 'confirmed'
     STATUS_DELETED = 'deleted'
     STATUS_ACTIVE = [STATUS_CONFIRMED, STATUS_DELETED]
+    
+    def ordered_order_details
+      self.order_details.includes(:product).order('erp_products_products.ordered_code')
+    end
+    
     if Erp::Core.available?("qdeliveries")
 			after_save :update_cache_delivery_status
 
