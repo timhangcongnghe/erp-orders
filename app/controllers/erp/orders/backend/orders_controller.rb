@@ -145,11 +145,17 @@ module Erp
               }
             else
               if @order.sales?
-                redirect_to session.delete(:return_to)
-                # redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+                if session[:return_to].present?
+                  redirect_to session.delete(:return_to)
+                else
+                  redirect_to erp_sales.backend_sales_orders_path, notice: t('.success')
+                end
               elsif @order.purchase?
-                redirect_to session.delete(:return_to)
-                # redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+                if session[:return_to].present?
+                  redirect_to session.delete(:return_to)
+                else
+                  redirect_to erp_purchase.backend_purchase_orders_path, notice: t('.success')
+                end
               end
             end
           else
