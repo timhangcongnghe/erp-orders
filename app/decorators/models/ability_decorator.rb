@@ -42,11 +42,37 @@ Erp::Ability.class_eval do
     end
 
     can :delete, Erp::Orders::Order do |order|
-      order.is_draft? or order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved?  or order.is_confirmed?
+      (order.is_draft? or order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved?  or order.is_confirmed?) and 
+      (if order.sales?
+        user.get_permission(:sales, :sales, :orders, :delete) == 'yes'
+      else
+        user.get_permission(:purchase, :purchase, :orders, :delete) == 'yes'
+      end)
     end
 
     can :update, Erp::Orders::Order do |order|
-      order.is_stock_checking? or order.is_draft? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed? or order.is_deleted?
+      (order.is_stock_checking? or order.is_draft? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed? or order.is_deleted?) and
+      (if order.sales?
+        user.get_permission(:sales, :sales, :orders, :update) == 'yes' or
+        (
+          user.get_permission(:sales, :sales, :orders, :update) == 'in_day' and
+          (order.confirmed_at.nil? or Time.now < order.confirmed_at.end_of_day)
+        )
+      else
+        user.get_permission(:purchase, :purchase, :orders, :update) == 'yes' or
+        (
+          user.get_permission(:purchase, :purchase, :orders, :update) == 'in_day' and
+          (order.confirmed_at.nil? or Time.now < order.confirmed_at.end_of_day)
+        )
+      end)
+    end
+    
+    can :create, Erp::Orders::Order do |order|
+      if order.sales?
+        user.get_permission(:sales, :sales, :orders, :create) == 'yes'
+      else
+        user.get_permission(:purchase, :purchase, :orders, :create) == 'yes'
+      end
     end
 
     can :sales_export, Erp::Orders::Order do |order|

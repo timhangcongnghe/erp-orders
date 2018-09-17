@@ -109,6 +109,11 @@ module Erp::Orders
 			end
 
 		end
+    
+    # update confirmed at
+    def update_confirmed_at
+      self.update_columns(confirmed_at: Time.now)
+    end
 
     PAYMENT_STATUS_PAID = 'paid'
     PAYMENT_STATUS_OVERDUE = 'overdue'

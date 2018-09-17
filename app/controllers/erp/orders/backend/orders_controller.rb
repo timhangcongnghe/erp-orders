@@ -103,6 +103,8 @@ module Erp
               )
             end
           end
+          
+          authorize! :create, @order
 
           if request.xhr?
             render '_form', layout: nil, locals: {order: @order}
@@ -121,6 +123,9 @@ module Erp
         # POST /orders
         def create
           @order = Order.new(order_params)
+          
+          authorize! :create, @order
+          
           @order.creator = current_user
 
           if @order.save
@@ -235,6 +240,7 @@ module Erp
         def set_confirmed
           authorize! :confirm, @order
           @order.set_confirmed
+          @order.update_confirmed_at
 
           respond_to do |format|
           format.json {

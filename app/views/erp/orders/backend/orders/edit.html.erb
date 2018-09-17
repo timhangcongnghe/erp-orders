@@ -19,11 +19,13 @@
 <% end %>
 
 <% content_for :page_toolbar do %>
-    <%= erp_component('button/create', {
-        text: t(".#{@order.sales? ? 'create_sales_order' : 'create_purchases_order'}"),
-        href: erp_orders.new_backend_order_path(type: @type),
-        class: 'btn-noborder'
-    }) %>
+    <% if can? :create, @order %>
+        <%= erp_component('button/create', {
+            text: t(".#{@order.sales? ? 'create_sales_order' : 'create_purchases_order'}"),
+            href: erp_orders.new_backend_order_path(type: @type),
+            class: 'btn-noborder'
+        }) %>
+    <% end %>
 <% end %>
 
 <% content_for :page_toolbar do %>

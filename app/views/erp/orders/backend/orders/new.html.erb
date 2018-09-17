@@ -19,14 +19,24 @@
 <% end %>
 
 <% content_for :page_toolbar do %>
-    <%= erp_component('button/create', {
-        text: 'Bảng giá mua',
-        href: erp_prices.general_backend_supplier_prices_path
-    }) %>
-    <%= erp_component('button/create', {
-        text: 'Bảng giá bán',
-        href: erp_prices.backend_customer_prices_path
-    }) %>
+    <% if can? :purchase_supplier_prices_update, nil %>
+        <%= erp_component('button/create', {
+            text: 'Bảng giá mua (chung)',
+            href: erp_prices.general_backend_supplier_prices_path
+        }) %>
+    <% end %>
+    <% if can? :sales_customer_prices_update_general, nil %>
+        <%= erp_component('button/create', {
+            text: 'Bảng giá bán (chung)',
+            href: erp_prices.general_backend_customer_prices_path
+        }) %>
+    <% end %>
+    <% if can? :sales_customer_prices_update, nil %>
+        <%= erp_component('button/create', {
+            text: 'Bảng giá bán (KH)',
+            href: erp_prices.backend_customer_prices_path
+        }) %>
+    <% end %>
 <% end %>
 
 <div class="row">
