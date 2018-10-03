@@ -27,6 +27,12 @@ module Erp::Orders
 					tax.short_name.present? ? tax.short_name : tax.name
 				end
 			end
+			
+			def tax_percentage
+				if tax.present?
+					tax.amount.present? ? tax.amount : 0.0
+				end
+			end
 		end
 
     has_many :order_details, dependent: :destroy
