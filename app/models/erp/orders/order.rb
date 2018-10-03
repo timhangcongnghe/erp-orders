@@ -31,6 +31,8 @@ module Erp::Orders
 			def tax_percentage
 				if tax.present?
 					tax.amount.present? ? tax.amount : 0.0
+				else
+          return 0.0
 				end
 			end
 		end
