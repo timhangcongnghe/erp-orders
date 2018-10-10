@@ -24,7 +24,7 @@ Erp::Ability.class_eval do
     end
 
     can :xlsx_export, Erp::Orders::Order do |order|
-      true
+      order.is_confirmed?
     end
 
     can :set_stock_checking, Erp::Orders::Order do |order|
@@ -56,13 +56,13 @@ Erp::Ability.class_eval do
         user.get_permission(:sales, :sales, :orders, :update) == 'yes' or
         (
           user.get_permission(:sales, :sales, :orders, :update) == 'in_day' and
-          (order.confirmed_at.nil? or Time.now < order.confirmed_at.end_of_day)
+          (order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?))
         )
       else
         user.get_permission(:purchase, :purchase, :orders, :update) == 'yes' or
         (
           user.get_permission(:purchase, :purchase, :orders, :update) == 'in_day' and
-          (order.confirmed_at.nil? or Time.now < order.confirmed_at.end_of_day)
+          (order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?))
         )
       end)
     end
