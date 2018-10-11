@@ -42,12 +42,19 @@ Erp::Ability.class_eval do
     end
 
     can :delete, Erp::Orders::Order do |order|
-      (order.is_draft? or order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved?  or order.is_confirmed?) and 
-      (if order.sales?
-        user.get_permission(:sales, :sales, :orders, :delete) == 'yes'
-      else
-        user.get_permission(:purchase, :purchase, :orders, :delete) == 'yes'
-      end)
+      order.is_draft? or
+      (
+        (
+          order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved?  or order.is_confirmed?
+        ) and 
+        (
+          if order.sales?
+           user.get_permission(:sales, :sales, :orders, :delete) == 'yes'
+          else
+            user.get_permission(:purchase, :purchase, :orders, :delete) == 'yes'
+          end
+        )
+      )
     end
 
     can :update, Erp::Orders::Order do |order|
