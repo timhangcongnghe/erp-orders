@@ -29,7 +29,7 @@ Erp::Ability.class_eval do
 
     can :set_stock_checking, Erp::Orders::Order do |order|
       if order.sales?
-        order.is_draft? or order.is_deleted?
+        order.is_draft?
       end
     end
 
@@ -37,7 +37,7 @@ Erp::Ability.class_eval do
       if order.sales?
         order.is_draft? or order.is_stock_checked? or order.is_stock_approved?
       else
-        order.is_draft? or order.is_deleted?
+        order.is_draft?
       end
     end
 
@@ -58,20 +58,31 @@ Erp::Ability.class_eval do
     end
 
     can :update, Erp::Orders::Order do |order|
-      (order.is_stock_checking? or order.is_draft? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed? or order.is_deleted?) and
-      (if order.sales?
-        user.get_permission(:sales, :sales, :orders, :update) == 'yes' or
+      order.is_draft? or
+      (
         (
-          user.get_permission(:sales, :sales, :orders, :update) == 'in_day' and
-          (order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?))
-        )
-      else
-        user.get_permission(:purchase, :purchase, :orders, :update) == 'yes' or
+          order.is_stock_checking? or order.is_stock_checked? or order.is_stock_approved? or order.is_confirmed?
+        ) and
         (
-          user.get_permission(:purchase, :purchase, :orders, :update) == 'in_day' and
-          (order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?))
+          if order.sales?
+            user.get_permission(:sales, :sales, :orders, :update) == 'yes' or
+            (
+              user.get_permission(:sales, :sales, :orders, :update) == 'in_day' and
+              (
+                order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?)
+              )
+            )
+          else
+            user.get_permission(:purchase, :purchase, :orders, :update) == 'yes' or
+            (
+              user.get_permission(:purchase, :purchase, :orders, :update) == 'in_day' and
+              (
+                order.confirmed_at.nil? or (Time.now < order.confirmed_at.end_of_day and order.is_confirmed?)
+              )
+            )
+          end
         )
-      end)
+      )
     end
     
     can :create, Erp::Orders::Order do |order|
