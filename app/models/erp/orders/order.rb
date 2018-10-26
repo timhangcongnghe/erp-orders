@@ -99,9 +99,17 @@ module Erp::Orders
 
 			def delivery_status
 				remain = not_delivered_quantity
+				
+				delivered = true
+				self.order_details.each do |od|
+          if od.cache_delivery_status != Erp::Orders::Order::DELIVERY_STATUS_DELIVERED
+            delivered = false
+          end
+        end
+				
 				if remain > 0
 					return Erp::Orders::Order::DELIVERY_STATUS_NOT_DELIVERY
-				elsif remain == 0
+				elsif remain == 0 and delivered
 					return Erp::Orders::Order::DELIVERY_STATUS_DELIVERED
 				else
 					return Erp::Orders::Order::DELIVERY_STATUS_OVER_DELIVERED
