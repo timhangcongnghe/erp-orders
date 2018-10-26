@@ -187,10 +187,20 @@ module Erp
           else
             #@order.set_draft
           end
+          
+          # store old contact for updating cache
+          prev_customer = nil
+          prev_supplier = nil
+          prev_customer = @order.customer if @order.sales? # don ban hang
+          prev_supplier = @order.supplier if @order.purchase? # don mua hang
 
           if @order.update(order_params)
             # update cache
             @order.update_cache_delivery_status
+            
+            # update cache for old contact
+            prev_customer.update_cache_sales_debt_amount if (prev_customer.present? and @order.customer != prev_customer)
+            prev_supplier.update_cache_purchase_debt_amount if (prev_supplier.present? and @order.supplier != prev_supplier)
 
             if request.xhr?
               render json: {
