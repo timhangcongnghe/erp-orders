@@ -609,36 +609,38 @@ module Erp::Orders
 
     # Check if order details is change
     def is_items_change?(params)
-			params.each do |row|
-				exist = false
-				# check if change quantity
-				order_details.each do |od|
-					if row[1]["product_id"].to_i == od.product_id
-						exist = true
-						if row[1]["quantity"].to_i != od.quantity
-							return true
-						end
-					end
-				end
-				# check if the product is added
-				if exist == false
-					return true
-				end
-			end
-
-			# check if the product is removed
-			order_details.each do |od|
-				exist = false
-				params.each do |row|
-					if od.product_id == row[1]["product_id"].to_i
-						exist = true if !row[1]["_destroy"].present?
-						break if (od.product_id == row[1]["product_id"].to_i);
-					end
-				end
-				if exist == false
-					return true
-				end
-			end
+			if params.present?
+        params.each do |row|
+          exist = false
+          # check if change quantity
+          order_details.each do |od|
+            if row[1]["product_id"].to_i == od.product_id
+              exist = true
+              if row[1]["quantity"].to_i != od.quantity
+                return true
+              end
+            end
+          end
+          # check if the product is added
+          if exist == false
+            return true
+          end
+        end
+  
+        # check if the product is removed
+        order_details.each do |od|
+          exist = false
+          params.each do |row|
+            if od.product_id == row[1]["product_id"].to_i
+              exist = true if !row[1]["_destroy"].present?
+              break if (od.product_id == row[1]["product_id"].to_i);
+            end
+          end
+          if exist == false
+            return true
+          end
+        end
+      end
 
 			return false
 		end
