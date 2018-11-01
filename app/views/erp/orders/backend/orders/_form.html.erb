@@ -351,12 +351,13 @@
         </div>
     </div>
     <% if order.sales? %>
-        <input type='submit' class="btn green-seagreen" name="act_save_with_default" value="<%= t('.save') %>" />
-        <input type='submit' class="btn green-seagreen" name="act_save_with_checking" value="<%= t('.save_and_stock_checking') %>" />
+        <input type='submit' class="btn green-seagreen one_click_btn" name="act_save_with_default" value="<%= t('.save') %>" />
+        <input type='submit' class="btn green-seagreen one_click_btn" name="act_save_with_checking" value="<%= t('.save_and_stock_checking') %>" />
     <% end %>
     <% if order.purchase? %>
         <%= erp_component('button/save', {
-            text: t('.submit')
+            text: t('.submit'),
+            class: 'one_click_btn'
         }) %>
     <% end %>
     <%= erp_component('button/cancel', {
