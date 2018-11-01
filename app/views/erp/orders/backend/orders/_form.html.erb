@@ -1,4 +1,11 @@
 <%= form_for([erp_orders, :backend, order], html: {multipart: true}) do |f| %>
+    
+    <% if order.errors.full_messages_for(:order_details).present? %>
+        <span class="help-block alert">
+            <%= order.errors.full_messages_for(:order_details).join('').html_safe %>
+        </span>
+    <% end %>
+    
     <% if order.sales? %>
         <% employee_name = 'sales_employee' %>
         <% scope = Erp::Taxes::Tax::TAX_SCOPE_SALES %>

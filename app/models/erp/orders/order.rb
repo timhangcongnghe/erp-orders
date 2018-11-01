@@ -691,6 +691,11 @@ module Erp::Orders
 			self.update_column(:cache_search, str.join(" ") + " " + str.join(" ").to_ascii)
 		end
 		
+		validate :must_have_order_details
+    def must_have_order_details
+      errors.add(:order_details, :message_must_have_order_details) if order_details.empty?
+    end
+		
 		def update_employee_for_order
       nvkd_id = nil
       if self.sales?

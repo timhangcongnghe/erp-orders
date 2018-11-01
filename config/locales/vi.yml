@@ -463,6 +463,8 @@ vi:
               blank: "không được để trống"
             tax_id:
               blank: "không được để trống"
+            order_details:
+              message_must_have_order_details: "bắt buộc không được để trống."
     attributes:
       erp/orders/order:
         code: "Mã đơn hàng"
@@ -472,3 +474,4 @@ vi:
         employee_id: "Nhân viên"
         warehouse_id: "Kho hàng"
         tax_id: "Thuế"
+        order_details: "Chi tiết đơn hàng"
