@@ -175,7 +175,16 @@
 <div class="mt-5 text-small">
     Tổng số tiền (bằng chữ): <strong><%= docso(@order.cache_total) %></strong>
     <br>
-    Lưu ý: Cty chỉ thu hồi hàng hóa khi có HĐBH kèm theo.
+    <table>
+      <tr>
+        <td width="35px">Lưu ý:</td>
+        <td width="500px">- Cty chỉ thu hồi hàng hóa khi có HĐBH kèm theo.</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td width="500px">- Khách hàng vui lòng cung cấp thông tin liên hệ đầy đủ.</td>
+      </tr>
+    </table>
 </div>
 <% content_for :footer do %>
     <div class="col text-center" style="width: 25%">
