@@ -7,10 +7,12 @@ module Erp
 
         # GET /orders
         def index
+          authorize! :read, @order
         end
 
         # POST /orders/list
         def list
+          authorize! :read, @order
           @orders = Order.search(params).paginate(:page => params[:page], :per_page => 20)
 
           render layout: nil
@@ -32,6 +34,7 @@ module Erp
 
         # POST /orders/list
         def show_list
+          authorize! :read, @order
         end
 
         # GET /orders/1
