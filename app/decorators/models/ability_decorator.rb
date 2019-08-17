@@ -34,11 +34,23 @@ Erp::Ability.class_eval do
     end
 
     can :confirm, Erp::Orders::Order do |order|
-      if order.sales?
-        order.is_draft? or order.is_stock_checked? or order.is_stock_approved?
-      else
-        order.is_draft?
-      end
+      (
+        if order.sales?
+          order.is_draft? or order.is_stock_checked? or order.is_stock_approved?
+        else
+          order.is_draft?
+        end
+      ) or
+      (
+        order.is_deleted? and !order.confirmed_at.nil?
+        (
+          if order.sales?
+            user.get_permission(:sales, :sales, :orders, :reconfirm) == 'yes'
+          else
+            user.get_permission(:purchase, :purchase, :orders, :reconfirm) == 'yes'
+          end
+        )
+      )
     end
 
     can :delete, Erp::Orders::Order do |order|
