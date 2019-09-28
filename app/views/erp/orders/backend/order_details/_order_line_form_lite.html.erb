@@ -36,12 +36,81 @@
     <td class="text-left">
         <span class="line_subtotal text-semibold"><Strong><%= format_price(order_detail.subtotal) %></Strong></span>
     </td>
+    <% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
+		<td class="text-left">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][discount]',
+				value: order_detail.discount,
+				text: order_detail.discount,
+				class: "line_discount_amount inline"
+			}) %>
+		</td>
+	<% end %>
     <td class="text-left">
         <span class="line_total text-bold text-primary"><%= format_price(order_detail.total) %></span>
-    </td>
-    <td width="1%">
-    </td>
-    <td width="1%">
+    </td><% if order_detail.order.sales? or (params.present? and params[:type] == Erp::Orders::Order::TYPE_SALES_ORDER) %>
+		<td class="text-right payment-for-contact">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][customer_commission]',
+				value: order_detail.customer_commission,
+				text: order_detail.customer_commission,
+				class: "line_customer_commission_amount#{order_detail.id} inline"
+			}) %>
+			<div class="ajax-box default_customer_commission_info"
+				data-url="<%= erp_orders.ajax_default_customer_commission_info_backend_order_details_path(
+							#customer_commission: order_detail.customer_commission,
+							#customer_id: @order.customer_id,#@order.present? ? @order.customer_id : '',
+							#order_detail_id: order_detail.id
+							#price: order_detail.price,
+							#quantity: order_detail.quantity
+							) %>"
+				data-control="
+					[name='order[customer_id]'],
+					[name='order[order_details_attributes][<%= uid %>][product_id]'],
+					[name='order[order_details_attributes][<%= uid %>][quantity]'],
+					[name='order[order_details_attributes][<%= uid %>][price]'],
+					[name='order[order_details_attributes][<%= uid %>][discount]'],
+					[name='uids[<%= uid %>]']
+				">
+			</div>
+		</td>
+        <td class="text-right payment-for-order">
+			<%= erp_form_control("number", {
+				name: 'order[order_details_attributes][' + uid + '][commission]',
+				value: order_detail.commission,
+				text: order_detail.commission,
+				class: "line_commission_amount inline"
+			}) %>
+		</td>
+	<% end %>
+	<% if Erp::Core.available?('ortho_k') %>
+        <td width="5%" class="select-sm">
+            <%= erp_form_control('select', {
+                name: 'order[order_details_attributes][' + uid + '][eye_position]',
+                value: order_detail.eye_position,
+                options: Erp::Orders::Order.get_eye_positions(),
+                include_blank: 'Chọn',
+            }) %>
+        </td>        
+    <% end %>
+    <td width="10%">
+        <% if Erp::Core.available?('ortho_k') %>
+            <%= erp_form_control("text", {
+                name: 'order[order_details_attributes][' + uid + '][serials]',
+                value: order_detail.serials,
+                text: order_detail.serials,
+                class: 'product-serials',
+                rows: 1,
+                placeholder: 'Số Lô/Serials'
+            }) %>
+        <% end %>
+        <%= erp_form_control("text", {
+            name: 'order[order_details_attributes][' + uid + '][description]',
+            value: order_detail.description,
+            text: order_detail.description,
+            rows: 1,
+            placeholder: 'Ghi chú'
+        }) %>
     </td>
     <td class="text-right">
         <%= erp_form_control("addableform_remove_button", {
