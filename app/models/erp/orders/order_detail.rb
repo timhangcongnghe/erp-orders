@@ -208,7 +208,7 @@ module Erp::Orders
     end
 
     def product_price
-      product.nil? ? '' : product.product_price
+      product.nil? ? '' : product.get_show_price
     end
 
     def product_category_name

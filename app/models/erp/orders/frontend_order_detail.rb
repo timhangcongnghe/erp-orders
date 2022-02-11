@@ -11,7 +11,7 @@ module Erp::Orders
     
     def update_current_price_from_product
       if self.price.nil?
-        self.price = product.product_price
+        self.price = product.get_show_price
       end    
     end
       

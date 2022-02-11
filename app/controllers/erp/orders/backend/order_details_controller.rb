@@ -70,7 +70,7 @@ module Erp
         def order_line_form
           @order_detail = OrderDetail.new
           @order_detail.product_id = params[:add_value]
-          @order_detail.price = @order_detail.product_price
+          @order_detail.price = @order_detail.get_show_price
 
           @order_detail.order = Erp::Orders::Order.new
 
